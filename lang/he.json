@@ -1,0 +1,12 @@
+{
+    "home_page": "מסך הבית",
+    "new_order": "הזמנה חדשה",
+    "orders_history": "היסטוריית הזמנות",
+    "orders_managment": "ניהול הזמנות",
+    "full_name": "שם מלא",
+    "phone_number": "מספר טלפון",
+    "date": "תאריך",
+    "time": "שעה",
+    "order_number": "מספר הזמנה: {{num}}",
+    "notes": "הערות"
+}
