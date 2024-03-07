@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:tzamtzam_hadar/core/text_styles.dart';
 
 class AppDropDown extends StatefulWidget {
-  final void Function(String?) onChanged;
+  final void Function(String) onChanged;
   final List<String> listValues;
   final String? hintText;
 
-  const AppDropDown(
-      {super.key,
-      required this.onChanged,
-      required this.listValues,
-      this.hintText});
+  const AppDropDown({
+    Key? key,
+    required this.onChanged,
+    required this.listValues,
+    this.hintText,
+  }) : super(key: key);
 
   @override
   State<AppDropDown> createState() => _AppDropDownState();
 }
 
 class _AppDropDownState extends State<AppDropDown> {
+  late String? value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      value: widget.listValues.first == "" ? null : widget.listValues.first,
-      items: widget.listValues.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem(
+    return DropdownButtonFormField<String>(
+      value: value,
+      items: widget.listValues.map((String value) {
+        return DropdownMenuItem<String>(
           value: value,
           child: Center(
             child: Text(
               value,
               textAlign: TextAlign.center,
-              style: AppTextStyle().dropDownValues,
             ),
           ),
         );
       }).toList(),
-      onChanged: widget.onChanged,
+      onChanged: (newValue) {
+        widget.onChanged(newValue!);
+      },
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),

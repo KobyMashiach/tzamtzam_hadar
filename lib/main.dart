@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:tzamtzam_hadar/core/check_first_login.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
+import 'package:tzamtzam_hadar/core/theme.dart';
 import 'package:tzamtzam_hadar/core/translates/delegate.dart';
 import 'package:tzamtzam_hadar/screens/home/home_page.dart';
 

@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
   final EdgeInsets? padding;
   final TextInputAction? textInputAction;
   final String? counterText;
+  final bool? hintTextCenter;
   AppTextField(
       {super.key,
       this.controller,
@@ -22,6 +23,7 @@ class AppTextField extends StatefulWidget {
       this.keyboard,
       this.textInputAction,
       this.checkIfPassword = false,
+      this.hintTextCenter,
       required this.hintText,
       this.readOnly,
       this.maxLines,
@@ -48,6 +50,9 @@ class _AppTextFieldState extends State<AppTextField> {
     return Padding(
       padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextField(
+          textAlign: widget.hintTextCenter == true
+              ? TextAlign.center
+              : TextAlign.start,
           onChanged: widget.onChanged,
           maxLength: widget.maxLength,
           maxLines: widget.maxLines ?? 1,

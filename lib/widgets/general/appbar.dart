@@ -12,6 +12,7 @@ appAppBar(
       logoPath: 'assets/logo.png',
       primaryColor: AppColor.primaryColor,
       shadowColor: AppColor.shadowColor,
+      titleColor: Colors.black,
       actions: actions,
       developerPage: developerPage,
       // titleColor: Colors.black,

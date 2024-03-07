@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:kh_easy_dev/widgets/navigate_page.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
-import 'package:tzamtzam_hadar/core/lists.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/screens/home/bloc/home_page_bloc.dart';
+import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/tests/test_colors.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 import 'package:tzamtzam_hadar/widgets/side_menu.dart';
@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final cardHeight = screenHeight * 0.05;
-    final mainCategories = AppLists().mainCategories(context);
+    final mainCategoriesPages = mainCategories(context);
     return BlocProvider(
       create: (context) => HomePageBloc()..add(HomePageEventInitial()),
       child: BlocConsumer<HomePageBloc, HomePageState>(
@@ -30,8 +30,8 @@ class HomePage extends StatelessWidget {
         listener: (context, state) async {
           final bloc = context.read<HomePageBloc>();
           if (state is HomePageCategoryNavigation) {
-            KheasydevNavigatePage().push(
-                context, mainCategories.entries.elementAt(state.page).value);
+            KheasydevNavigatePage().push(context,
+                mainCategoriesPages.entries.elementAt(state.page).value);
           }
         },
         builder: (context, state) {
@@ -56,25 +56,18 @@ class HomePage extends StatelessWidget {
                     SizedBox(height: 10),
                     Expanded(
                       child: ListView.separated(
-                        itemCount: mainCategories.length,
-                        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        //     crossAxisCount: 2,
-                        //     crossAxisSpacing: 4,
-                        //     mainAxisSpacing: 4,
-                        //     childAspectRatio: 2),
+                        itemCount: mainCategoriesPages.length,
                         separatorBuilder: (context, index) =>
                             SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final category =
-                              mainCategories.entries.elementAt(index);
+                              mainCategoriesPages.entries.elementAt(index);
                           return GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
                               log("Move to page: ${category.value.toString()}");
                               bloc.add(HomePageEventNavigateToPage(
                                   pageIndex: index));
-                              // KheasydevNavigatePage()
-                              //     .push(context, category.value);
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50.0),
@@ -91,15 +84,15 @@ class HomePage extends StatelessWidget {
                                             border: Border(
                                                 right: BorderSide(
                                                     width: 1.0,
-                                                    color: Colors.white24))),
+                                                    color: Colors.black26))),
                                         child: const Icon(Icons.store,
-                                            color: Colors.white),
+                                            color: Colors.black),
                                       ),
                                       title: RowBranchText(
                                           cardHeight: cardHeight,
                                           category: category.key),
                                       trailing: const Icon(Icons.arrow_forward,
-                                          color: Colors.white, size: 30.0)),
+                                          color: Colors.black, size: 30.0)),
                                 ),
                               ),
                             ),
@@ -140,7 +133,7 @@ class RowBranchText extends StatelessWidget {
       height: cardHeight,
       child: Text(
         category,
-        style: TextStyle(fontSize: 20, color: Colors.white),
+        style: AppTextStyle().mainListValues,
         textAlign: TextAlign.center,
       ),
     );

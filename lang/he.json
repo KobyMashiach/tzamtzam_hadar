@@ -8,5 +8,20 @@
     "date": "תאריך",
     "time": "שעה",
     "order_number": "מספר הזמנה: {{num}}",
-    "notes": "הערות"
+    "notes": "הערות",
+    "pictures": "תמונות",
+    "sublimation": "סובלימציה",
+    "general": "כללי",
+    "categories": "קטגוריות",
+    "other": "אחר",
+    "add_more": "הוסף עוד",
+    "type": "סוג",
+    "sizes": "גדלים",
+    "size": "גודל",
+    "fill": "מילוי",
+    "matte": "מט",
+    "glossy": "מבריק",
+    "fill_type": "(fill) ללא שוליים",
+    "fit_type": "(fit) עם שוליים",
+    "amount": "כמות"
 }
