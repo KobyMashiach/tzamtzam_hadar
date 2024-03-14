@@ -5,7 +5,10 @@ abstract class HomePageEvent {}
 
 class HomePageEventInitial extends HomePageEvent {}
 
-class HomePageEventNavigateToPage extends HomePageEvent {
+@immutable
+class HomePageEventNavigatiotn extends HomePageEvent {}
+
+class HomePageEventNavigateToPage extends HomePageEventNavigatiotn {
   final int pageIndex;
   HomePageEventNavigateToPage({required this.pageIndex});
 }

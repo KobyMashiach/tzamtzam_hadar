@@ -36,78 +36,83 @@ class HomePage extends StatelessWidget {
         },
         builder: (context, state) {
           final bloc = context.read<HomePageBloc>();
-          return Scaffold(
-            appBar: appAppBar(title: appTranslate(context, 'home_page')),
-            drawer: appSideMenu(context, index: 0),
-            body: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      "assets/logo.png",
-                      height: screenHeight * 0.2,
-                    ),
-                    Text(
-                      appTranslate(context, "orders_managment"),
-                      style: AppTextStyle().title,
-                    ),
-                    kheasydevDivider(black: true, height: 2),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: mainCategoriesPages.length,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 8),
-                        itemBuilder: (context, index) {
-                          final category =
-                              mainCategoriesPages.entries.elementAt(index);
-                          return GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              log("Move to page: ${category.value.toString()}");
-                              bloc.add(HomePageEventNavigateToPage(
-                                  pageIndex: index));
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: Card(
-                                elevation: 8.0,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                      color: AppColor.primaryColor),
-                                  child: ListTile(
-                                      leading: Container(
-                                        padding:
-                                            const EdgeInsets.only(right: 12.0),
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                right: BorderSide(
-                                                    width: 1.0,
-                                                    color: Colors.black26))),
-                                        child: const Icon(Icons.store,
-                                            color: Colors.black),
-                                      ),
-                                      title: RowBranchText(
-                                          cardHeight: cardHeight,
-                                          category: category.key),
-                                      trailing: const Icon(Icons.arrow_forward,
-                                          color: Colors.black, size: 30.0)),
+          return PopScope(
+            canPop: false,
+            child: Scaffold(
+              appBar: appAppBar(title: appTranslate(context, 'home_page')),
+              drawer: appSideMenu(context, index: 0),
+              body: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/logo.png",
+                        height: screenHeight * 0.2,
+                      ),
+                      Text(
+                        appTranslate(context, "orders_managment"),
+                        style: AppTextStyle().title,
+                      ),
+                      kheasydevDivider(black: true, height: 2),
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: mainCategoriesPages.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final category =
+                                mainCategoriesPages.entries.elementAt(index);
+                            return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                log("Move to page: ${category.value.toString()}");
+                                bloc.add(HomePageEventNavigateToPage(
+                                    pageIndex: index));
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: Card(
+                                  elevation: 8.0,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: AppColor.primaryColor),
+                                    child: ListTile(
+                                        leading: Container(
+                                          padding: const EdgeInsets.only(
+                                              right: 12.0),
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  right: BorderSide(
+                                                      width: 1.0,
+                                                      color: Colors.black26))),
+                                          child: const Icon(Icons.store,
+                                              color: Colors.black),
+                                        ),
+                                        title: RowBranchText(
+                                            cardHeight: cardHeight,
+                                            category: category.key),
+                                        trailing: const Icon(
+                                            Icons.arrow_forward,
+                                            color: Colors.black,
+                                            size: 30.0)),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
+              //TODO: check if need floadting action button
+              // floatingActionButton: FloatingActionButton(onPressed: () {
+              //   KheasydevNavigatePage().push(context, TestColors());
+              // }),
             ),
-            //TODO: check if need floadting action button
-            // floatingActionButton: FloatingActionButton(onPressed: () {
-            //   KheasydevNavigatePage().push(context, TestColors());
-            // }),
           );
         },
       ),

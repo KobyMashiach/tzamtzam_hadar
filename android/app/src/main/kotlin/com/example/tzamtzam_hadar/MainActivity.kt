@@ -1,4 +1,4 @@
-package com.KHEasyDev.tzamtzam_hadar
+package com.KHEasyDev.tzamtzamHadar
 
 import io.flutter.embedding.android.FlutterActivity
 
