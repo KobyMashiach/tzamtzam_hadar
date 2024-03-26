@@ -6,7 +6,7 @@ import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/screens/new_order/bloc/new_order_bloc.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/bloc/new_order_inner_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
 import 'package:tzamtzam_hadar/widgets/general/app_loading_page.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_radio_list_tile.dart';
@@ -79,9 +79,9 @@ class _NewOrderState extends State<NewOrder> {
     return RepositoryProvider(
       create: (context) => OrdersDataSource(),
       child: BlocProvider(
-        create: (context) => NewOrderBloc(context.read<OrdersDataSource>())
+        create: (context) => NewOrderInnerBloc(context.read<OrdersDataSource>())
           ..add(NewOrderEventInitial(context)),
-        child: BlocConsumer<NewOrderBloc, NewOrderState>(
+        child: BlocConsumer<NewOrderInnerBloc, NewOrderInnerState>(
           listenWhen: (previous, current) => current is NewOrderNavigationState,
           buildWhen: (previous, current) => current is! NewOrderNavigationState,
           listener: (context, state) {
@@ -93,7 +93,7 @@ class _NewOrderState extends State<NewOrder> {
             }
           },
           builder: (context, state) {
-            final bloc = context.read<NewOrderBloc>();
+            final bloc = context.read<NewOrderInnerBloc>();
 
             if (state is NewOrderOnLoading) {
               return AppLoading();
@@ -181,8 +181,8 @@ class _NewOrderState extends State<NewOrder> {
         : screenHeight;
   }
 
-  Future<void> doneOrderMenu(BuildContext context, NewOrderBloc bloc,
-      NewOrderState state, double screenHeight) {
+  Future<void> doneOrderMenu(BuildContext context, NewOrderInnerBloc bloc,
+      NewOrderInnerState state, double screenHeight) {
     return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -278,7 +278,7 @@ class _NewOrderState extends State<NewOrder> {
     );
   }
 
-  Row dateAndTime(BuildContext context, NewOrderState state) {
+  Row dateAndTime(BuildContext context, NewOrderInnerState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -506,7 +506,7 @@ class _NewOrderState extends State<NewOrder> {
     return true;
   }
 
-  saveOrder(NewOrderBloc bloc) {
+  saveOrder(NewOrderInnerBloc bloc) {
     if (!orderValidation(context)) return;
     bloc.add(NewOrderEventAddOrder(
         customerName: _customerName.text,

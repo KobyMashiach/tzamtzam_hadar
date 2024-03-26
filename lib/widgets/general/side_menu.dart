@@ -9,7 +9,7 @@ import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/screens/managment/managment.dart';
-import 'package:tzamtzam_hadar/screens/home/home_page.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/order_managment_root.dart';
 import 'package:tzamtzam_hadar/screens/send_files/send_files.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
@@ -30,14 +30,15 @@ appSideMenu(BuildContext context, {required int index}) {
           onTap: () {
             KheasydevNavigatePage().pushAndRemoveUntil(context, SendFiles());
           }),
-      if (GeneralDataSource.getPermissions().toId() <= 3) // no customer
+      if (permission.toId() <= 3) // no customer
         SideBarModel(
             icon: Icons.manage_accounts_outlined,
             label: appTranslate(context, "orders_managment"),
             onTap: () {
-              KheasydevNavigatePage().pushAndRemoveUntil(context, HomePage());
+              KheasydevNavigatePage()
+                  .pushAndRemoveUntil(context, OrderManagmentRoot());
             }),
-      if (GeneralDataSource.getPermissions().toId() <= 2)
+      if (permission.toId() <= 2)
         SideBarModel(
             icon: Icons.settings_applications_outlined,
             label: appTranslate(context, "managment"),

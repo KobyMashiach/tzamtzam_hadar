@@ -1,6 +1,6 @@
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
-import 'package:tzamtzam_hadar/screens/new_order/new_order.dart';
-import 'package:tzamtzam_hadar/screens/orders_managment/order_managment.dart';
+import 'package:tzamtzam_hadar/screens/home/orders_managment_inner/order_managment.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/new_order_inner.dart';
 
 List<String> categoriesList(context) => [
       appTranslate(context, "canvas"),

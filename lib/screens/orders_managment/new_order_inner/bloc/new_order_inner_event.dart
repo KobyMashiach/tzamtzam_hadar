@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'new_order_bloc.dart';
+part of 'new_order_inner_bloc.dart';
 
 @immutable
-abstract class NewOrderEvent {}
+abstract class NewOrderInnerEvent {}
 
-class NewOrderEventInitial extends NewOrderEvent {
+class NewOrderEventInitial extends NewOrderInnerEvent {
   final BuildContext context;
   NewOrderEventInitial(this.context);
 }
 
-class NewOrderEventAddOrder extends NewOrderEvent {
+class NewOrderEventAddOrder extends NewOrderInnerEvent {
   final String customerName;
   final String phoneNumber;
   final String category;
@@ -36,14 +36,14 @@ class NewOrderEventAddOrder extends NewOrderEvent {
       this.sublimationProduct});
 }
 
-class NewOrderEventAmountChange extends NewOrderEvent {
+class NewOrderEventAmountChange extends NewOrderInnerEvent {
   final int amount;
   NewOrderEventAmountChange(this.amount);
 }
 
-class NewOrderEventNavToHomeScreen extends NewOrderEvent {}
+class NewOrderEventNavToHomeScreen extends NewOrderInnerEvent {}
 
-class NewOrderOnNewOrder extends NewOrderEvent {
+class NewOrderOnNewOrder extends NewOrderInnerEvent {
   final bool newCustomer;
   NewOrderOnNewOrder({required this.newCustomer});
 }

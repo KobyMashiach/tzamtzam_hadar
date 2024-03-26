@@ -1,7 +1,7 @@
-part of 'new_order_bloc.dart';
+part of 'new_order_inner_bloc.dart';
 
 @immutable
-abstract class NewOrderState {
+abstract class NewOrderInnerState {
   final String date;
   final String time;
   final String orderId;
@@ -12,7 +12,7 @@ abstract class NewOrderState {
   final List<String> canvasSizes;
   final List<String> sublimationProducts;
 
-  NewOrderState(
+  NewOrderInnerState(
       {required this.date,
       required this.time,
       required this.orderId,
@@ -24,7 +24,7 @@ abstract class NewOrderState {
       required this.sublimationProducts});
 }
 
-final class NewOrderInitial extends NewOrderState {
+final class NewOrderInitial extends NewOrderInnerState {
   NewOrderInitial(
       {required super.date,
       required super.time,
@@ -37,7 +37,7 @@ final class NewOrderInitial extends NewOrderState {
       required super.sublimationProducts});
 }
 
-final class NewOrderFetchData extends NewOrderState {
+final class NewOrderFetchData extends NewOrderInnerState {
   NewOrderFetchData(
       {required super.date,
       required super.time,
@@ -50,7 +50,7 @@ final class NewOrderFetchData extends NewOrderState {
       required super.sublimationProducts});
 }
 
-final class NewOrderOnLoading extends NewOrderState {
+final class NewOrderOnLoading extends NewOrderInnerState {
   NewOrderOnLoading(
       {required super.date,
       required super.time,
@@ -63,7 +63,7 @@ final class NewOrderOnLoading extends NewOrderState {
       required super.sublimationProducts});
 }
 
-final class NewOrderGetAmount extends NewOrderState {
+final class NewOrderGetAmount extends NewOrderInnerState {
   final int amount;
   NewOrderGetAmount(
       {required this.amount,
@@ -78,7 +78,7 @@ final class NewOrderGetAmount extends NewOrderState {
       required super.sublimationProducts});
 }
 
-final class NewOrderOnNewOrderState extends NewOrderState {
+final class NewOrderOnNewOrderState extends NewOrderInnerState {
   final bool newCustomer;
   NewOrderOnNewOrderState(
       {required this.newCustomer,
@@ -94,7 +94,7 @@ final class NewOrderOnNewOrderState extends NewOrderState {
 }
 
 @immutable
-abstract class NewOrderNavigationState extends NewOrderState {
+abstract class NewOrderNavigationState extends NewOrderInnerState {
   NewOrderNavigationState(
       {required super.date,
       required super.time,

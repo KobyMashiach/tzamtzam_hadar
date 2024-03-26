@@ -5,7 +5,7 @@ import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/screens/orders_managment/bloc/order_managment_bloc.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/orders_managment_inner/bloc/order_managment_inner_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/cards/order_managment_card.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
@@ -17,8 +17,8 @@ class OrderManagment extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) =>
-          OrderManagmentBloc()..add(OrderManagmentEventInitial()),
-      child: BlocConsumer<OrderManagmentBloc, OrderManagmentState>(
+          OrderManagmentInnerBloc()..add(OrderManagmentEventInitial()),
+      child: BlocConsumer<OrderManagmentInnerBloc, OrderManagmentInnerState>(
         listenWhen: (previous, current) =>
             current is OrderManagmentNavigatorState,
         buildWhen: (previous, current) =>
@@ -27,7 +27,7 @@ class OrderManagment extends StatelessWidget {
           switch (state.runtimeType) {}
         },
         builder: (context, state) {
-          final bloc = context.read<OrderManagmentBloc>();
+          final bloc = context.read<OrderManagmentInnerBloc>();
           return Scaffold(
             appBar: appAppBar(title: appTranslate(context, 'orders_managment')),
             floatingActionButton: FloatingActionButton.extended(

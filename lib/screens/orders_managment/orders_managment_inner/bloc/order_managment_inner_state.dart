@@ -1,17 +1,17 @@
-part of 'order_managment_bloc.dart';
+part of 'order_managment_inner_bloc.dart';
 
 @immutable
-abstract class OrderManagmentState {
+abstract class OrderManagmentInnerState {
   final List<OrderModel> orders;
-  const OrderManagmentState({required this.orders});
+  const OrderManagmentInnerState({required this.orders});
 }
 
-final class OrderManagmentInitial extends OrderManagmentState {
+final class OrderManagmentInitial extends OrderManagmentInnerState {
   const OrderManagmentInitial({required super.orders});
 }
 
 @immutable
-abstract class OrderManagmentNavigatorState extends OrderManagmentState {
+abstract class OrderManagmentNavigatorState extends OrderManagmentInnerState {
   const OrderManagmentNavigatorState({required super.orders});
 }
 

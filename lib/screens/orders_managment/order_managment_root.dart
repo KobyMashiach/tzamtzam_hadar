@@ -7,15 +7,15 @@ import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
-import 'package:tzamtzam_hadar/screens/home/bloc/home_page_bloc.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/bloc/order_managment_root_bloc.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 import 'package:tzamtzam_hadar/widgets/general/side_menu.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class OrderManagmentRoot extends StatelessWidget {
   static const routeName = '/homePage';
-  HomePage({super.key});
+  OrderManagmentRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,9 @@ class HomePage extends StatelessWidget {
     final cardHeight = screenHeight * 0.05;
     final mainCategoriesPages = mainCategories(context);
     return BlocProvider(
-      create: (context) => HomePageBloc()..add(HomePageEventInitial()),
-      child: BlocConsumer<HomePageBloc, HomePageState>(
+      create: (context) =>
+          OrderManagmentRootBloc()..add(HomePageEventInitial()),
+      child: BlocConsumer<OrderManagmentRootBloc, OrderManagmentRootState>(
         listenWhen: (previous, current) => current is HomePageNavigationState,
         buildWhen: (previous, current) => current is! HomePageNavigationState,
         listener: (context, state) async {
@@ -39,7 +40,7 @@ class HomePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          final bloc = context.read<HomePageBloc>();
+          final bloc = context.read<OrderManagmentRootBloc>();
           return PopScope(
             canPop: false,
             child: Scaffold(

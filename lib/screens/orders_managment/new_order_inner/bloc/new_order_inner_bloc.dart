@@ -8,10 +8,10 @@ import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
-part 'new_order_event.dart';
-part 'new_order_state.dart';
+part 'new_order_inner_event.dart';
+part 'new_order_inner_state.dart';
 
-class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
+class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   String time = "";
   String date = "";
   String orderId = "";
@@ -24,7 +24,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   OrderModel? order;
 
   final OrdersDataSource repo;
-  NewOrderBloc(this.repo)
+  NewOrderInnerBloc(this.repo)
       : super(NewOrderInitial(
             date: "",
             time: "",
@@ -43,7 +43,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   }
 
   FutureOr<void> _newOrderEventInitial(
-      NewOrderEventInitial event, Emitter<NewOrderState> emit) async {
+      NewOrderEventInitial event, Emitter<NewOrderInnerState> emit) async {
     emit(_newOrderOnLoading());
     final List<OrderModel> orders = OrdersDataSource.getOrders();
 
@@ -101,7 +101,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   }
 
   FutureOr<void> _newOrderEventAddOrder(
-      NewOrderEventAddOrder event, Emitter<NewOrderState> emit) {
+      NewOrderEventAddOrder event, Emitter<NewOrderInnerState> emit) {
     order = OrderModel(
         orderId: orderId,
         date: date,
@@ -121,7 +121,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   }
 
   FutureOr<void> _newOrderEventAmountChange(
-      NewOrderEventAmountChange event, Emitter<NewOrderState> emit) {
+      NewOrderEventAmountChange event, Emitter<NewOrderInnerState> emit) {
     emit(NewOrderGetAmount(
         amount: event.amount,
         date: date,
@@ -136,7 +136,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   }
 
   FutureOr<void> _newOrderEventNavToHomeScreen(
-      NewOrderEventNavToHomeScreen event, Emitter<NewOrderState> emit) {
+      NewOrderEventNavToHomeScreen event, Emitter<NewOrderInnerState> emit) {
     emit(NewOrderNavigationNavToHomeScreen(
         date: date,
         time: time,
@@ -150,7 +150,7 @@ class NewOrderBloc extends Bloc<NewOrderEvent, NewOrderState> {
   }
 
   FutureOr<void> _newOrderOnNewOrder(
-      NewOrderOnNewOrder event, Emitter<NewOrderState> emit) {
+      NewOrderOnNewOrder event, Emitter<NewOrderInnerState> emit) {
     emit(NewOrderOnNewOrderState(
         newCustomer: event.newCustomer,
         date: date,
