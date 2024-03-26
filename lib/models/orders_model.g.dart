@@ -24,6 +24,7 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       phoneNumber: fields[4] as String,
       category: fields[5] as String,
       employeeName: fields[12] as String?,
+      amount: fields[13] as int,
       notes: fields[6] as String?,
       photoSize: fields[7] as String?,
       photoType: fields[8] as String?,
@@ -36,7 +37,7 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.orderId)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       ..writeByte(11)
       ..write(obj.sublimationProduct)
       ..writeByte(12)
-      ..write(obj.employeeName);
+      ..write(obj.employeeName)
+      ..writeByte(13)
+      ..write(obj.amount);
   }
 
   @override

@@ -2,18 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/screens/new_order/bloc/new_order_bloc.dart';
-import 'package:tzamtzam_hadar/services/general_lists.dart';
-import 'package:tzamtzam_hadar/widgets/app_dropdown.dart';
-import 'package:tzamtzam_hadar/widgets/app_loading_page.dart';
-import 'package:tzamtzam_hadar/widgets/app_radio_list_tile.dart';
-import 'package:tzamtzam_hadar/widgets/design/app_textfields.dart';
+import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
+import 'package:tzamtzam_hadar/widgets/general/app_loading_page.dart';
+import 'package:tzamtzam_hadar/widgets/design/fields/app_radio_list_tile.dart';
+import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
 class NewOrder extends StatefulWidget {
@@ -28,7 +25,8 @@ class _NewOrderState extends State<NewOrder> {
   late TextEditingController _customerPhoneNumber;
   late TextEditingController _employeeName;
   late TextEditingController _notes;
-  int _amount = 0;
+  late TextEditingController _amount;
+  // int _amount = 0;
 
   // categories
   late List<String> categories;
@@ -61,6 +59,7 @@ class _NewOrderState extends State<NewOrder> {
     _customerPhoneNumber = TextEditingController();
     _employeeName = TextEditingController();
     _notes = TextEditingController();
+    _amount = TextEditingController();
     super.initState();
   }
 
@@ -85,12 +84,24 @@ class _NewOrderState extends State<NewOrder> {
         child: BlocConsumer<NewOrderBloc, NewOrderState>(
           listenWhen: (previous, current) => current is NewOrderNavigationState,
           buildWhen: (previous, current) => current is! NewOrderNavigationState,
-          listener: (context, state) {},
+          listener: (context, state) {
+            switch (state.runtimeType) {
+              case const (NewOrderNavigationNavToHomeScreen):
+                //ToDo: change to popuntil
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 2);
+            }
+          },
           builder: (context, state) {
             final bloc = context.read<NewOrderBloc>();
 
             if (state is NewOrderOnLoading) {
               return AppLoading();
+            }
+            if (state is NewOrderOnNewOrderState) {
+              clearData(state.newCustomer);
+              Navigator.of(context).pop();
+              bloc.add(NewOrderEventInitial(context));
             }
 
             categories = state.categories;
@@ -189,8 +200,9 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () async {
-                      await OrdersDataSource.clearOrders();
+                      saveOrder(bloc);
                       log(name: "order done", "finish order");
+                      bloc.add(NewOrderEventNavToHomeScreen());
                     },
                     title: Text(appTranslate(context, "finish_order")),
                     leading: Icon(Icons.download_done_rounded),
@@ -199,20 +211,9 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      if (!orderValidation(context)) return;
-                      bloc.add(NewOrderEventAddOrder(
-                          customerName: _customerName.text,
-                          phoneNumber: _customerPhoneNumber.text,
-                          category: category!,
-                          amount: _amount,
-                          employeeName: _employeeName.text,
-                          canvasSize: canvasSize,
-                          photoSize: pictureSize,
-                          photoType: pictureType,
-                          photoFill: pictureFill,
-                          notes: _notes.text,
-                          sublimationProduct: sublimationProduct));
-                      log(name: "order done", "new order to new customeer");
+                      saveOrder(bloc);
+                      log(name: "order done", "new order to new customer");
+                      bloc.add(NewOrderOnNewOrder(newCustomer: true));
                     },
                     title: Text(
                         "${appTranslate(context, "new_order")} ${appTranslate(context, "to")}${appTranslate(context, "new_customer")}"),
@@ -222,9 +223,8 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      // orderValidation(context);
-                      log(name: "order done", "new order to current customer");
-                      log(OrdersDataSource.getOrders().toString());
+                      saveOrder(bloc);
+                      bloc.add(NewOrderOnNewOrder(newCustomer: false));
                     },
                     title: Text(
                         "${appTranslate(context, "new_order")} ${appTranslate(context, "to")}${appTranslate(context, "current_customer")}"),
@@ -242,14 +242,15 @@ class _NewOrderState extends State<NewOrder> {
 
   AppDropDown categoriesDropdown(BuildContext context) {
     return AppDropDown(
-        onChanged: (value) {
-          log(name: "category type", value);
-          setState(() {
-            category = value;
-          });
-        },
-        hintText: appTranslate(context, "categories"),
-        listValues: categories);
+      onChanged: (value) {
+        log(name: "category type", value);
+        setState(() {
+          category = value;
+        });
+      },
+      hintText: appTranslate(context, "categories"),
+      listValues: categories,
+    );
   }
 
   Row nameAndPhoneFields(BuildContext context) {
@@ -325,9 +326,10 @@ class _NewOrderState extends State<NewOrder> {
             child: AppTextField(
           hintText: '0',
           hintTextCenter: true,
+          controller: _amount,
           onChanged: (value) {
             setState(() {
-              _amount = int.tryParse(value) ?? 0;
+              _amount.text = value;
             });
           },
           padding: EdgeInsets.all(0),
@@ -496,11 +498,48 @@ class _NewOrderState extends State<NewOrder> {
         return false;
       }
     }
-    if (_amount <= 0) {
+    if (int.parse(_amount.text) <= 0) {
       kheasydevAppToast(appTranslate(context, "missing_amount"));
       return false;
     }
 
     return true;
+  }
+
+  saveOrder(NewOrderBloc bloc) {
+    if (!orderValidation(context)) return;
+    bloc.add(NewOrderEventAddOrder(
+        customerName: _customerName.text,
+        phoneNumber: _customerPhoneNumber.text,
+        category: category!,
+        amount: int.parse(_amount.text),
+        employeeName: _employeeName.text,
+        canvasSize: canvasSize,
+        photoSize: pictureSize,
+        photoType: pictureType,
+        photoFill: pictureFill,
+        notes: _notes.text,
+        sublimationProduct: sublimationProduct));
+  }
+
+  void clearData(bool newCustomer) {
+    if (newCustomer) {
+      _customerName.clear();
+      _customerPhoneNumber.clear();
+      _employeeName.clear();
+    }
+    _notes.clear();
+    _amount.clear();
+    category = null;
+    canvasSize = null;
+    sublimationProduct = null;
+    pictureSize = null;
+    pictureType = null;
+    pictureFill = null;
+    canvasSizeExpanded = false;
+    sublimationProductExpanded = false;
+    pictureSizesExpanded = false;
+    pictureTypesExpanded = false;
+    pictureFillExpanded = false;
   }
 }

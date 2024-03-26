@@ -78,6 +78,21 @@ final class NewOrderGetAmount extends NewOrderState {
       required super.sublimationProducts});
 }
 
+final class NewOrderOnNewOrderState extends NewOrderState {
+  final bool newCustomer;
+  NewOrderOnNewOrderState(
+      {required this.newCustomer,
+      required super.date,
+      required super.time,
+      required super.orderId,
+      required super.categories,
+      required super.picturesSizes,
+      required super.picturesTypes,
+      required super.picturesFill,
+      required super.canvasSizes,
+      required super.sublimationProducts});
+}
+
 @immutable
 abstract class NewOrderNavigationState extends NewOrderState {
   NewOrderNavigationState(
@@ -92,7 +107,15 @@ abstract class NewOrderNavigationState extends NewOrderState {
       required super.sublimationProducts});
 }
 
-// final class NewOrderNavigation extends NewOrderNavigationState {
-//   final int page;
-//   NewOrderNavigation({required this.page});
-// }
+final class NewOrderNavigationNavToHomeScreen extends NewOrderNavigationState {
+  NewOrderNavigationNavToHomeScreen(
+      {required super.date,
+      required super.time,
+      required super.orderId,
+      required super.categories,
+      required super.picturesSizes,
+      required super.picturesTypes,
+      required super.picturesFill,
+      required super.canvasSizes,
+      required super.sublimationProducts});
+}

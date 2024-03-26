@@ -101,7 +101,7 @@ class _CheckInternetSpeedState extends State<CheckInternetSpeed> {
             const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
+                backgroundColor:
                     readyToTest && !loadingDownload ? Colors.blue : Colors.grey,
               ),
               onPressed: loadingDownload
@@ -140,7 +140,7 @@ class _CheckInternetSpeedState extends State<CheckInternetSpeed> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: readyToTest ? Colors.blue : Colors.grey,
+                backgroundColor: readyToTest ? Colors.blue : Colors.grey,
               ),
               onPressed: loadingUpload
                   ? null

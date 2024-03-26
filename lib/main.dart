@@ -5,11 +5,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tzamtzam_hadar/core/check_first_login.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
-import 'package:tzamtzam_hadar/core/theme.dart';
 import 'package:tzamtzam_hadar/core/translates/delegate.dart';
 import 'package:tzamtzam_hadar/hive/adapters_controller.dart';
+import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/screens/home/home_page.dart';
+import 'package:tzamtzam_hadar/screens/send_files/send_files.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +17,7 @@ void main() async {
   await Hive.initFlutter(appDocumentDirectory.path);
   AdaptersController.registerAdapters();
   await OrdersDataSource.initialise();
+  await GeneralDataSource.initialise();
 
   runApp(const MyApp());
 }
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: SendFiles(),
     );
   }
 }

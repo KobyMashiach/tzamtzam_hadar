@@ -5,6 +5,7 @@ class NextButton extends StatelessWidget {
   const NextButton({
     super.key,
     required this.onTap,
+    this.onLongTap,
     required this.icon,
     this.onTapDisable,
     this.disabled = false,
@@ -12,6 +13,7 @@ class NextButton extends StatelessWidget {
   });
 
   final Function() onTap;
+  final Function()? onLongTap;
   final Function()? onTapDisable;
   final IconData icon;
   final bool disabled;
@@ -20,6 +22,7 @@ class NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onLongPress: disabled ? null : onLongTap,
       onTap: disabled ? onTapDisable : onTap,
       child: Container(
         width: 160,

@@ -33,6 +33,8 @@ class OrderModel extends HiveObject {
   final String? sublimationProduct;
   @HiveField(12)
   final String? employeeName;
+  @HiveField(13)
+  final int amount;
 
   OrderModel(
       {required this.orderId,
@@ -42,6 +44,7 @@ class OrderModel extends HiveObject {
       required this.phoneNumber,
       required this.category,
       required this.employeeName,
+      required this.amount,
       this.notes,
       this.photoSize,
       this.photoType,
@@ -63,7 +66,8 @@ class OrderModel extends HiveObject {
       'photoType': photoType,
       'photoFill': photoFill,
       "canvasSize": canvasSize,
-      "sublimationProduct": sublimationProduct
+      "sublimationProduct": sublimationProduct,
+      "amount": amount,
     };
   }
 
@@ -82,11 +86,12 @@ class OrderModel extends HiveObject {
       photoFill: map['photoFill'] as String? ?? "",
       canvasSize: map['canvasSize'] as String? ?? "",
       sublimationProduct: map['photoFsublimationProductill'] as String? ?? "",
+      amount: map['amount'] as int,
     );
   }
 
   @override
   String toString() {
-    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName,employeeName: $employeeName , phoneNumber: $phoneNumber, category: $category, notes: $notes, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct)';
+    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName,employeeName: $employeeName,amount:$amount, phoneNumber: $phoneNumber, category: $category, notes: $notes, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct)';
   }
 }

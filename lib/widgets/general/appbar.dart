@@ -6,6 +6,7 @@ appAppBar(
     {required String title,
     List<Widget>? actions,
     Widget? developerPage,
+    VoidCallback? onBackButtonPreesed,
     BuildContext? context}) {
   return kheasydevAppBar(
       title: title,
@@ -15,6 +16,9 @@ appAppBar(
       titleColor: Colors.black,
       actions: actions,
       developerPage: developerPage,
-      // titleColor: Colors.black,
+      leading: onBackButtonPreesed != null
+          ? IconButton(
+              onPressed: onBackButtonPreesed, icon: Icon(Icons.arrow_back))
+          : null,
       context: context);
 }

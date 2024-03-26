@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'new_order_bloc.dart';
 
 @immutable
@@ -38,4 +39,11 @@ class NewOrderEventAddOrder extends NewOrderEvent {
 class NewOrderEventAmountChange extends NewOrderEvent {
   final int amount;
   NewOrderEventAmountChange(this.amount);
+}
+
+class NewOrderEventNavToHomeScreen extends NewOrderEvent {}
+
+class NewOrderOnNewOrder extends NewOrderEvent {
+  final bool newCustomer;
+  NewOrderOnNewOrder({required this.newCustomer});
 }

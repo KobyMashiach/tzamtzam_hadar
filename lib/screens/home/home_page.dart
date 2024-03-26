@@ -9,12 +9,12 @@ import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/screens/home/bloc/home_page_bloc.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
-import 'package:tzamtzam_hadar/tests/test_colors.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
-import 'package:tzamtzam_hadar/widgets/side_menu.dart';
+import 'package:tzamtzam_hadar/widgets/general/side_menu.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
+  static const routeName = '/homePage';
   HomePage({super.key});
 
   @override
@@ -28,10 +28,14 @@ class HomePage extends StatelessWidget {
         listenWhen: (previous, current) => current is HomePageNavigationState,
         buildWhen: (previous, current) => current is! HomePageNavigationState,
         listener: (context, state) async {
-          final bloc = context.read<HomePageBloc>();
           if (state is HomePageCategoryNavigation) {
+            //ToDo: add settings to kheasydev
             KheasydevNavigatePage().push(context,
                 mainCategoriesPages.entries.elementAt(state.page).value);
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     settings: RouteSettings(name: HomePage.routeName),
+            //     builder: (context) =>
+            //         mainCategoriesPages.entries.elementAt(state.page).value));
           }
         },
         builder: (context, state) {
@@ -39,13 +43,15 @@ class HomePage extends StatelessWidget {
           return PopScope(
             canPop: false,
             child: Scaffold(
-              appBar: appAppBar(title: appTranslate(context, 'home_page')),
-              drawer: appSideMenu(context, index: 0),
+              appBar:
+                  appAppBar(title: appTranslate(context, 'orders_managment')),
+              drawer: appSideMenu(context, index: 1),
               body: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: Column(
                     children: [
+                      SizedBox(height: 24),
                       Image.asset(
                         "assets/logo.png",
                         height: screenHeight * 0.2,
@@ -108,10 +114,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              //TODO: check if need floadting action button
-              // floatingActionButton: FloatingActionButton(onPressed: () {
-              //   KheasydevNavigatePage().push(context, TestColors());
-              // }),
             ),
           );
         },
