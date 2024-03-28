@@ -83,5 +83,13 @@
     "google photos": "גוגל תמונות",
     "managment": "ניהול",
     "edit": "עריכה",
-    "delete": "מחיקה"
+    "delete": "מחיקה",
+    "title": "כותרת",
+    "choose_image": "בחר תמונה",
+    "choose_qrcode": "בחר קוד QR",
+    "gallery": "גלרייה",
+    "camera": "מצלמה",
+    "image": "תמונה",
+    "link": "קישור",
+    "paste_link": "הדבק קישור לתמונה"
 }

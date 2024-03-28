@@ -18,7 +18,7 @@ class EmployeeLogin extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     String password = "";
     return Scaffold(
-        appBar: appAppBar(title: appTranslate(context, "employee_login")),
+        appBar: appAppBar(title: appTranslate("employee_login")),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Stack(
@@ -27,13 +27,13 @@ class EmployeeLogin extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      appTranslate(context, 'write_password'),
+                      appTranslate('write_password'),
                       style: AppTextStyle().title,
                     ),
                     kheasydevDivider(black: true),
                     SizedBox(height: screenHeight / 10),
                     AppTextField(
-                      hintText: appTranslate(context, 'password'),
+                      hintText: appTranslate('password'),
                       keyboard: TextInputType.number,
                       onChanged: (value) {
                         password = value;
@@ -55,8 +55,7 @@ class EmployeeLogin extends StatelessWidget {
                           key: UserPermissions.employees);
                       KheasydevNavigatePage().pop(context);
                     } else {
-                      kheasydevAppToast(
-                          appTranslate(context, 'wrong_password'));
+                      kheasydevAppToast(appTranslate('wrong_password'));
                     }
                   },
                   icon: Icons.done,

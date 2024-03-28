@@ -45,22 +45,22 @@ enum UserPermissions {
 extension UserPermissionsX on UserPermissions {
   String getString(BuildContext context) {
     return switch (this) {
-      UserPermissions.developer => appTranslate(context, 'developer'),
-      UserPermissions.admin => appTranslate(context, 'admin'),
-      UserPermissions.employees => appTranslate(context, 'employees'),
-      UserPermissions.customer => appTranslate(context, 'customer'),
+      UserPermissions.developer => appTranslate('developer'),
+      UserPermissions.admin => appTranslate('admin'),
+      UserPermissions.employees => appTranslate('employees'),
+      UserPermissions.customer => appTranslate('customer'),
     };
   }
 
   UserPermissions toUserPermissions(BuildContext context, String permission) {
-    String translatedPermission = appTranslate(context, permission);
-    if (translatedPermission == appTranslate(context, 'developer')) {
+    String translatedPermission = appTranslate(permission);
+    if (translatedPermission == appTranslate('developer')) {
       return UserPermissions.developer;
-    } else if (translatedPermission == appTranslate(context, 'admin')) {
+    } else if (translatedPermission == appTranslate('admin')) {
       return UserPermissions.admin;
-    } else if (translatedPermission == appTranslate(context, 'employees')) {
+    } else if (translatedPermission == appTranslate('employees')) {
       return UserPermissions.employees;
-    } else if (translatedPermission == appTranslate(context, 'customer')) {
+    } else if (translatedPermission == appTranslate('customer')) {
       return UserPermissions.customer;
     } else {
       return UserPermissions.customer;

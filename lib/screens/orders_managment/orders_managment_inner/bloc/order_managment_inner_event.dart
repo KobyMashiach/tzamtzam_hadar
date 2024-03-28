@@ -4,3 +4,5 @@ part of 'order_managment_inner_bloc.dart';
 abstract class OrderManagmentInnerEvent {}
 
 class OrderManagmentEventInitial extends OrderManagmentInnerEvent {}
+
+class OrderManagmentEventClearOrders extends OrderManagmentInnerEvent {}

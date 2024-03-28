@@ -17,7 +17,6 @@ class InfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return KheasydevDialog(
-      height: qrCode == null ? 300 : 500,
       primaryColor: Colors.white,
       title: title,
       child: Padding(

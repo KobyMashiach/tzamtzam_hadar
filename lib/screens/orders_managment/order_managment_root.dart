@@ -44,8 +44,7 @@ class OrderManagmentRoot extends StatelessWidget {
           return PopScope(
             canPop: false,
             child: Scaffold(
-              appBar:
-                  appAppBar(title: appTranslate(context, 'orders_managment')),
+              appBar: appAppBar(title: appTranslate('orders_managment')),
               drawer: appSideMenu(context, index: 1),
               body: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -58,7 +57,7 @@ class OrderManagmentRoot extends StatelessWidget {
                         height: screenHeight * 0.2,
                       ),
                       Text(
-                        appTranslate(context, "orders_managment"),
+                        appTranslate("orders_managment"),
                         style: AppTextStyle().title,
                       ),
                       kheasydevDivider(black: true, height: 2),

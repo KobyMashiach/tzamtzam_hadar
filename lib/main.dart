@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -6,13 +7,22 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tzamtzam_hadar/core/check_first_login.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/translates/delegate.dart';
+import 'package:tzamtzam_hadar/firebase_options.dart';
 import 'package:tzamtzam_hadar/hive/adapters_controller.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/screens/send_files/send_files.dart';
 
+class NavigationContextService {
+  //ToDo: check global key
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
   AdaptersController.registerAdapters();
@@ -35,6 +45,7 @@ class MyApp extends StatelessWidget {
     //       ),
     //     );
     return GetMaterialApp(
+      navigatorKey: NavigationContextService.navigatorKey,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalCupertinoLocalizations.delegate,

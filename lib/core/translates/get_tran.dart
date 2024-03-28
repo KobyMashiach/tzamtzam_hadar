@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tzamtzam_hadar/core/translates/localizations.dart';
+import 'package:tzamtzam_hadar/main.dart';
 
-String appTranslate(BuildContext context, String key,
-    {Map<String, String>? arguments}) {
-  return AppLocalizations.of(context)?.trans(context, key, arguments) ??
+String appTranslate(String key, {Map<String, String>? arguments}) {
+  final context = NavigationContextService.navigatorKey.currentContext;
+  return AppLocalizations.of(context!)?.trans(context, key, arguments) ??
       "wrong key";
 }

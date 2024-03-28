@@ -22,7 +22,7 @@ class SendFiles extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: appAppBar(
-                title: appTranslate(context, 'send_files'),
+                title: appTranslate('send_files'),
                 developerPage: PermissionLogin(),
                 context: context),
             drawer: appSideMenu(context, index: 0),
@@ -31,7 +31,7 @@ class SendFiles extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    appTranslate(context, 'send_files'),
+                    appTranslate('send_files'),
                     style: AppTextStyle().title,
                   ),
                   kheasydevDivider(black: true),

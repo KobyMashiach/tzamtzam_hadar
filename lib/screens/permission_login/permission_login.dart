@@ -21,7 +21,7 @@ class PermissionLogin extends StatelessWidget {
 
     return Scaffold(
       appBar: appAppBar(
-          title: appTranslate(context, 'choose_permissions'),
+          title: appTranslate('choose_permissions'),
           onBackButtonPreesed: () {
             KheasydevNavigatePage().pushAndRemoveUntil(context, SendFiles());
           }),
@@ -33,7 +33,7 @@ class PermissionLogin extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    appTranslate(context, 'choose_permissions'),
+                    appTranslate('choose_permissions'),
                     style: AppTextStyle().title,
                   ),
                   kheasydevDivider(black: true),
@@ -62,7 +62,7 @@ class PermissionLogin extends StatelessWidget {
                   if (keyboardDisable) ...[
                     kheasydevDivider(black: true),
                     Text(
-                        "${appTranslate(context, 'current_permission')}: ${GeneralDataSource.getPermissions().getString(context)}"),
+                        "${appTranslate('current_permission')}: ${GeneralDataSource.getPermissions().getString(context)}"),
                   ]
                 ],
               ),

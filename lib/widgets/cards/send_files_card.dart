@@ -22,18 +22,18 @@ class SendFilesCard extends StatelessWidget {
         motion: const StretchMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {}, //ToDo: delete from list
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: appTranslate(context, 'delete'),
+            label: appTranslate('delete'),
           ),
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {}, //ToDo: edit item
             backgroundColor: Color(0xFF21B7CA),
             foregroundColor: Colors.white,
             icon: Icons.share,
-            label: appTranslate(context, 'edit'),
+            label: appTranslate('edit'),
           ),
         ],
       ),
@@ -50,19 +50,19 @@ class SendFilesCard extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          title: Text("${appTranslate(context, "send_some_in", arguments: {
-                "type": appTranslate(context, item.type)
-              })} ${appTranslate(context, item.name)}"),
+          title: Text("${appTranslate("send_some_in", arguments: {
+                "type": appTranslate(item.type)
+              })} ${appTranslate(item.name)}"),
           leading: networkLoadingImages(item.imageUrl),
           trailing: IconButton(
             onPressed: () async {
               await showDialog(
                 context: context,
                 builder: (context) => InfoDialog(
-                    title: "${appTranslate(context, "send_some_in", arguments: {
-                          "type": appTranslate(context, item.type)
-                        })} ${appTranslate(context, item.name)}",
-                    info: appTranslate(context, "${item.name}_send_info"),
+                    title: "${appTranslate("send_some_in", arguments: {
+                          "type": appTranslate(item.type)
+                        })} ${appTranslate(item.name)}",
+                    info: appTranslate("${item.name}_send_info"),
                     imageUrl: item.imageUrl,
                     qrCode: item.qrCode),
               );

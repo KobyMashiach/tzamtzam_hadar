@@ -6,6 +6,7 @@ import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
+import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/bloc/new_order_inner_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
 import 'package:tzamtzam_hadar/widgets/general/app_loading_page.dart';
@@ -76,11 +77,20 @@ class _NewOrderState extends State<NewOrder> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final keyboardDisable = MediaQuery.of(context).viewInsets.bottom;
-    return RepositoryProvider(
-      create: (context) => OrdersDataSource(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<OrdersDataSource>(
+          create: (context) => OrdersDataSource(),
+        ),
+        RepositoryProvider<OrdersRepo>(
+          create: (context) => OrdersRepo(),
+        ),
+      ],
       child: BlocProvider(
-        create: (context) => NewOrderInnerBloc(context.read<OrdersDataSource>())
-          ..add(NewOrderEventInitial(context)),
+        create: (context) => NewOrderInnerBloc(
+          context.read<OrdersDataSource>(),
+          context.read<OrdersRepo>(),
+        )..add(NewOrderEventInitial(context)),
         child: BlocConsumer<NewOrderInnerBloc, NewOrderInnerState>(
           listenWhen: (previous, current) => current is NewOrderNavigationState,
           buildWhen: (previous, current) => current is! NewOrderNavigationState,
@@ -111,13 +121,13 @@ class _NewOrderState extends State<NewOrder> {
             canvasSizes = state.canvasSizes;
             sublimationProducts = state.sublimationProducts;
             return Scaffold(
-                appBar: appAppBar(title: appTranslate(context, "new_order")),
+                appBar: appAppBar(title: appTranslate("new_order")),
                 floatingActionButton: keyboardDisable == 0
                     ? FloatingActionButton.extended(
                         onPressed: () {
                           doneOrderMenu(context, bloc, state, screenHeight);
                         },
-                        label: Text(appTranslate(context, "finish_order")),
+                        label: Text(appTranslate("finish_order")),
                         icon: Icon(Icons.done),
                       )
                     : SizedBox.shrink(),
@@ -130,7 +140,7 @@ class _NewOrderState extends State<NewOrder> {
                         children: [
                           Center(
                             child: Text(
-                              appTranslate(context, 'order_number',
+                              appTranslate('order_number',
                                   arguments: {"num": state.orderId}),
                               style: AppTextStyle().title,
                             ),
@@ -145,13 +155,13 @@ class _NewOrderState extends State<NewOrder> {
                           heightSpace(),
                           amountOfProduct(context),
                           AppTextField(
-                            hintText: appTranslate(context, 'employee_name'),
+                            hintText: appTranslate('employee_name'),
                             controller: _employeeName,
                             padding: EdgeInsets.symmetric(vertical: 8),
                           ),
                           Expanded(
                             child: AppTextField(
-                              hintText: appTranslate(context, 'notes'),
+                              hintText: appTranslate('notes'),
                               controller: _notes,
                               maxLines: 5,
                               textInputAction: TextInputAction.newline,
@@ -193,7 +203,7 @@ class _NewOrderState extends State<NewOrder> {
               children: <Widget>[
                 SizedBox(height: 24),
                 Expanded(
-                  child: Text(appTranslate(context, "what_want_todo"),
+                  child: Text(appTranslate("what_want_todo"),
                       style: AppTextStyle().title),
                 ),
                 kheasydevDivider(black: true),
@@ -204,7 +214,7 @@ class _NewOrderState extends State<NewOrder> {
                       log(name: "order done", "finish order");
                       bloc.add(NewOrderEventNavToHomeScreen());
                     },
-                    title: Text(appTranslate(context, "finish_order")),
+                    title: Text(appTranslate("finish_order")),
                     leading: Icon(Icons.download_done_rounded),
                   ),
                 ),
@@ -216,7 +226,7 @@ class _NewOrderState extends State<NewOrder> {
                       bloc.add(NewOrderOnNewOrder(newCustomer: true));
                     },
                     title: Text(
-                        "${appTranslate(context, "new_order")} ${appTranslate(context, "to")}${appTranslate(context, "new_customer")}"),
+                        "${appTranslate("new_order")} ${appTranslate("to")}${appTranslate("new_customer")}"),
                     leading: Icon(Icons.person_add_outlined),
                   ),
                 ),
@@ -227,7 +237,7 @@ class _NewOrderState extends State<NewOrder> {
                       bloc.add(NewOrderOnNewOrder(newCustomer: false));
                     },
                     title: Text(
-                        "${appTranslate(context, "new_order")} ${appTranslate(context, "to")}${appTranslate(context, "current_customer")}"),
+                        "${appTranslate("new_order")} ${appTranslate("to")}${appTranslate("current_customer")}"),
                     leading: Icon(Icons.settings_backup_restore_rounded),
                   ),
                 ),
@@ -248,7 +258,7 @@ class _NewOrderState extends State<NewOrder> {
           category = value;
         });
       },
-      hintText: appTranslate(context, "categories"),
+      hintText: appTranslate("categories"),
       listValues: categories,
     );
   }
@@ -258,7 +268,7 @@ class _NewOrderState extends State<NewOrder> {
       children: [
         Expanded(
           child: AppTextField(
-            hintText: appTranslate(context, 'full_name'),
+            hintText: appTranslate('full_name'),
             controller: _customerName,
             textInputAction: TextInputAction.next,
             padding: EdgeInsets.symmetric(vertical: 8),
@@ -267,7 +277,7 @@ class _NewOrderState extends State<NewOrder> {
         SizedBox(width: 12),
         Expanded(
           child: AppTextField(
-            hintText: appTranslate(context, 'phone_number'),
+            hintText: appTranslate('phone_number'),
             controller: _customerPhoneNumber,
             keyboard: TextInputType.phone,
             // textInputAction: TextInputAction.next,
@@ -282,8 +292,8 @@ class _NewOrderState extends State<NewOrder> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("${appTranslate(context, 'date')}: ${state.date}"),
-        Text("${appTranslate(context, 'time')}: ${state.time}"),
+        Text("${appTranslate('date')}: ${state.date}"),
+        Text("${appTranslate('time')}: ${state.time}"),
       ],
     );
   }
@@ -307,7 +317,7 @@ class _NewOrderState extends State<NewOrder> {
           children: subCategories(context, title: 'product'),
         );
       } else if (category == categories[3]) {
-        return Text(appTranslate(context, "write_in_notes"));
+        return Text(appTranslate("write_in_notes"));
       }
     }
     return SizedBox.shrink();
@@ -318,7 +328,7 @@ class _NewOrderState extends State<NewOrder> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          appTranslate(context, 'amount'),
+          appTranslate('amount'),
           style: AppTextStyle().mainListValues,
         ),
         SizedBox(width: 24),
@@ -353,7 +363,7 @@ class _NewOrderState extends State<NewOrder> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              appTranslate(context, title),
+              appTranslate(title),
               style: AppTextStyle().title.copyWith(fontSize: 20),
             ),
             Icon(
@@ -471,13 +481,12 @@ class _NewOrderState extends State<NewOrder> {
     if (_customerName.text.isEmpty ||
         _customerPhoneNumber.text.isEmpty ||
         _employeeName.text.isEmpty) {
-      kheasydevAppToast(
-          appTranslate(context, "missing_customer_employee_details"));
+      kheasydevAppToast(appTranslate("missing_customer_employee_details"));
       return false;
     }
     if (category == categories[0]) {
       if (canvasSize == null || canvasSize!.isEmpty) {
-        kheasydevAppToast(appTranslate(context, "missing_canvas_size"));
+        kheasydevAppToast(appTranslate("missing_canvas_size"));
         return false;
       }
     }
@@ -488,18 +497,18 @@ class _NewOrderState extends State<NewOrder> {
           pictureFill!.isEmpty ||
           pictureType == null ||
           pictureType!.isEmpty) {
-        kheasydevAppToast(appTranslate(context, "missing_picture_details"));
+        kheasydevAppToast(appTranslate("missing_picture_details"));
         return false;
       }
     }
     if (category == categories[2]) {
       if (sublimationProduct == null || sublimationProduct!.isEmpty) {
-        kheasydevAppToast(appTranslate(context, "missing_sublimation_size"));
+        kheasydevAppToast(appTranslate("missing_sublimation_size"));
         return false;
       }
     }
     if (int.parse(_amount.text) <= 0) {
-      kheasydevAppToast(appTranslate(context, "missing_amount"));
+      kheasydevAppToast(appTranslate("missing_amount"));
       return false;
     }
 

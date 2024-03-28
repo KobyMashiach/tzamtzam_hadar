@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
@@ -23,8 +25,9 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   List<String> sublimationProducts = [];
   OrderModel? order;
 
-  final OrdersDataSource repo;
-  NewOrderInnerBloc(this.repo)
+  final OrdersDataSource dsRepo;
+  final OrdersRepo repo;
+  NewOrderInnerBloc(this.dsRepo, this.repo)
       : super(NewOrderInitial(
             date: "",
             time: "",
@@ -116,8 +119,10 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         photoType: event.photoType,
         notes: event.notes,
         sublimationProduct: event.sublimationProduct,
-        amount: event.amount);
+        amount: event.amount,
+        status: OrderStatus.progress.getStringToFirestore());
     OrdersDataSource.addOrder(order: order!);
+    repo.newOrUpdateOrderToFirestore(order!);
   }
 
   FutureOr<void> _newOrderEventAmountChange(

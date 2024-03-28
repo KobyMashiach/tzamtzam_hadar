@@ -3,10 +3,16 @@ import 'package:tzamtzam_hadar/screens/home/orders_managment_inner/order_managme
 import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/new_order_inner.dart';
 
 List<String> categoriesList(context) => [
-      appTranslate(context, "canvas"),
-      appTranslate(context, "pictures"),
-      appTranslate(context, "sublimation"),
-      appTranslate(context, "general"),
+      appTranslate("canvas"),
+      appTranslate("pictures"),
+      appTranslate("sublimation"),
+      appTranslate("general"),
+    ];
+List<String> managmentCategoriesList() => [
+      appTranslate("send_files"),
+      // appTranslate ("pictures"),
+      // appTranslate ("sublimation"),
+      // appTranslate ("general"),
     ];
 
 List<String> picturesSizesList(context) => [
@@ -17,25 +23,25 @@ List<String> picturesSizesList(context) => [
       "20X30",
       "30X40",
       "30X45",
-      appTranslate(context, "other")
+      appTranslate("other")
     ];
 
 List<String> picturesTypeList(context) => [
-      appTranslate(context, 'matte'),
-      appTranslate(context, 'glossy'),
+      appTranslate('matte'),
+      appTranslate('glossy'),
     ];
 List<String> picturesFillList(context) => [
-      appTranslate(context, 'fill_type'),
-      appTranslate(context, 'fit_type'),
+      appTranslate('fill_type'),
+      appTranslate('fit_type'),
     ];
 
 List<String> sublimationProductsList(context) => [
-      appTranslate(context, 'basalt'),
-      appTranslate(context, 'glass'),
-      appTranslate(context, 'bear'),
-      appTranslate(context, 'shirt'),
-      appTranslate(context, 'mug'),
-      appTranslate(context, 'bottle'),
+      appTranslate('basalt'),
+      appTranslate('glass'),
+      appTranslate('bear'),
+      appTranslate('shirt'),
+      appTranslate('mug'),
+      appTranslate('bottle'),
     ];
 
 List<String> canvasSizesList(context) => [
@@ -50,14 +56,12 @@ List<String> canvasSizesList(context) => [
       "30X30",
       "40X40",
       "50X50",
-      appTranslate(context, "other")
+      appTranslate("other")
     ];
 
 Map<String, dynamic> mainCategories(context) => {
-      appTranslate(context, "new_order"): NewOrder(),
-      appTranslate(context, "orders_managment"): OrderManagment(),
-      // appTranslate(context, "orders_history"):
-      //     NewOrder(title: appTranslate(context, "orders_history")),
+      appTranslate("new_order"): NewOrder(),
+      appTranslate("orders_managment"): OrderManagment(),
     };
 
 Map<String, dynamic> sendFilesMap() => {

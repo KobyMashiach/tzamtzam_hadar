@@ -68,42 +68,38 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("${appTranslate(context, "date")}: ${order.date}"),
-            Text("${appTranslate(context, "amount")}: ${order.amount}"),
+            Text("${appTranslate("date")}: ${order.date}"),
+            Text("${appTranslate("amount")}: ${order.amount}"),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("${appTranslate(context, "time")}: ${order.time}"),
-            Text(
-                "${appTranslate(context, "phone_number")}: ${order.phoneNumber}"),
+            Text("${appTranslate("time")}: ${order.time}"),
+            Text("${appTranslate("phone_number")}: ${order.phoneNumber}"),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-                "${appTranslate(context, "employee_name")}: ${order.employeeName}"),
+            Text("${appTranslate("employee_name")}: ${order.employeeName}"),
             if (order.category == categories[0])
-              Text(
-                  "${appTranslate(context, "canvas_size")}: ${order.canvasSize}"),
+              Text("${appTranslate("canvas_size")}: ${order.canvasSize}"),
             if (order.category == categories[1])
               Column(
                 children: [
-                  Text("${appTranslate(context, "size")}: ${order.photoSize}"),
-                  Text("${appTranslate(context, "fill")}: ${order.photoType}"),
-                  Text("${appTranslate(context, "type")}: ${order.photoFill}"),
+                  Text("${appTranslate("size")}: ${order.photoSize}"),
+                  Text("${appTranslate("fill")}: ${order.photoType}"),
+                  Text("${appTranslate("type")}: ${order.photoFill}"),
                 ],
               ),
             if (order.category == categories[2])
-              Text(
-                  "${appTranslate(context, "product")}: ${order.sublimationProduct}"),
+              Text("${appTranslate("product")}: ${order.sublimationProduct}"),
           ],
         ),
         if (order.notes != null) SizedBox(height: 16),
         if (order.notes != null)
-          Text("${appTranslate(context, "notes")}: ${order.notes}"),
+          Text("${appTranslate("notes")}: ${order.notes}"),
       ],
     );
   }

@@ -6,33 +6,25 @@ import 'package:tzamtzam_hadar/models/user_permissions.dart';
 import 'package:tzamtzam_hadar/services/general_data.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 
-class LoginDialog extends StatelessWidget {
-  final UserPermissions permission;
-  const LoginDialog({
-    super.key,
-    required this.permission,
-  });
+class UserInputDialog extends StatelessWidget {
+  final String title;
+  final String hintText;
+  const UserInputDialog(
+      {super.key, required this.title, required this.hintText});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController passwordInput = TextEditingController();
+    TextEditingController textInput = TextEditingController();
     return KheasydevDialog(
       height: 150,
       primaryColor: Colors.white,
-      title: "${appTranslate('login')} ${permission.getString(context)}",
+      title: title,
       buttons: [
         GenericButtonModel(
             text: appTranslate('ok'),
             type: GenericButtonType.outlined,
             onPressed: () async {
-              if (passwordInput.text == permissionPassword(permission)) {
-                await GeneralDataSource.savePermissions(key: permission);
-                kheasydevAppToast(appTranslate('login_successfuly_to',
-                    arguments: {"permission": permission.getString(context)}));
-                Navigator.of(context).pop();
-              } else {
-                kheasydevAppToast(appTranslate('wrong_password'));
-              }
+              Navigator.of(context).pop(textInput.text);
             }),
         GenericButtonModel(
             text: appTranslate('cancel'),
@@ -45,12 +37,12 @@ class LoginDialog extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 12),
         child: AppTextField(
           onChanged: (password) {
-            passwordInput.text = password;
+            textInput.text = password;
           },
-          hintText: appTranslate('password'),
+          hintText: hintText,
           clearXIcon: true,
-          controller: passwordInput,
-          onClear: () => passwordInput.clear(),
+          controller: textInput,
+          onClear: () => textInput.clear(),
         ),
       ),
     );

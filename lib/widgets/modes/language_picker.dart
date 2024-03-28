@@ -68,7 +68,7 @@ void getupdateLocale(String selectedLanguage) {
 DropdownMenuItem<String> dropdownItem(BuildContext context,
     {required String language, required String flag}) {
   return DropdownMenuItem(
-    value: appTranslate(context, language),
+    value: appTranslate(language),
     child: Row(
       children: [
         SvgPicture.asset(
@@ -76,7 +76,7 @@ DropdownMenuItem<String> dropdownItem(BuildContext context,
           width: 30,
         ),
         const SizedBox(width: 8),
-        Text(appTranslate(context, language)),
+        Text(appTranslate(language)),
       ],
     ),
   );

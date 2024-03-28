@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1018634080821",
+    "project_id": "tzamtzamhadar",
+    "storage_bucket": "tzamtzamhadar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018634080821:android:38947e14c631bb63c5577c",
+        "android_client_info": {
+          "package_name": "com.KHEasyDev.tzamtzamHadar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXVcwsNlSli35vAD0T3ROYe5WZDZQyM2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

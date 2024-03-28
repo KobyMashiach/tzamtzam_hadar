@@ -26,14 +26,14 @@ appSideMenu(BuildContext context, {required int index}) {
     sidebarItems: [
       SideBarModel(
           icon: Icons.file_copy_outlined,
-          label: appTranslate(context, "send_files"),
+          label: appTranslate("send_files"),
           onTap: () {
             KheasydevNavigatePage().pushAndRemoveUntil(context, SendFiles());
           }),
       if (permission.toId() <= 3) // no customer
         SideBarModel(
             icon: Icons.manage_accounts_outlined,
-            label: appTranslate(context, "orders_managment"),
+            label: appTranslate("orders_managment"),
             onTap: () {
               KheasydevNavigatePage()
                   .pushAndRemoveUntil(context, OrderManagmentRoot());
@@ -41,7 +41,7 @@ appSideMenu(BuildContext context, {required int index}) {
       if (permission.toId() <= 2)
         SideBarModel(
             icon: Icons.settings_applications_outlined,
-            label: appTranslate(context, "managment"),
+            label: appTranslate("managment"),
             onTap: () {
               KheasydevNavigatePage().pushAndRemoveUntil(context, Managment());
             }),

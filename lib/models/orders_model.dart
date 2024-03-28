@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive/hive.dart';
+import 'package:tzamtzam_hadar/core/enums.dart';
 
 part 'orders_model.g.dart';
 
@@ -35,6 +36,8 @@ class OrderModel extends HiveObject {
   final String? employeeName;
   @HiveField(13)
   final int amount;
+  @HiveField(14)
+  final String status;
 
   OrderModel(
       {required this.orderId,
@@ -45,6 +48,7 @@ class OrderModel extends HiveObject {
       required this.category,
       required this.employeeName,
       required this.amount,
+      required this.status,
       this.notes,
       this.photoSize,
       this.photoType,
@@ -68,6 +72,7 @@ class OrderModel extends HiveObject {
       "canvasSize": canvasSize,
       "sublimationProduct": sublimationProduct,
       "amount": amount,
+      "status": status,
     };
   }
 
@@ -87,11 +92,12 @@ class OrderModel extends HiveObject {
       canvasSize: map['canvasSize'] as String? ?? "",
       sublimationProduct: map['photoFsublimationProductill'] as String? ?? "",
       amount: map['amount'] as int,
+      status: map['status'] as String,
     );
   }
 
   @override
   String toString() {
-    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName,employeeName: $employeeName,amount:$amount, phoneNumber: $phoneNumber, category: $category, notes: $notes, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct)';
+    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName, phoneNumber: $phoneNumber, category: $category, notes: $notes, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct, employeeName: $employeeName, amount: $amount, status: $status)';
   }
 }

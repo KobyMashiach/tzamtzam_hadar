@@ -18,11 +18,13 @@ class AppTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String? counterText;
   final bool? hintTextCenter;
+  final bool? xIconHalf;
   AppTextField(
       {super.key,
       this.controller,
       this.enable,
       this.keyboard,
+      this.xIconHalf,
       this.textInputAction,
       this.checkIfPassword = false,
       this.hintTextCenter,
@@ -85,8 +87,8 @@ class _AppTextFieldState extends State<AppTextField> {
                       onTap: () {
                         widget.onClear?.call();
                       },
-                      child: const FractionallySizedBox(
-                        heightFactor: 0.2,
+                      child: FractionallySizedBox(
+                        heightFactor: widget.xIconHalf == true ? 0.1 : 0.2,
                         child: CircleAvatar(
                           backgroundColor: Colors.grey,
                           child: FittedBox(

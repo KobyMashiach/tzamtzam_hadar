@@ -6,7 +6,7 @@ import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 Widget AppLoading() => Builder(builder: (context) {
       return Scaffold(
         appBar: appAppBar(
-          title: appTranslate(context, "loading_date"),
+          title: appTranslate("loading_date"),
         ),
         body: Center(
           child: Column(
@@ -15,7 +15,7 @@ Widget AppLoading() => Builder(builder: (context) {
               CircularProgressIndicator(),
               SizedBox(height: 30),
               Text(
-                appTranslate(context, "loading_data"),
+                appTranslate("loading_data"),
                 style: AppTextStyle().title,
               )
             ],
