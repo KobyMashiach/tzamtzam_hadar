@@ -5,4 +5,14 @@ abstract class OrderManagmentInnerEvent {}
 
 class OrderManagmentEventInitial extends OrderManagmentInnerEvent {}
 
-class OrderManagmentEventClearOrders extends OrderManagmentInnerEvent {}
+class OrderManagmentEventDeleteOrder extends OrderManagmentInnerEvent {
+  final OrderModel order;
+
+  OrderManagmentEventDeleteOrder(this.order);
+}
+
+class OrderManagmentEventEditOrder extends OrderManagmentInnerEvent {
+  final OrderModel order;
+
+  OrderManagmentEventEditOrder(this.order);
+}

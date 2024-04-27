@@ -10,3 +10,22 @@ class ManagmentEventOpenDialog extends ManagmentEvent {
 
   ManagmentEventOpenDialog(this.index);
 }
+
+class ManagmentEventClearOrders extends ManagmentEvent {}
+
+class ManagmentEventAddNewSendFilesItem extends ManagmentEvent {
+  final String title;
+  final String description;
+  final String type;
+  final String networkUrl;
+  final XFile image;
+  final XFile? qrImage;
+
+  ManagmentEventAddNewSendFilesItem(
+      {required this.title,
+      required this.description,
+      required this.type,
+      required this.networkUrl,
+      required this.image,
+      required this.qrImage});
+}

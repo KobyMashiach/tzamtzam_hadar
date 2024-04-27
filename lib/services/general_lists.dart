@@ -1,68 +1,43 @@
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
-import 'package:tzamtzam_hadar/screens/home/orders_managment_inner/order_managment.dart';
+import 'package:tzamtzam_hadar/models/contact_model.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/new_order_inner.dart';
+import 'package:tzamtzam_hadar/screens/orders_managment/orders_managment_inner/order_managment_inner.dart';
 
-List<String> categoriesList(context) => [
-      appTranslate("canvas"),
-      appTranslate("pictures"),
-      appTranslate("sublimation"),
-      appTranslate("general"),
-    ];
-List<String> managmentCategoriesList() => [
-      appTranslate("send_files"),
-      // appTranslate ("pictures"),
-      // appTranslate ("sublimation"),
-      // appTranslate ("general"),
-    ];
+// TODO: add all lists and map to firestore
+// TODO: save in hive and check if exist
 
-List<String> picturesSizesList(context) => [
-      "9X13",
-      "10X15",
-      "13X18",
-      "15X21",
-      "20X30",
-      "30X40",
-      "30X45",
-      appTranslate("other")
-    ];
+final List<String> globalPicturesSizes = [];
+final List<String> globalPicturesSizesTranslated = [];
 
-List<String> picturesTypeList(context) => [
-      appTranslate('matte'),
-      appTranslate('glossy'),
-    ];
-List<String> picturesFillList(context) => [
-      appTranslate('fill_type'),
-      appTranslate('fit_type'),
-    ];
+final List<String> globalPicturesFill = [];
+final List<String> globalPicturesFillTranslated = [];
 
-List<String> sublimationProductsList(context) => [
-      appTranslate('basalt'),
-      appTranslate('glass'),
-      appTranslate('bear'),
-      appTranslate('shirt'),
-      appTranslate('mug'),
-      appTranslate('bottle'),
-    ];
+final List<String> globalPicturesType = [];
+final List<String> globalPicturesTypeTranslated = [];
 
-List<String> canvasSizesList(context) => [
-      "20X30",
-      "30X40",
-      "30X45",
-      "35X50",
-      "40X60",
-      "50X70",
-      "70X100",
-      "20X20",
-      "30X30",
-      "40X40",
-      "50X50",
-      appTranslate("other")
-    ];
+final List<String> globalCanvasSizes = [];
+final List<String> globalCanvasSizesTranslated = [];
 
-Map<String, dynamic> mainCategories(context) => {
-      appTranslate("new_order"): NewOrder(),
-      appTranslate("orders_managment"): OrderManagment(),
-    };
+final List<String> globalManagmentCategories = [];
+final List<String> globalManagmentCategoriesTranslated = [];
+
+final List<String> globalProductsCategories = [];
+final List<String> globalProductsCategoriesTranslated = [];
+
+final List<String> globalSublimationProducts = [];
+final List<String> globalSublimationProductsTranslated = [];
+
+final List<String> globalSendFilesType = [];
+final List<String> globalSendFilesTypeTranslated = [];
+
+final Map<dynamic, dynamic> globalMainCategories = {};
+final Map<String, dynamic> globalMainCategoriesTranslated = {};
+
+final Map<dynamic, dynamic> globalSendFiles = {};
+final Map<String, dynamic> globalSendFilesTranslated = {};
+
+final Map<dynamic, dynamic> globalContactsList = {};
+final Map<String, List<ContactModel>> globalContactsListTranslated = {};
 
 Map<String, dynamic> sendFilesMap() => {
       "vkiosk": {

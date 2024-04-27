@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 
@@ -16,19 +15,27 @@ class OrderManagmentInnerBloc
   OrderManagmentInnerBloc(this.repo)
       : super(OrderManagmentInitial(orders: [])) {
     on<OrderManagmentEventInitial>(_orderManagmentEventInitial);
-    on<OrderManagmentEventClearOrders>(_orderManagmentEventClearOreders);
+    on<OrderManagmentEventDeleteOrder>(_orderManagmentEventDeleteOrder);
+    on<OrderManagmentEventEditOrder>(_orderManagmentEventEditOrder);
   }
 
   FutureOr<void> _orderManagmentEventInitial(OrderManagmentEventInitial event,
       Emitter<OrderManagmentInnerState> emit) {
-    orders = OrdersDataSource.getOrders();
+    orders = repo.getAllOrders();
     emit(OrderManagmentInitial(orders: orders));
   }
 
-  FutureOr<void> _orderManagmentEventClearOreders(
-      OrderManagmentEventClearOrders event,
+  FutureOr<void> _orderManagmentEventDeleteOrder(
+      OrderManagmentEventDeleteOrder event,
       Emitter<OrderManagmentInnerState> emit) async {
-    await OrdersDataSource.clearOrders();
-    repo.clearOrdersTable();
+    await repo.deleteOrder(event.order);
+    emit(buildRefreshUI());
   }
+
+  FutureOr<void> _orderManagmentEventEditOrder(
+      OrderManagmentEventEditOrder event,
+      Emitter<OrderManagmentInnerState> emit) {}
+
+  OrderManagmentInitial buildRefreshUI() =>
+      OrderManagmentInitial(orders: repo.getAllOrders());
 }

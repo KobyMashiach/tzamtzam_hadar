@@ -26,3 +26,15 @@ final class ManagmentNavigationOpenSendFilesDialog
   ManagmentNavigationOpenSendFilesDialog(
       {required this.index, required super.managmentList});
 }
+
+final class ManagmentNavigationOpenDeleteAllOrdersDialog
+    extends ManagmentNavigationState {
+  ManagmentNavigationOpenDeleteAllOrdersDialog({required super.managmentList});
+}
+
+final class ManagmentNavigationNavToContactsPage
+    extends ManagmentNavigationState {
+  final Map<String, List<ContactModel>> contacts;
+  ManagmentNavigationNavToContactsPage(
+      {required this.contacts, required super.managmentList});
+}

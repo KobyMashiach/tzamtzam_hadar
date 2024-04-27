@@ -6,8 +6,8 @@ import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/models/user_permissions.dart';
 import 'package:tzamtzam_hadar/screens/send_files/send_files.dart';
+import 'package:tzamtzam_hadar/widgets/cards/general_card.dart';
 import 'package:tzamtzam_hadar/widgets/design/buttons/next_button.dart';
-import 'package:tzamtzam_hadar/widgets/cards/permissions_card.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/login_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
@@ -46,8 +46,9 @@ class PermissionLogin extends StatelessWidget {
                             SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final permission = UserPermissions.values[index + 1];
-                          return PermissionsCard(
-                            permission: permission,
+                          return GeneralCard(
+                            title: permission.getString(context),
+                            centerTitle: true,
                             onTap: () async {
                               await showDialog(
                                 context: context,

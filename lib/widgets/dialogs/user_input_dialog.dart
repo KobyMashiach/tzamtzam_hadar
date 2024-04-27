@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
-import 'package:tzamtzam_hadar/hive/general_data_source.dart';
-import 'package:tzamtzam_hadar/models/user_permissions.dart';
-import 'package:tzamtzam_hadar/services/general_data.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 
 class UserInputDialog extends StatelessWidget {

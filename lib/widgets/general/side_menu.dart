@@ -15,8 +15,8 @@ import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
 appSideMenu(BuildContext context, {required int index}) {
   final permission = GeneralDataSource.getPermissions();
-  //ToDo: add to splash screen function that prints all logs
-  //ToDo: on splash screen load all images
+  //TODO: add to splash screen function that prints all logs
+  //TODO: on splash screen load all images
   log(name: "permission", permission.toString());
   return KheasydevSideMenu(
     selectedIndex: index,

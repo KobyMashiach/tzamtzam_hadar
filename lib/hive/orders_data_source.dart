@@ -10,19 +10,33 @@ class OrdersDataSource {
     }
   }
 
-  static Future addOrder({required OrderModel order}) async {
+  Future addOrder({required OrderModel order}) async {
     final box = Hive.box<OrderModel>(_orderBox);
     await box.add(order);
   }
 
-  static List<OrderModel> getOrders() {
+  List<OrderModel> getOrders() {
     final box = Hive.box<OrderModel>(_orderBox);
     final orders = box.values.map((e) => e).toList();
     return orders;
   }
 
-  static Future clearOrders() async {
+  Future clearOrders() async {
     final box = Hive.box<OrderModel>(_orderBox);
     await box.clear();
+  }
+
+  Future saveOrders(List<OrderModel> orders) async {
+    final box = Hive.box<OrderModel>(_orderBox);
+    await box.clear();
+    await box.addAll(orders);
+  }
+
+  Future deleteOrder(OrderModel order) async {
+    final box = Hive.box<OrderModel>(_orderBox);
+    final orders = box.values.map((e) => e).toList();
+    orders.removeWhere((element) => element.orderId == order.orderId);
+    await box.clear();
+    await box.addAll(orders);
   }
 }

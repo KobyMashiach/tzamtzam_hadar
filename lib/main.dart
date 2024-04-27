@@ -1,6 +1,8 @@
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,12 +11,10 @@ import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/translates/delegate.dart';
 import 'package:tzamtzam_hadar/firebase_options.dart';
 import 'package:tzamtzam_hadar/hive/adapters_controller.dart';
-import 'package:tzamtzam_hadar/hive/general_data_source.dart';
-import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/screens/send_files/send_files.dart';
+import 'package:tzamtzam_hadar/screens/splash_screen/splash_screen.dart';
 
 class NavigationContextService {
-  //ToDo: check global key
+  //TODO: check global key
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
@@ -25,11 +25,10 @@ void main() async {
   );
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
+  //TODO: remove from main and move to a bloc
   AdaptersController.registerAdapters();
-  await OrdersDataSource.initialise();
-  await GeneralDataSource.initialise();
 
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -75,7 +74,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
         useMaterial3: true,
       ),
-      home: SendFiles(),
+      home: SplashScreen(),
     );
   }
 }

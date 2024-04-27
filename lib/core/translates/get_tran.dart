@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tzamtzam_hadar/core/translates/localizations.dart';
 import 'package:tzamtzam_hadar/main.dart';
 

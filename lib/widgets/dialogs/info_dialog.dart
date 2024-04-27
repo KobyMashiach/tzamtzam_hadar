@@ -32,7 +32,8 @@ class InfoDialog extends StatelessWidget {
               ],
             ),
             networkLoadingImages(imageUrl),
-            if (qrCode != null) networkLoadingImages(qrCode!, size: 200)
+            if (qrCode != null && qrCode != "")
+              networkLoadingImages(qrCode!, size: 200)
           ],
         ),
       ),

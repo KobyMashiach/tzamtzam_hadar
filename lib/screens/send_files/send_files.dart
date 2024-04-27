@@ -14,40 +14,50 @@ class SendFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //ToDo: CachedNetworkImage
+    //TODO: CachedNetworkImage
     return BlocProvider(
       create: (context) => SendFilesBloc()..add(SendFilesEventInit()),
       child: BlocConsumer<SendFilesBloc, SendFilesState>(
         listener: (context, state) {},
         builder: (context, state) {
+          final bloc = context.read<SendFilesBloc>();
           return Scaffold(
             appBar: appAppBar(
                 title: appTranslate('send_files'),
                 developerPage: PermissionLogin(),
                 context: context),
             drawer: appSideMenu(context, index: 0),
-            body: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  Text(
-                    appTranslate('send_files'),
-                    style: AppTextStyle().title,
+            body: state is SendFilesLoading
+                ? Center(child: CircularProgressIndicator())
+                : Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        Text(
+                          appTranslate('send_files'),
+                          style: AppTextStyle().title,
+                        ),
+                        kheasydevDivider(black: true),
+                        SizedBox(height: 24),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: state.sendFilesList.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 16),
+                          itemBuilder: (context, index) {
+                            final item = state.sendFilesList[index];
+                            return SendFilesCard(
+                              item: item,
+                              onDelete: (context) =>
+                                  bloc.add(SendFilesOnDeleteItem(item: item)),
+                              onEdit: (context) =>
+                                  bloc.add(SendFilesOnEditItem(item: item)),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  kheasydevDivider(black: true),
-                  SizedBox(height: 24),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: state.sendFilesList.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final item = state.sendFilesList[index];
-                      return SendFilesCard(item: item);
-                    },
-                  ),
-                ],
-              ),
-            ),
           );
         },
       ),

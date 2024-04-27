@@ -21,7 +21,7 @@ class OrderManagmentRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final cardHeight = screenHeight * 0.05;
-    final mainCategoriesPages = mainCategories(context);
+    final mainCategoriesPages = globalMainCategoriesTranslated;
     return BlocProvider(
       create: (context) =>
           OrderManagmentRootBloc()..add(HomePageEventInitial()),
@@ -30,7 +30,7 @@ class OrderManagmentRoot extends StatelessWidget {
         buildWhen: (previous, current) => current is! HomePageNavigationState,
         listener: (context, state) async {
           if (state is HomePageCategoryNavigation) {
-            //ToDo: add settings to kheasydev
+            //TODO: add settings to kheasydev
             KheasydevNavigatePage().push(context,
                 mainCategoriesPages.entries.elementAt(state.page).value);
             // Navigator.of(context).push(MaterialPageRoute(

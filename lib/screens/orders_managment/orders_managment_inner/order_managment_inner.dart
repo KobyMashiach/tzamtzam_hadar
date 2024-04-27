@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kh_easy_dev/kh_easy_dev.dart';
-import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
@@ -12,12 +10,18 @@ import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
 class OrderManagment extends StatelessWidget {
   const OrderManagment({super.key});
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    return RepositoryProvider<OrdersRepo>(
-      create: (context) => OrdersRepo(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<OrdersDataSource>(
+          create: (context) => OrdersDataSource(),
+        ),
+        RepositoryProvider<OrdersRepo>(
+          create: (context) => OrdersRepo(context.read<OrdersDataSource>()),
+        ),
+      ],
       child: BlocProvider(
         create: (context) => OrderManagmentInnerBloc(
           context.read<OrdersRepo>(),
@@ -34,34 +38,6 @@ class OrderManagment extends StatelessWidget {
             final bloc = context.read<OrderManagmentInnerBloc>();
             return Scaffold(
               appBar: appAppBar(title: appTranslate('orders_managment')),
-              floatingActionButton: FloatingActionButton.extended(
-                onPressed: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (context) => KheasydevDialog(
-                      title: appTranslate("are_you_sure"),
-                      primaryColor: AppColor.primaryColor,
-                      buttons: [
-                        GenericButtonModel(
-                            text: appTranslate("yes"),
-                            type: GenericButtonType.outlined,
-                            onPressed: () {
-                              bloc.add(OrderManagmentEventClearOrders());
-                              Navigator.of(context).pop();
-                            }),
-                        GenericButtonModel(
-                            text: appTranslate("no"),
-                            type: GenericButtonType.outlined,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            }),
-                      ],
-                    ),
-                  );
-                },
-                label: Text(appTranslate("delete_all_orders")),
-                icon: Icon(Icons.delete_outline),
-              ),
               body: state.orders.isEmpty
                   ? Center(
                       child: Text(appTranslate("not_order_found"),
@@ -78,7 +54,13 @@ class OrderManagment extends StatelessWidget {
                                 SizedBox(height: 8),
                             itemBuilder: (context, index) {
                               final order = state.orders[index];
-                              return OrderManagmentCard(order: order);
+                              return OrderManagmentCard(
+                                order: order,
+                                onDelete: (context) => bloc
+                                    .add(OrderManagmentEventDeleteOrder(order)),
+                                onEdit: (context) => bloc
+                                    .add(OrderManagmentEventEditOrder(order)),
+                              );
                             },
                           ),
                         ),

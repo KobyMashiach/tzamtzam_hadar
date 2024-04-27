@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
+import 'package:tzamtzam_hadar/screens/splash_screen/bloc/splash_screen_bloc.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
@@ -17,7 +19,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   String time = "";
   String date = "";
   String orderId = "";
-  List<String> categories = [];
+  List<String> productsCategories = [];
   List<String> picturesSizes = [];
   List<String> picturesTypes = [];
   List<String> picturesFill = [];
@@ -25,9 +27,9 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   List<String> sublimationProducts = [];
   OrderModel? order;
 
-  final OrdersDataSource dsRepo;
+  final OrdersDataSource localDB;
   final OrdersRepo repo;
-  NewOrderInnerBloc(this.dsRepo, this.repo)
+  NewOrderInnerBloc(this.localDB, this.repo)
       : super(NewOrderInitial(
             date: "",
             time: "",
@@ -48,7 +50,8 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   FutureOr<void> _newOrderEventInitial(
       NewOrderEventInitial event, Emitter<NewOrderInnerState> emit) async {
     emit(_newOrderOnLoading());
-    final List<OrderModel> orders = OrdersDataSource.getOrders();
+    //TODO: add automatic order to firebase, if dont completed -> remove
+    final List<OrderModel> orders = localDB.getOrders();
 
     // Map<String, OrderModel> orderMap = Map.fromIterable(
     //   orders,
@@ -68,21 +71,20 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
     maxOrderId++;
     orderId = GeneralFunctions().formatOrderId(maxOrderId);
 
-    // orderId = "423";
     date = DateFormat('dd/MM/yyyy').format(DateTime.now());
     time = DateFormat('HH:mm').format(DateTime.now());
-    categories = categoriesList(event.context);
-    picturesSizes = picturesSizesList(event.context);
-    picturesTypes = picturesTypeList(event.context);
-    picturesFill = picturesFillList(event.context);
-    canvasSizes = canvasSizesList(event.context);
-    sublimationProducts = sublimationProductsList(event.context);
+    productsCategories = globalProductsCategoriesTranslated;
+    picturesSizes = globalPicturesSizesTranslated;
+    picturesTypes = globalPicturesTypeTranslated;
+    picturesFill = globalPicturesFillTranslated;
+    canvasSizes = globalCanvasSizesTranslated;
+    sublimationProducts = globalSublimationProductsTranslated;
 
     emit(NewOrderInitial(
         date: date,
         time: time,
         orderId: orderId,
-        categories: categories,
+        categories: productsCategories,
         picturesSizes: picturesSizes,
         picturesTypes: picturesTypes,
         picturesFill: picturesFill,
@@ -121,7 +123,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         sublimationProduct: event.sublimationProduct,
         amount: event.amount,
         status: OrderStatus.progress.getStringToFirestore());
-    OrdersDataSource.addOrder(order: order!);
+    localDB.addOrder(order: order!);
     repo.newOrUpdateOrderToFirestore(order!);
   }
 
@@ -132,7 +134,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         date: date,
         time: time,
         orderId: orderId,
-        categories: categories,
+        categories: productsCategories,
         picturesSizes: picturesSizes,
         picturesTypes: picturesTypes,
         picturesFill: picturesFill,
@@ -146,7 +148,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         date: date,
         time: time,
         orderId: orderId,
-        categories: categories,
+        categories: productsCategories,
         picturesSizes: picturesSizes,
         picturesTypes: picturesTypes,
         picturesFill: picturesFill,
@@ -161,7 +163,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         date: date,
         time: time,
         orderId: orderId,
-        categories: categories,
+        categories: productsCategories,
         picturesSizes: picturesSizes,
         picturesTypes: picturesTypes,
         picturesFill: picturesFill,

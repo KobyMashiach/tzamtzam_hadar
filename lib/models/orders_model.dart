@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive/hive.dart';
-import 'package:tzamtzam_hadar/core/enums.dart';
 
 part 'orders_model.g.dart';
 

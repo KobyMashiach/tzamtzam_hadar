@@ -83,7 +83,7 @@ class _NewOrderState extends State<NewOrder> {
           create: (context) => OrdersDataSource(),
         ),
         RepositoryProvider<OrdersRepo>(
-          create: (context) => OrdersRepo(),
+          create: (context) => OrdersRepo(context.read<OrdersDataSource>()),
         ),
       ],
       child: BlocProvider(
@@ -97,7 +97,7 @@ class _NewOrderState extends State<NewOrder> {
           listener: (context, state) {
             switch (state.runtimeType) {
               case const (NewOrderNavigationNavToHomeScreen):
-                //ToDo: change to popuntil
+                //TODO: change to popuntil
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
             }

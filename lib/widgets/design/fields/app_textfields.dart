@@ -9,6 +9,7 @@ class AppTextField extends StatefulWidget {
   final TextInputType? keyboard;
   final bool? checkIfPassword;
   final bool? readOnly;
+  final bool? maxLinesIsNull;
   final int? maxLines;
   final int? maxLength;
   final Function(String)? onChanged;
@@ -30,6 +31,7 @@ class AppTextField extends StatefulWidget {
       this.hintTextCenter,
       this.onClear,
       this.clearXIcon = false,
+      this.maxLinesIsNull,
       required this.hintText,
       this.readOnly,
       this.maxLines,
@@ -60,7 +62,7 @@ class _AppTextFieldState extends State<AppTextField> {
             widget.hintTextCenter == true ? TextAlign.center : TextAlign.start,
         onChanged: widget.onChanged,
         maxLength: widget.maxLength,
-        maxLines: widget.maxLines ?? 1,
+        maxLines: widget.maxLinesIsNull == true ? null : widget.maxLines ?? 1,
         textInputAction: widget.textInputAction,
         style: const TextStyle(color: Colors.black),
         enabled: widget.enable ?? true,

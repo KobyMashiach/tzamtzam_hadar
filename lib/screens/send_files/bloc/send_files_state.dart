@@ -10,3 +10,7 @@ abstract class SendFilesState {
 final class SendFilesInitial extends SendFilesState {
   SendFilesInitial({required super.sendFilesList});
 }
+
+final class SendFilesLoading extends SendFilesState {
+  SendFilesLoading({required super.sendFilesList});
+}
