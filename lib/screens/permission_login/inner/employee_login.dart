@@ -50,9 +50,9 @@ class EmployeeLogin extends StatelessWidget {
                 child: NextButton(
                   onTap: () async {
                     if (password ==
-                        permissionPassword(UserPermissions.employees)) {
+                        permissionPassword(UserPermissions.employee)) {
                       await GeneralDataSource.savePermissions(
-                          key: UserPermissions.employees);
+                          key: UserPermissions.employee);
                       KheasydevNavigatePage().pop(context);
                     } else {
                       kheasydevAppToast(appTranslate('wrong_password'));

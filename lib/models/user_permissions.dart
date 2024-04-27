@@ -15,7 +15,7 @@ enum UserPermissions {
   admin(2),
 
   @HiveField(3)
-  employees(3),
+  employee(3),
 
   @HiveField(4)
   customer(4);
@@ -47,7 +47,7 @@ extension UserPermissionsX on UserPermissions {
     return switch (this) {
       UserPermissions.developer => appTranslate('developer'),
       UserPermissions.admin => appTranslate('admin'),
-      UserPermissions.employees => appTranslate('employees'),
+      UserPermissions.employee => appTranslate('employee'),
       UserPermissions.customer => appTranslate('customer'),
     };
   }
@@ -58,8 +58,8 @@ extension UserPermissionsX on UserPermissions {
       return UserPermissions.developer;
     } else if (translatedPermission == appTranslate('admin')) {
       return UserPermissions.admin;
-    } else if (translatedPermission == appTranslate('employees')) {
-      return UserPermissions.employees;
+    } else if (translatedPermission == appTranslate('employee')) {
+      return UserPermissions.employee;
     } else if (translatedPermission == appTranslate('customer')) {
       return UserPermissions.customer;
     } else {

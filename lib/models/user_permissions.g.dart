@@ -18,7 +18,7 @@ class UserPermissionsAdapter extends TypeAdapter<UserPermissions> {
       case 2:
         return UserPermissions.admin;
       case 3:
-        return UserPermissions.employees;
+        return UserPermissions.employee;
       case 4:
         return UserPermissions.customer;
       default:
@@ -35,7 +35,7 @@ class UserPermissionsAdapter extends TypeAdapter<UserPermissions> {
       case UserPermissions.admin:
         writer.writeByte(2);
         break;
-      case UserPermissions.employees:
+      case UserPermissions.employee:
         writer.writeByte(3);
         break;
       case UserPermissions.customer:
