@@ -9,6 +9,7 @@ import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/contact_model.dart';
 import 'package:tzamtzam_hadar/repos/lists_maps_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
+import 'package:tzamtzam_hadar/repos/send_files_repo.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
 part 'managment_event.dart';
@@ -19,7 +20,11 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
   Map<String, List<ContactModel>> contacts = {};
   final OrdersRepo orderRepo;
   final ListsMapsRepo listsMapsRepo;
-  ManagmentBloc({required this.orderRepo, required this.listsMapsRepo})
+  final SendFilesRepo sendFilesRepo;
+  ManagmentBloc(
+      {required this.orderRepo,
+      required this.listsMapsRepo,
+      required this.sendFilesRepo})
       : super(ManagmentStateInitial(managmentList: [])) {
     on<ManagmentEventInit>(_managmentEventInit);
     on<ManagmentEventOpenDialog>(_managmentEventOpenDialog);
@@ -69,7 +74,7 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
       ManagmentEventAddNewSendFilesItem event,
       Emitter<ManagmentState> emit) async {
     emit(ManagmentStateLoading(managmentList: managmentList));
-    await listsMapsRepo.uploadNewSendFiles(
+    await sendFilesRepo.uploadNewSendFiles(
       title: event.title,
       description: event.description,
       type: event.type,

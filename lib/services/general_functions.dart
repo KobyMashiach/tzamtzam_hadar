@@ -12,6 +12,7 @@ class GeneralFunctions {
   openWeb(String url) async {
     String openUrl;
     if (!url.startsWith('mailto:') &&
+        !url.startsWith("tel:") &&
         !url.startsWith('https://') &&
         !url.startsWith('http://')) {
       openUrl = 'https://$url';

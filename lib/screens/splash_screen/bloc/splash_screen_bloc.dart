@@ -138,7 +138,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
             String phoneNumber = map['phoneNumber'] ?? '';
             contacts.add(ContactModel(name: name, phoneNumber: phoneNumber));
           });
-          tran[key] = contacts;
+          tran[appTranslate(key)] = contacts;
         },
       );
     }

@@ -3,10 +3,7 @@ part of 'contacts_screen_bloc.dart';
 @immutable
 abstract class ContactsScreenEvent {}
 
-class ContactsScreenEventInitialize extends ContactsScreenEvent {
-  final Map<String, List<ContactModel>> contacts;
-  ContactsScreenEventInitialize(this.contacts);
-}
+class ContactsScreenEventInitialize extends ContactsScreenEvent {}
 
 class ContactsScreenEventOnPhonePress extends ContactsScreenEvent {
   final String phoneNumber;
@@ -33,4 +30,21 @@ class ContactsScreenEventOnCloseCategory extends ContactsScreenEvent {
 class ContactsScreenEventOnOpenCategory extends ContactsScreenEvent {
   final String category;
   ContactsScreenEventOnOpenCategory(this.category);
+}
+
+class ContactsScreenEventOnNewContactClicked extends ContactsScreenEvent {}
+
+class ContactsScreenEventOnAddNewContactClicked extends ContactsScreenEvent {
+  final String name;
+  final String phoneNumber;
+  final String group;
+
+  ContactsScreenEventOnAddNewContactClicked(
+      {required this.name, required this.phoneNumber, required this.group});
+}
+
+class ContactsScreenEventOnDeleteContact extends ContactsScreenEvent {
+  final String name;
+  final String group;
+  ContactsScreenEventOnDeleteContact({required this.name, required this.group});
 }

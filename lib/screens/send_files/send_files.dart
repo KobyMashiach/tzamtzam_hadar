@@ -6,6 +6,7 @@ import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/lists_maps_data_source.dart';
 import 'package:tzamtzam_hadar/models/send_files_model.dart';
 import 'package:tzamtzam_hadar/repos/lists_maps_repo.dart';
+import 'package:tzamtzam_hadar/repos/send_files_repo.dart';
 import 'package:tzamtzam_hadar/screens/permission_login/permission_login.dart';
 import 'package:tzamtzam_hadar/screens/send_files/bloc/send_files_bloc.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
@@ -20,18 +21,10 @@ class SendFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<ListsMapsDataSource>(
-          create: (context) => ListsMapsDataSource(),
-        ),
-        RepositoryProvider<ListsMapsRepo>(
-          create: (context) =>
-              ListsMapsRepo(context.read<ListsMapsDataSource>()),
-        ),
-      ],
+    return RepositoryProvider(
+      create: (context) => SendFilesRepo(),
       child: BlocProvider(
-        create: (context) => SendFilesBloc(context.read<ListsMapsRepo>())
+        create: (context) => SendFilesBloc(context.read<SendFilesRepo>())
           ..add(SendFilesEventInit()),
         child: BlocConsumer<SendFilesBloc, SendFilesState>(
           listenWhen: (previous, current) => current is SendFilesNavigatorState,

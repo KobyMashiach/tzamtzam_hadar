@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/send_files_model.dart';
 import 'package:tzamtzam_hadar/repos/lists_maps_repo.dart';
+import 'package:tzamtzam_hadar/repos/send_files_repo.dart';
 import 'package:tzamtzam_hadar/services/firestore_data.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
@@ -16,9 +17,9 @@ part 'send_files_state.dart';
 
 class SendFilesBloc extends Bloc<SendFilesEvent, SendFilesState> {
   List<SendFilesModel> sendFilesList = [];
-  final ListsMapsRepo listsMapsRepo;
+  final SendFilesRepo sendFilesRepo;
 
-  SendFilesBloc(this.listsMapsRepo)
+  SendFilesBloc(this.sendFilesRepo)
       : super(SendFilesInitial(sendFilesList: [])) {
     on<SendFilesEventInit>(_sendFilesEventInit);
     on<SendFilesOnLoadingScreen>(_sendFilesOnLoadingScreen);
@@ -54,7 +55,7 @@ class SendFilesBloc extends Bloc<SendFilesEvent, SendFilesState> {
   FutureOr<void> _sendFilesOnDeleteItem(
       SendFilesOnDeleteItem event, Emitter<SendFilesState> emit) async {
     emit(SendFilesLoading(sendFilesList: sendFilesList));
-    await listsMapsRepo.removeItemFromSendFiles(name: event.item.name);
+    await sendFilesRepo.removeItemFromSendFiles(name: event.item.name);
     kheasydevAppToast(appTranslate("send_item_deleted",
         arguments: {"name": event.item.name}));
     refreshUIFunction(emit);
@@ -69,7 +70,7 @@ class SendFilesBloc extends Bloc<SendFilesEvent, SendFilesState> {
   FutureOr<void> _sendFilesOnSaveEditItem(
       SendFilesOnSaveEditItem event, Emitter<SendFilesState> emit) async {
     emit(SendFilesLoading(sendFilesList: sendFilesList));
-    await listsMapsRepo.uploadNewSendFiles(
+    await sendFilesRepo.uploadNewSendFiles(
       title: event.title,
       description: event.description,
       type: event.type,
@@ -79,7 +80,7 @@ class SendFilesBloc extends Bloc<SendFilesEvent, SendFilesState> {
       emailLink: event.emailLink,
     );
     if (event.oldTitle != event.title)
-      await listsMapsRepo.removeItemFromSendFiles(name: event.oldTitle);
+      await sendFilesRepo.removeItemFromSendFiles(name: event.oldTitle);
     kheasydevAppToast(
         appTranslate("send_item_updated", arguments: {"name": event.title}));
     refreshUIFunction(emit);

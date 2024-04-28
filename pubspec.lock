@@ -217,6 +217,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  contact_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: contact_picker_platform_interface
+      sha256: e2cd47192185c0918daae8e2db081ac3fc2f3ccc3cc1f4089df3286866fe127f
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
+  contact_picker_web:
+    dependency: transitive
+    description:
+      name: contact_picker_web
+      sha256: d953015cb05ee8305dda9fab4cdad7a70f323f926b2d6b2effb952014ccba5fc
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   convert:
     dependency: transitive
     description:
@@ -453,6 +469,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttercontactpicker:
+    dependency: "direct main"
+    description:
+      name: fluttercontactpicker
+      sha256: "8dba34b6e79dcf76c793e50301e7f9621ae5168d74707e58a1e71dcdbc82ed0f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   fluttertoast:
     dependency: transitive
     description:

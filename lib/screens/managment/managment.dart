@@ -11,6 +11,7 @@ import 'package:tzamtzam_hadar/hive/lists_maps_data_source.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/repos/lists_maps_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
+import 'package:tzamtzam_hadar/repos/send_files_repo.dart';
 import 'package:tzamtzam_hadar/screens/contacts/contacts_screen.dart';
 import 'package:tzamtzam_hadar/screens/managment/bloc/managment_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/cards/general_card.dart';
@@ -38,11 +39,13 @@ class Managment extends StatelessWidget {
           create: (context) =>
               ListsMapsRepo(context.read<ListsMapsDataSource>()),
         ),
+        RepositoryProvider<SendFilesRepo>(create: (context) => SendFilesRepo()),
       ],
       child: BlocProvider(
         create: (context) => ManagmentBloc(
             orderRepo: context.read<OrdersRepo>(),
-            listsMapsRepo: context.read<ListsMapsRepo>())
+            listsMapsRepo: context.read<ListsMapsRepo>(),
+            sendFilesRepo: context.read<SendFilesRepo>())
           ..add(ManagmentEventInit()),
         child: BlocConsumer<ManagmentBloc, ManagmentState>(
           listenWhen: (previous, current) =>
@@ -73,18 +76,16 @@ class Managment extends StatelessWidget {
               case const (ManagmentNavigationOpenDeleteAllOrdersDialog):
                 await deleteAllOrdersDialog(context, bloc);
               case const (ManagmentNavigationNavToContactsPage):
-                final newState = state as ManagmentNavigationNavToContactsPage;
-                KheasydevNavigatePage()
-                    .push(context, ContactsScreen(contacts: newState.contacts));
+                KheasydevNavigatePage().push(context, ContactsScreen());
             }
           },
           builder: (context, state) {
             final bloc = context.read<ManagmentBloc>();
             return Scaffold(
               appBar: appAppBar(title: appTranslate('managment')),
-              drawer: appSideMenu(context, index: 0),
+              drawer: appSideMenu(context, index: 2),
               body: state is ManagmentStateLoading
-                  ? CircularProgressIndicator()
+                  ? Center(child: CircularProgressIndicator())
                   : Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(

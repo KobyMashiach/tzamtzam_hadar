@@ -102,6 +102,9 @@
     "suppliers": "ספקים",
     "customers": "לקוחות",
     "dontcontactsincategory": "לא נמצאו אנשי קשר בקטגוריה זו",
+    "please_write_name": "נא מלא את השדה 'שם'",
+    "please_write_phone_number": "נא מלא את השדה 'מספר טלפון'",
+    "please_write_group": "נא בחר את הקבוצה",
     "please_write_title": "נא מלא את השדה 'כותרת'",
     "please_write_description": "נא מלא את השדה 'תיאור'",
     "please_write_type": "נא בחר את הסוג",
@@ -112,5 +115,12 @@
     "restart": "הפעל מחדש",
     "send_item_uploaded": "הפריט {{name}} נוצר בהצלחה",
     "send_item_updated": "הפריט {{name}} התעדכן בהצלחה",
-    "send_item_deleted": "הפריט {{name}} נמחק בהצלחה"
+    "send_item_deleted": "הפריט {{name}} נמחק בהצלחה",
+    "add_contact": "הוסף איש קשר",
+    "name": "שם",
+    "group": "קבוצה",
+    "contact_uploaded": "איש הקשר {{name}} נוצר בהצלחה",
+    "contact_updated": "איש הקשר {{name}} התעדכן בהצלחה",
+    "contact_deleted": "איש הקשר {{name}} נמחק בהצלחה",
+    "wrong_phone_number": "מספר טלפון שגוי"
 }
