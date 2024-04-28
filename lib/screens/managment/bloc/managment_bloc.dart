@@ -59,14 +59,17 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
 
   FutureOr<void> _managmentEventClearOrders(
       ManagmentEventClearOrders event, Emitter<ManagmentState> emit) async {
+    emit(ManagmentStateLoading(managmentList: managmentList));
     await orderRepo.clearOrdersTable();
+    emit(ManagmentStateInitial(managmentList: managmentList));
     kheasydevAppToast(appTranslate("all_orders_deleted"));
   }
 
   FutureOr<void> _managmentEventAddNewSendFilesItem(
       ManagmentEventAddNewSendFilesItem event,
       Emitter<ManagmentState> emit) async {
-    listsMapsRepo.uploadNewSendFiles(
+    emit(ManagmentStateLoading(managmentList: managmentList));
+    await listsMapsRepo.uploadNewSendFiles(
       title: event.title,
       description: event.description,
       type: event.type,
@@ -75,5 +78,8 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
       qrImage: event.qrImage,
       emailLink: event.emailLink,
     );
+    emit(ManagmentStateInitial(managmentList: managmentList));
+    kheasydevAppToast(
+        appTranslate("send_item_uploaded", arguments: {"name": event.title}));
   }
 }

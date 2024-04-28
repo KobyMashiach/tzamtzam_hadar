@@ -83,34 +83,36 @@ class Managment extends StatelessWidget {
             return Scaffold(
               appBar: appAppBar(title: appTranslate('managment')),
               drawer: appSideMenu(context, index: 0),
-              body: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    Text(
-                      appTranslate('managment'),
-                      style: AppTextStyle().title,
+              body: state is ManagmentStateLoading
+                  ? CircularProgressIndicator()
+                  : Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          Text(
+                            appTranslate('managment'),
+                            style: AppTextStyle().title,
+                          ),
+                          kheasydevDivider(black: true),
+                          SizedBox(height: 24),
+                          ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: state.managmentList.length,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16),
+                            itemBuilder: (context, index) {
+                              final item = state.managmentList[index];
+                              return GeneralCard(
+                                title: item,
+                                centerTitle: true,
+                                onTap: () =>
+                                    bloc.add(ManagmentEventOpenDialog(index)),
+                              ); //AddNewSendFilesDialog
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    kheasydevDivider(black: true),
-                    SizedBox(height: 24),
-                    ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: state.managmentList.length,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        final item = state.managmentList[index];
-                        return GeneralCard(
-                          title: item,
-                          centerTitle: true,
-                          onTap: () =>
-                              bloc.add(ManagmentEventOpenDialog(index)),
-                        ); //AddNewSendFilesDialog
-                      },
-                    ),
-                  ],
-                ),
-              ),
             );
           },
         ),

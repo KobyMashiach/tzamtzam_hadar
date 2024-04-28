@@ -109,5 +109,8 @@
     "please_upload_image": "נא העלה תמונה",
     "no_internet": "אין חיבור אינטרנט",
     "please_connect_internet": "נא התחבר לאינטרנט ואז נסה שוב",
-    "restart": "הפעל מחדש"
+    "restart": "הפעל מחדש",
+    "send_item_uploaded": "הפריט {{name}} נוצר בהצלחה",
+    "send_item_updated": "הפריט {{name}} התעדכן בהצלחה",
+    "send_item_deleted": "הפריט {{name}} נמחק בהצלחה"
 }
