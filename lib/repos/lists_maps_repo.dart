@@ -26,13 +26,15 @@ class ListsMapsRepo {
     }
   }
 
-  Future<void> uploadNewSendFiles(
-      {required String title,
-      required String description,
-      required String type,
-      required String networkUrl,
-      required XFile image,
-      required XFile? qrImage}) async {
+  Future<void> uploadNewSendFiles({
+    required String title,
+    required String description,
+    required String type,
+    required String networkUrl,
+    required XFile image,
+    required XFile? qrImage,
+    required bool emailLink,
+  }) async {
     firestoreUpdateDoc(collection,
         docName: 'last_update',
         values: {"lastUpdate": Timestamp.fromDate(DateTime.now())});
@@ -50,8 +52,10 @@ class ListsMapsRepo {
         "description": description,
         "qrCode": qrImageUrl,
         "networkUrl": networkUrl,
+        "emailLink": emailLink
       }
     });
+
     firestoreUpdateDoc(
       collection,
       docName: 'maps',
@@ -67,5 +71,23 @@ class ListsMapsRepo {
             .map((entry) => MapEntry<String, dynamic>(entry.key, entry.value)),
       ),
     );
+  }
+
+  Future<void> removeItemFromSendFiles({required String name}) async {
+    await deleteFilesFromFolderOnStorage("sendFiles/${name}");
+    globalSendFiles.removeWhere((key, value) => key == name);
+    globalSendFilesTranslated.removeWhere((key, value) => key == name);
+    final collection =
+        FirebaseFirestore.instance.collection('all_lists_and_maps');
+    firestoreUpdateDoc(
+      collection,
+      docName: 'maps',
+      values: {
+        "send_files_map": globalSendFiles,
+      },
+    );
+    firestoreUpdateDoc(collection,
+        docName: 'last_update',
+        values: {"lastUpdate": Timestamp.fromDate(DateTime.now())});
   }
 }

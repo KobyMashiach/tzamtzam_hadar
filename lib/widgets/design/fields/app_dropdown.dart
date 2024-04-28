@@ -4,12 +4,14 @@ class AppDropDown extends StatefulWidget {
   final void Function(String) onChanged;
   final List<String> listValues;
   final String? hintText;
+  final String? value;
 
   const AppDropDown({
     Key? key,
     required this.onChanged,
     required this.listValues,
     this.hintText,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class _AppDropDownState extends State<AppDropDown> {
   @override
   void initState() {
     super.initState();
-    value = null;
+    value = widget.value;
   }
 
   @override

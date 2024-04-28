@@ -73,6 +73,7 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
       networkUrl: event.networkUrl,
       image: event.image,
       qrImage: event.qrImage,
+      emailLink: event.emailLink,
     );
   }
 }

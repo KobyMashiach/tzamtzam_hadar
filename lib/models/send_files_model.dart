@@ -5,14 +5,17 @@ class SendFilesModel {
   final String networkUrl;
   final String imageUrl;
   final String? qrCode;
+  final bool emailLink;
 
-  SendFilesModel(
-      {required this.name,
-      required this.type,
-      required this.description,
-      required this.networkUrl,
-      required this.imageUrl,
-      this.qrCode});
+  SendFilesModel({
+    required this.name,
+    required this.type,
+    required this.description,
+    required this.networkUrl,
+    required this.imageUrl,
+    this.qrCode,
+    required this.emailLink,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +25,7 @@ class SendFilesModel {
       'networkUrl': networkUrl,
       'imageUrl': imageUrl,
       'qrCode': qrCode,
+      'emailLink': emailLink,
     };
   }
 }

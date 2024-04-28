@@ -11,7 +11,9 @@ class GeneralFunctions {
 
   openWeb(String url) async {
     String openUrl;
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    if (!url.startsWith('mailto:') &&
+        !url.startsWith('https://') &&
+        !url.startsWith('http://')) {
       openUrl = 'https://$url';
     } else {
       openUrl = url;
@@ -32,7 +34,8 @@ class GeneralFunctions {
     Uint8List bytes = response.bodyBytes;
 
     final tempDir = await getTemporaryDirectory();
-    File file = File('${tempDir.path}/image.jpg');
+    File file = File(
+        '${tempDir.path}/${imageUrl.substring(imageUrl.length - 10, imageUrl.length)}.jpg');
     await file.writeAsBytes(bytes);
     return XFile(file.path);
   }

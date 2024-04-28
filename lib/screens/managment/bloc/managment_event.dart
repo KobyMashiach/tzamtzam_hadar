@@ -20,12 +20,15 @@ class ManagmentEventAddNewSendFilesItem extends ManagmentEvent {
   final String networkUrl;
   final XFile image;
   final XFile? qrImage;
+  final bool emailLink;
 
-  ManagmentEventAddNewSendFilesItem(
-      {required this.title,
-      required this.description,
-      required this.type,
-      required this.networkUrl,
-      required this.image,
-      required this.qrImage});
+  ManagmentEventAddNewSendFilesItem({
+    required this.title,
+    required this.description,
+    required this.type,
+    required this.networkUrl,
+    required this.image,
+    required this.qrImage,
+    required this.emailLink,
+  });
 }

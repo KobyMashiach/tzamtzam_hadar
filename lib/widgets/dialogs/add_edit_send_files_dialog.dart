@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:kh_easy_dev/kh_easy_dev.dart';
+
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
@@ -12,21 +13,34 @@ import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/choose_image_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/user_input_dialog.dart';
 
-class AddNewSendFilesDialog extends StatefulWidget {
-  final String title;
-  final Function(Widget)? getImage;
+class AddEditSendFilesDialog extends StatefulWidget {
+  final String pageTitle;
 
-  const AddNewSendFilesDialog({
-    super.key,
-    required this.title,
-    this.getImage,
-  });
+  final String? title;
+  final String? description;
+  final String? type;
+  final String? networkUrl;
+  final XFile? oldImage;
+  final XFile? oldQrImage;
+  final bool? emailLink;
+
+  const AddEditSendFilesDialog({
+    Key? key,
+    required this.pageTitle,
+    this.title,
+    this.description,
+    this.type,
+    this.networkUrl,
+    this.oldImage,
+    this.oldQrImage,
+    this.emailLink,
+  }) : super(key: key);
 
   @override
-  State<AddNewSendFilesDialog> createState() => _AddNewSendFilesDialogState();
+  State<AddEditSendFilesDialog> createState() => _AddEditSendFilesDialogState();
 }
 
-class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
+class _AddEditSendFilesDialogState extends State<AddEditSendFilesDialog> {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   late TextEditingController typeController;
@@ -36,18 +50,48 @@ class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
   late Widget? displayQrCode = null;
   late XFile? image;
   late XFile? qrImage;
-
-  //TODO: add type images / documents
+  late bool? emailLink;
 
   @override
   void initState() {
     super.initState();
+    initControllersAndImages();
+    initDialogEditItem();
+  }
+
+  void initDialogEditItem() async {
+    if (widget.title != null && widget.title != "")
+      titleController.text = widget.title!;
+    if (widget.description != null && widget.description != "")
+      descriptionController.text = widget.description!;
+    if (widget.type != null && widget.type != "")
+      typeController.text = widget.type!;
+    if (widget.networkUrl != null && widget.networkUrl != "") {
+      networkUrlController.text = widget.networkUrl!;
+      if (networkUrlController.text.startsWith("mailto:")) {
+        networkUrlController.text =
+            networkUrlController.text.replaceAll("mailto:", "");
+      }
+    }
+    if (widget.oldImage != null) {
+      image = widget.oldImage;
+      displayImage = Image.file(File(image!.path));
+    }
+    if (widget.oldQrImage != null) {
+      qrImage = widget.oldQrImage;
+      displayQrCode = Image.file(File(qrImage!.path));
+    }
+    if (widget.emailLink != null) emailLink = widget.emailLink;
+  }
+
+  void initControllersAndImages() {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     typeController = TextEditingController();
     networkUrlController = TextEditingController();
     image = null;
     qrImage = null;
+    emailLink = false;
   }
 
   @override
@@ -67,31 +111,13 @@ class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
           ? sizeScreen * 0.5
           : sizeScreen * 0.6,
       primaryColor: Colors.white,
-      title: widget.title,
+      title: widget.pageTitle,
       buttons: [
         GenericButtonModel(
             text: appTranslate('ok'),
             type: GenericButtonType.outlined,
             onPressed: () async {
-              if (titleController.text == "")
-                kheasydevAppToast(appTranslate("please_write_title"));
-              else if (descriptionController.text == "")
-                kheasydevAppToast(appTranslate("please_write_description"));
-              else if (networkUrlController.text == "")
-                kheasydevAppToast(appTranslate("please_write_link"));
-              else if (typeController.text == "")
-                kheasydevAppToast(appTranslate("please_write_type"));
-              else if (image == null)
-                kheasydevAppToast(appTranslate("please_upload_image"));
-              else
-                Navigator.of(context).pop((
-                  titleController.text,
-                  descriptionController.text,
-                  typeController.text,
-                  networkUrlController.text,
-                  image,
-                  qrImage
-                ));
+              onSaveSendFilesDialog(context);
             }),
         GenericButtonModel(
             text: appTranslate('cancel'),
@@ -105,41 +131,18 @@ class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
           child: Column(
             children: [
               Expanded(
-                child: AppTextField(
-                  onChanged: (title) {
-                    titleController.text = title;
-                  },
-                  hintText: appTranslate('title'),
-                  clearXIcon: true,
-                  controller: titleController,
-                  onClear: () => titleController.clear(),
-                ),
-              ),
+                  child: textControllersRows(
+                      title: "title", controller: titleController)),
               Expanded(
-                child: AppTextField(
-                  onChanged: (title) {
-                    descriptionController.text = title;
-                  },
-                  hintText: appTranslate('description'),
-                  clearXIcon: true,
-                  controller: descriptionController,
-                  onClear: () => descriptionController.clear(),
-                  textInputAction: TextInputAction.newline,
-                  keyboard: TextInputType.multiline,
-                  maxLinesIsNull: true,
-                ),
-              ),
+                  child: textControllersRows(
+                      title: "description",
+                      controller: descriptionController,
+                      description: true)),
               Expanded(
-                child: AppTextField(
-                  onChanged: (title) {
-                    networkUrlController.text = title;
-                  },
-                  hintText: appTranslate('link'),
-                  clearXIcon: true,
-                  controller: networkUrlController,
-                  onClear: () => networkUrlController.clear(),
-                ),
-              ),
+                  child: textControllersRows(
+                      title: emailLink == true ? "email" : "link",
+                      controller: networkUrlController,
+                      link: true)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -150,6 +153,10 @@ class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
                   Expanded(
                     flex: 7,
                     child: AppDropDown(
+                        hintText: appTranslate("type"),
+                        value: widget.type != null
+                            ? appTranslate(widget.type!)
+                            : null,
                         onChanged: (value) {
                           if (value == globalSendFilesTypeTranslated[0]) {
                             typeController.text = globalSendFilesType[0];
@@ -190,6 +197,74 @@ class _AddNewSendFilesDialogState extends State<AddNewSendFilesDialog> {
               ),
             ],
           )),
+    );
+  }
+
+  void onSaveSendFilesDialog(BuildContext context) {
+    if (titleController.text == "")
+      kheasydevAppToast(appTranslate("please_write_title"));
+    else if (descriptionController.text == "")
+      kheasydevAppToast(appTranslate("please_write_description"));
+    else if (networkUrlController.text == "")
+      kheasydevAppToast(appTranslate("please_write_link"));
+    else if (typeController.text == "")
+      kheasydevAppToast(appTranslate("please_write_type"));
+    else if (image == null)
+      kheasydevAppToast(appTranslate("please_upload_image"));
+    else {
+      if (emailLink == true &&
+          !networkUrlController.text.startsWith("mailto:")) {
+        networkUrlController.text = "mailto:${networkUrlController.text}";
+      } else if (emailLink == false &&
+          networkUrlController.text.startsWith("mailto:")) {
+        networkUrlController.text =
+            networkUrlController.text.replaceAll("mailto:", "");
+      }
+      Navigator.of(context).pop((
+        titleController.text,
+        descriptionController.text,
+        typeController.text,
+        networkUrlController.text,
+        image,
+        qrImage,
+        emailLink,
+      ));
+    }
+  }
+
+  Row textControllersRows(
+      {required String title,
+      required TextEditingController controller,
+      bool? description,
+      bool? link}) {
+    return Row(
+      children: [
+        Expanded(flex: 2, child: Text("${appTranslate(title)}:")),
+        if (link == true)
+          CheckboxMenuButton(
+            value: emailLink,
+            onChanged: (value) {
+              emailLink = value;
+              setState(() {});
+            },
+            child: Text(""),
+          ),
+        Expanded(
+          flex: 8,
+          child: AppTextField(
+            padding: EdgeInsets.all(0),
+            onChanged: (value) => controller.text = value,
+            hintText: appTranslate(title),
+            clearXIcon: true,
+            controller: controller,
+            onClear: () => controller.clear(),
+            textInputAction:
+                description == true ? TextInputAction.newline : null,
+            keyboard: description == true ? TextInputType.multiline : null,
+            maxLinesIsNull: description == true ? true : null,
+          ),
+        ),
+      ],
     );
   }
 

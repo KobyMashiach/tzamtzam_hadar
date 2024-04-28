@@ -14,7 +14,7 @@ import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/contacts/contacts_screen.dart';
 import 'package:tzamtzam_hadar/screens/managment/bloc/managment_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/cards/general_card.dart';
-import 'package:tzamtzam_hadar/widgets/dialogs/add_new_send_files_dialog.dart';
+import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_send_files_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 import 'package:tzamtzam_hadar/widgets/general/side_menu.dart';
 
@@ -57,18 +57,18 @@ class Managment extends StatelessWidget {
                     state as ManagmentNavigationOpenSendFilesDialog;
                 final sendFilesData = await showDialog(
                   context: context,
-                  builder: (context) => AddNewSendFilesDialog(
-                      title: newState.managmentList[state.index]),
+                  builder: (context) => AddEditSendFilesDialog(
+                      pageTitle: newState.managmentList[state.index]),
                 );
                 bloc.add(ManagmentEventAddNewSendFilesItem(
-                    title: sendFilesData.$1,
-                    description: sendFilesData.$2,
-                    type: sendFilesData.$3,
-                    networkUrl: sendFilesData.$4,
-                    image: sendFilesData.$5,
-                    qrImage: sendFilesData.$6));
-                log(sendFilesData.toString());
-              //TODO: new event that save sendFilesData (string title, string description, xfile image, xfile? qrImage)
+                  title: sendFilesData.$1,
+                  description: sendFilesData.$2,
+                  type: sendFilesData.$3,
+                  networkUrl: sendFilesData.$4,
+                  image: sendFilesData.$5,
+                  qrImage: sendFilesData.$6,
+                  emailLink: sendFilesData.$7,
+                ));
               //  if(sendFilesData!= null){bloc.add(event)}
               case const (ManagmentNavigationOpenDeleteAllOrdersDialog):
                 await deleteAllOrdersDialog(context, bloc);
@@ -93,11 +93,6 @@ class Managment extends StatelessWidget {
                     ),
                     kheasydevDivider(black: true),
                     SizedBox(height: 24),
-                    // AppDropDown(
-                    //   onChanged: (value) {},
-                    //   listValues: state.managmentList,
-                    //   hintText: appTranslate("key"),
-                    // )
                     ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.managmentList.length,
