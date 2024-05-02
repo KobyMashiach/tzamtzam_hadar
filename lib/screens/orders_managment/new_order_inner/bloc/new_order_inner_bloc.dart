@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
-import 'package:tzamtzam_hadar/screens/splash_screen/bloc/splash_screen_bloc.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
@@ -50,7 +48,6 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   FutureOr<void> _newOrderEventInitial(
       NewOrderEventInitial event, Emitter<NewOrderInnerState> emit) async {
     emit(_newOrderOnLoading());
-    //TODO: add automatic order to firebase, if dont completed -> remove
     final List<OrderModel> orders = localDB.getOrders();
 
     // Map<String, OrderModel> orderMap = Map.fromIterable(

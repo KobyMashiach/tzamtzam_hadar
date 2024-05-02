@@ -5,6 +5,7 @@ class AppDropDown extends StatefulWidget {
   final List<String> listValues;
   final String? hintText;
   final String? value;
+  final GlobalKey<FormFieldState>? keyToReset;
 
   const AppDropDown({
     Key? key,
@@ -12,6 +13,7 @@ class AppDropDown extends StatefulWidget {
     required this.listValues,
     this.hintText,
     this.value,
+    this.keyToReset,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class _AppDropDownState extends State<AppDropDown> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      key: widget.keyToReset,
       value: value,
       items: widget.listValues.map((String value) {
         return DropdownMenuItem<String>(

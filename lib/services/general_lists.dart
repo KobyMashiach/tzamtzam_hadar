@@ -1,10 +1,4 @@
-import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/contact_model.dart';
-import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/new_order_inner.dart';
-import 'package:tzamtzam_hadar/screens/orders_managment/orders_managment_inner/order_managment_inner.dart';
-
-// TODO: add all lists and map to firestore
-// TODO: save in hive and check if exist
 
 final List<String> globalPicturesSizes = [];
 final List<String> globalPicturesSizesTranslated = [];

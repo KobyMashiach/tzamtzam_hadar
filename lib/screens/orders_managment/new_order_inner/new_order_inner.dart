@@ -337,6 +337,7 @@ class _NewOrderState extends State<NewOrder> {
           hintText: '0',
           hintTextCenter: true,
           controller: _amount,
+          keyboard: TextInputType.number,
           onChanged: (value) {
             setState(() {
               _amount.text = value;
@@ -539,7 +540,7 @@ class _NewOrderState extends State<NewOrder> {
     }
     _notes.clear();
     _amount.clear();
-    category = null;
+    // category = null;
     canvasSize = null;
     sublimationProduct = null;
     pictureSize = null;

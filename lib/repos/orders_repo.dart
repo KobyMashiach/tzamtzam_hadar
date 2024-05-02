@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/services/firestore_data.dart';
@@ -10,14 +13,43 @@ class OrdersRepo {
 
   //TODO: check data in hive
 
-  List<OrderModel> getAllOrders() {
-    return localDB.getOrders();
-  }
+  // Future<Map<String, Map<String, OrderModel>>> getAllOrders() async {
+  Future<(List<OrderModel>, Map<String, Map<String, OrderModel>>)>
+      getAllOrders() async {
+    // final lastUpdateDB = localDB.getLastUpdate();
+    // final lastUpdateFS =
+    //     (await firestoreGetDataFromDoc(collection, 'last_update', "lastUpdate"))
+    //         .toDate();
 
-  void setNewOrdersCollection() {
-    firestoreNewDoc(collection, docName: "progress");
-    firestoreNewDoc(collection, docName: "done");
-    firestoreNewDoc(collection, docName: "hold");
+    // if (lastUpdateDB == null || !lastUpdateDB.isAtSameMomentAs(lastUpdateFS)) {
+    // QuerySnapshot querySnapshot = await collection.get();
+    // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    final Map<String, Map<String, dynamic>> allData =
+        await firestoreGetCollection(collection);
+    final Map<String, Map<String, OrderModel>> orders = {};
+    final List<OrderModel> allOrders = [];
+
+    allData.forEach((key, value) {
+      if (!orders.containsKey(key)) {
+        orders[key] = {};
+      }
+      if (value.isNotEmpty) {
+        value.forEach((innerKey, innerValue) {
+          OrderModel order = OrderModel.fromMap(innerValue);
+          orders[key]![innerKey] = order;
+          allOrders.add(order);
+        });
+      } else {
+        orders[key] = {};
+      }
+    });
+
+    allOrders.sort((a, b) => a.orderId.compareTo(b.orderId));
+
+    return (allOrders, orders);
+    // } else {
+    // return localDB.getOrders();
+    // }
   }
 
   void newOrUpdateOrderToFirestore(OrderModel order) {
@@ -26,17 +58,23 @@ class OrdersRepo {
         docName: order.status, values: {order.orderId: orderMap});
   }
 
+  void changeOrderStatusToFirestore(OrderModel order, String status) {
+    final Map<String, dynamic> orderMap = order.toMap();
+    orderMap["status"] = status;
+    firestoreUpdateDoc(collection,
+        docName: status, values: {order.orderId: orderMap});
+    firestoreDeleteField(collection,
+        docName: order.status, fieldName: order.orderId);
+  }
+
   Future<void> clearOrdersTable() async {
-    await localDB.clearOrders();
+    // await localDB.clearOrders();
     _clearFirestoreOrders();
   }
 
   Future<void> deleteOrder(OrderModel order) async {
-    await localDB.deleteOrder(order);
-    _clearFirestoreOrders();
-    // firestoreNewDoc(collection, docName: "progress", values: orders);
-    firestoreNewDoc(collection, docName: "done");
-    firestoreNewDoc(collection, docName: "hold");
+    firestoreDeleteField(collection,
+        docName: order.status, fieldName: order.orderId);
   }
 
   _clearFirestoreOrders() {

@@ -22,15 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _isVisible = false;
 
   _SplashScreenState() {
-    // Timer(const Duration(seconds: 1000), () async {
-    //   //TODO: change to 3 or when data load - the big one
-    // await checkConnectionNoInternet()
-    //     ? KheasydevNavigatePage()
-    //           .pushAndRemoveUntil(context, const ErrorPage())
-    // : KheasydevNavigatePage()
-    //     .pushAndRemoveUntil(context, const SendFiles());
-    // });
-
     Timer(const Duration(milliseconds: 500), () {
       setState(() {
         _isVisible = true;

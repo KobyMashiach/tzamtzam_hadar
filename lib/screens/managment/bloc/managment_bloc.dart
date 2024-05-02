@@ -43,14 +43,16 @@ class ManagmentBloc extends Bloc<ManagmentEvent, ManagmentState> {
     emit(ManagmentStateInitial(managmentList: managmentList));
   }
 
-  FutureOr<void> _managmentEventOpenDialog(
-      ManagmentEventOpenDialog event, Emitter<ManagmentState> emit) {
+  Future<FutureOr<void>> _managmentEventOpenDialog(
+      ManagmentEventOpenDialog event, Emitter<ManagmentState> emit) async {
     switch (event.index) {
       case 0:
         emit(ManagmentNavigationOpenSendFilesDialog(
             index: event.index, managmentList: managmentList));
       case 1:
-        if (orderRepo.getAllOrders().isNotEmpty) {
+        final data = await orderRepo.getAllOrders();
+        final allOrders = data.$1;
+        if (allOrders.isNotEmpty) {
           emit(ManagmentNavigationOpenDeleteAllOrdersDialog(
               managmentList: managmentList));
         } else {

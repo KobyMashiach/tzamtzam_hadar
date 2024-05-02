@@ -10,15 +10,16 @@ import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/services/general_subwidgets.dart';
 
 class OrderManagmentCard extends StatefulWidget {
-  const OrderManagmentCard({
-    super.key,
-    required this.order,
-    this.onDelete,
-    this.onEdit,
-  });
+  const OrderManagmentCard(
+      {super.key,
+      required this.order,
+      this.onDelete,
+      this.onChangeStatus,
+      this.onPrint});
   final OrderModel order;
   final Function(BuildContext context)? onDelete;
-  final Function(BuildContext context)? onEdit;
+  final Function(BuildContext context)? onChangeStatus;
+  final Function(BuildContext context)? onPrint;
 
   @override
   State<OrderManagmentCard> createState() => _OrderManagmentCardState();
@@ -32,9 +33,28 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
     return Slidable(
       enabled: GeneralDataSource.getPermissions().toId() <= 3,
       key: ValueKey(1),
-      startActionPane: GeneralSubwidgets().slidableGeneralActionPane(
-        onDelete: widget.onDelete,
-        onEdit: widget.onEdit,
+      startActionPane: GeneralSubwidgets()
+          .slidableGeneralActionPane(onDelete: widget.onDelete, moreButtons: [
+        SlidableAction(
+          onPressed: widget.onPrint,
+          backgroundColor: Colors.grey,
+          foregroundColor: Colors.white,
+          icon: Icons.details,
+          label: appTranslate('print'),
+        ),
+      ]),
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: widget.onChangeStatus,
+            backgroundColor: getBackgroundColor(widget.order.status),
+            foregroundColor: Colors.white,
+            icon: Icons.details,
+            label:
+                "${appTranslate('status')}: ${appTranslate(widget.order.status)}",
+          ),
+        ],
       ),
       child: GestureDetector(
         onTap: () => setState(() {
@@ -159,5 +179,14 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
               color: Colors.black, size: 30.0),
       ],
     );
+  }
+
+  Color getBackgroundColor(String status) {
+    return switch (status) {
+      "progress" => Colors.red,
+      "hold" => Colors.amber,
+      "done" => Colors.green,
+      _ => Colors.white
+    };
   }
 }

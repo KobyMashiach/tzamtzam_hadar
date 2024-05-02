@@ -36,7 +36,7 @@ class OrderModel extends HiveObject {
   @HiveField(13)
   final int amount;
   @HiveField(14)
-  final String status;
+  String status;
 
   OrderModel(
       {required this.orderId,

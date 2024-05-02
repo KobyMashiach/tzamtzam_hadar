@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:tzamtzam_hadar/core/conntection.dart';
 import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
@@ -38,21 +36,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     await ListsMapsDataSource.initialise();
     await GeneralDataSource.initialise();
     final allData = await listsMapsRepo.getAllData();
-    //TODO: From here
-
-    // globalPicturesSizes =
-    //     (allData[0][ListsEnums.canvas_sizes.getString()] as List<dynamic>)
-    //         .map((e) => e.toString())
-    //         .toList();
-    // globalPicturesSizesTranslated = globalPicturesSizes.map((str) {
-    //   if (str.isEmpty) return '';
-    //   int? firstChar = int.tryParse(str[0]);
-    //   if (firstChar != null) {
-    //     return str;
-    //   } else {
-    //     return appTranslate(str);
-    //   }
-    // }).toList();
 
     buildLists(globalPicturesSizes, globalPicturesSizesTranslated,
         ListsEnums.pictures_sizes.getString(), allData);
@@ -88,9 +71,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
         MapsEnums.contactsList.getString(), allData);
 
     emit(SplashScreenNavigationToSendFilesScreen(allData: allData));
-
-    //TODO: build new repo and get
-    // firestoreGetDataFromDoc(collection, doc, value)
   }
 
   void buildLists(

@@ -6,6 +6,7 @@ class GeneralSubwidgets {
   ActionPane slidableGeneralActionPane({
     Function(BuildContext context)? onDelete,
     Function(BuildContext context)? onEdit,
+    List<Widget>? moreButtons,
   }) {
     return ActionPane(
       motion: const StretchMotion(),
@@ -23,9 +24,10 @@ class GeneralSubwidgets {
             onPressed: onEdit,
             backgroundColor: Color(0xFF21B7CA),
             foregroundColor: Colors.white,
-            icon: Icons.share,
+            icon: Icons.edit,
             label: appTranslate('edit'),
           ),
+        ...moreButtons ?? [],
       ],
     );
   }

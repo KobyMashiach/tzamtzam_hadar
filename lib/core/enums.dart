@@ -33,6 +33,10 @@ extension OrderStatusX on OrderStatus {
       OrderStatus.hold => 'hold',
     };
   }
+
+  static List<String> getAllValuesString() {
+    return OrderStatus.values.map((e) => e.getString()).toList();
+  }
 }
 
 enum MapsEnums {

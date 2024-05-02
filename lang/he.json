@@ -122,5 +122,11 @@
     "contact_uploaded": "איש הקשר {{name}} נוצר בהצלחה",
     "contact_updated": "איש הקשר {{name}} התעדכן בהצלחה",
     "contact_deleted": "איש הקשר {{name}} נמחק בהצלחה",
-    "wrong_phone_number": "מספר טלפון שגוי"
+    "wrong_phone_number": "מספר טלפון שגוי",
+    "status": "סטטוס",
+    "done": "בוצע",
+    "progress": "בתהליך",
+    "hold": "בהמתנה",
+    "change_status": "שינוי סטטוס הזמנה",
+    "print": "הדפסה"
 }

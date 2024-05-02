@@ -7,7 +7,6 @@ import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/repos/contacts_repo.dart';
 import 'package:tzamtzam_hadar/screens/contacts/bloc/contacts_screen_bloc.dart';
-import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/widgets/cards/contact_card.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_contact_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';

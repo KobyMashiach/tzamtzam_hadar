@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tzamtzam_hadar/hive/lists_maps_data_source.dart';
 import 'package:tzamtzam_hadar/services/firestore_data.dart';
-import 'package:tzamtzam_hadar/services/general_lists.dart';
 
 class ListsMapsRepo {
   ListsMapsRepo(this.localDB);
