@@ -22,3 +22,8 @@ class OrderManagmentEventChangeOrderStatus extends OrderManagmentInnerEvent {
   OrderManagmentEventChangeOrderStatus(
       {required this.order, required this.status});
 }
+
+class OrderManagmentEventOpenPrintDialog extends OrderManagmentInnerEvent {
+  final OrderModel order;
+  OrderManagmentEventOpenPrintDialog(this.order);
+}

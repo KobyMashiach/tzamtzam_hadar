@@ -9,7 +9,6 @@ import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/bloc/new_order_inner_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
-import 'package:tzamtzam_hadar/widgets/general/app_loading_page.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_radio_list_tile.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
@@ -95,6 +94,7 @@ class _NewOrderState extends State<NewOrder> {
           listenWhen: (previous, current) => current is NewOrderNavigationState,
           buildWhen: (previous, current) => current is! NewOrderNavigationState,
           listener: (context, state) {
+            //TODO: add ask printing dialog
             switch (state.runtimeType) {
               case const (NewOrderNavigationNavToHomeScreen):
                 //TODO: change to popuntil
@@ -105,9 +105,6 @@ class _NewOrderState extends State<NewOrder> {
           builder: (context, state) {
             final bloc = context.read<NewOrderInnerBloc>();
 
-            if (state is NewOrderOnLoading) {
-              return AppLoading();
-            }
             if (state is NewOrderOnNewOrderState) {
               clearData(state.newCustomer);
               Navigator.of(context).pop();
@@ -131,49 +128,52 @@ class _NewOrderState extends State<NewOrder> {
                         icon: Icon(Icons.done),
                       )
                     : SizedBox.shrink(),
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 24, right: 24, left: 24),
-                  child: SingleChildScrollView(
-                    child: SizedBox(
-                      height: _getScreenHeight(screenHeight),
-                      child: Column(
-                        children: [
-                          Center(
-                            child: Text(
-                              appTranslate('order_number',
-                                  arguments: {"num": state.orderId}),
-                              style: AppTextStyle().title,
+                body: state is NewOrderOnLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Padding(
+                        padding:
+                            const EdgeInsets.only(top: 24, right: 24, left: 24),
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            height: _getScreenHeight(screenHeight),
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    appTranslate('order_number',
+                                        arguments: {"num": state.orderId}),
+                                    style: AppTextStyle().title,
+                                  ),
+                                ),
+                                heightSpace(),
+                                dateAndTime(context, state),
+                                heightSpace(),
+                                nameAndPhoneFields(context),
+                                categoriesDropdown(context),
+                                heightSpace(),
+                                getCategoryField(context),
+                                heightSpace(),
+                                amountOfProduct(context),
+                                AppTextField(
+                                  hintText: appTranslate('employee_name'),
+                                  controller: _employeeName,
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                ),
+                                Expanded(
+                                  child: AppTextField(
+                                    hintText: appTranslate('notes'),
+                                    controller: _notes,
+                                    maxLines: 5,
+                                    textInputAction: TextInputAction.newline,
+                                    keyboard: TextInputType.multiline,
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          heightSpace(),
-                          dateAndTime(context, state),
-                          heightSpace(),
-                          nameAndPhoneFields(context),
-                          categoriesDropdown(context),
-                          heightSpace(),
-                          getCategoryField(context),
-                          heightSpace(),
-                          amountOfProduct(context),
-                          AppTextField(
-                            hintText: appTranslate('employee_name'),
-                            controller: _employeeName,
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                          ),
-                          Expanded(
-                            child: AppTextField(
-                              hintText: appTranslate('notes'),
-                              controller: _notes,
-                              maxLines: 5,
-                              textInputAction: TextInputAction.newline,
-                              keyboard: TextInputType.multiline,
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ));
+                        ),
+                      ));
           },
         ),
       ),

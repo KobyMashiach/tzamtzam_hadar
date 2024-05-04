@@ -21,6 +21,7 @@ class OrderManagmentInnerBloc
         _orderManagmentEventChangeOrderStatusOpenDialog);
     on<OrderManagmentEventChangeOrderStatus>(
         _orderManagmentEventChangeOrderStatus);
+    on<OrderManagmentEventOpenPrintDialog>(_orderManagmentEventOpenPrintDialog);
   }
 
   FutureOr<void> _orderManagmentEventInitial(OrderManagmentEventInitial event,
@@ -59,5 +60,12 @@ class OrderManagmentInnerBloc
         .firstWhere((element) => element.orderId == event.order.orderId);
     order.status = event.status;
     emit(buildRefreshUI());
+  }
+
+  FutureOr<void> _orderManagmentEventOpenPrintDialog(
+      OrderManagmentEventOpenPrintDialog event,
+      Emitter<OrderManagmentInnerState> emit) {
+    emit(OrderManagmentOpenPrintDialog(
+        order: event.order, orders: orders, allOrders: allOrders));
   }
 }

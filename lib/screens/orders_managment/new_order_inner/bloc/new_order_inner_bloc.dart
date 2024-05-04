@@ -48,8 +48,9 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   FutureOr<void> _newOrderEventInitial(
       NewOrderEventInitial event, Emitter<NewOrderInnerState> emit) async {
     emit(_newOrderOnLoading());
-    final List<OrderModel> orders = localDB.getOrders();
-
+    // final List<OrderModel> orders = localDB.getOrders();
+    final data = await repo.getAllOrders();
+    final List<OrderModel> orders = data.$1;
     // Map<String, OrderModel> orderMap = Map.fromIterable(
     //   orders,
     //   key: (order) => (order as OrderModel).orderId,

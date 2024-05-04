@@ -30,8 +30,6 @@ class SendFilesBloc extends Bloc<SendFilesEvent, SendFilesState> {
 
   FutureOr<void> _sendFilesEventInit(
       SendFilesEventInit event, Emitter<SendFilesState> emit) async {
-    firestoreNewDoc(FirebaseFirestore.instance.collection('Orders'),
-        docName: 'progress'); //ToDo ==> move to splash screen
     refreshUIFunction(emit);
   }
 

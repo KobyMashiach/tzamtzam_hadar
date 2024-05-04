@@ -84,9 +84,6 @@ class Managment extends StatelessWidget {
             return Scaffold(
               appBar: appAppBar(title: appTranslate('managment')),
               drawer: appSideMenu(context, index: 2),
-              floatingActionButton: FloatingActionButton(onPressed: () {
-                Hive.box<OrderModel>('orderModel').clear();
-              }),
               body: state is ManagmentStateLoading
                   ? Center(child: CircularProgressIndicator())
                   : Padding(

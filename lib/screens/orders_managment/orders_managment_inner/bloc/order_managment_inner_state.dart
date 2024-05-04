@@ -30,3 +30,9 @@ final class OrderManagmentChangeStatusDialog
   const OrderManagmentChangeStatusDialog(
       {required this.order, required super.orders, required super.allOrders});
 }
+
+final class OrderManagmentOpenPrintDialog extends OrderManagmentNavigatorState {
+  final OrderModel order;
+  const OrderManagmentOpenPrintDialog(
+      {required this.order, required super.orders, required super.allOrders});
+}

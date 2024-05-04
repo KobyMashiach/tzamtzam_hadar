@@ -51,6 +51,8 @@ dependencies:
   connectivity_plus: ^6.0.2
   flutter_phoenix: ^1.1.1
   fluttercontactpicker: ^5.0.0
+  printing: ^5.12.0
+  pdf: ^3.10.8
   # flutter_phone_direct_caller: ^2.1.1
 
   # firebase
