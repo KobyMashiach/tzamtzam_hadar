@@ -13,6 +13,11 @@ final class OrderManagmentInitial extends OrderManagmentInnerState {
       {required super.orders, required super.allOrders});
 }
 
+final class OrderManagmentLoading extends OrderManagmentInnerState {
+  const OrderManagmentLoading(
+      {required super.orders, required super.allOrders});
+}
+
 @immutable
 abstract class OrderManagmentNavigatorState extends OrderManagmentInnerState {
   const OrderManagmentNavigatorState(
@@ -35,4 +40,15 @@ final class OrderManagmentOpenPrintDialog extends OrderManagmentNavigatorState {
   final OrderModel order;
   const OrderManagmentOpenPrintDialog(
       {required this.order, required super.orders, required super.allOrders});
+}
+
+final class OrderManagmentOpenAddContactDialog
+    extends OrderManagmentNavigatorState {
+  final String name;
+  final String phoneNumber;
+  const OrderManagmentOpenAddContactDialog(
+      {required this.name,
+      required this.phoneNumber,
+      required super.orders,
+      required super.allOrders});
 }

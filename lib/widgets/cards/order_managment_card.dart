@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kh_easy_dev/widgets/navigate_page.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
@@ -8,6 +8,7 @@ import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/services/general_subwidgets.dart';
+import 'package:tzamtzam_hadar/widgets/dialogs/general_dialog.dart';
 
 class OrderManagmentCard extends StatefulWidget {
   const OrderManagmentCard(
@@ -15,11 +16,13 @@ class OrderManagmentCard extends StatefulWidget {
       required this.order,
       this.onDelete,
       this.onChangeStatus,
-      this.onPrint});
+      this.onPrint,
+      this.onAddContact});
   final OrderModel order;
   final Function(BuildContext context)? onDelete;
   final Function(BuildContext context)? onChangeStatus;
-  final Function(BuildContext context)? onPrint;
+  final VoidCallback? onPrint;
+  final VoidCallback? onAddContact;
 
   @override
   State<OrderManagmentCard> createState() => _OrderManagmentCardState();
@@ -35,12 +38,29 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
       key: ValueKey(1),
       startActionPane: GeneralSubwidgets()
           .slidableGeneralActionPane(onDelete: widget.onDelete, moreButtons: [
+        // SlidableAction(
+        //   onPressed: widget.onPrint,
+        //   backgroundColor: Colors.grey,
+        //   foregroundColor: Colors.white,
+        //   icon: Icons.details,
+        //   label: appTranslate('print'),
+        // ),
         SlidableAction(
-          onPressed: widget.onPrint,
+          onPressed: (context) async {
+            await showDialog(
+                context: context,
+                builder: (context) {
+                  return GeneralDialog(
+                    title: appTranslate('what_want_todo'),
+                    child: more_actions_menu(),
+                    noOkCancelButtons: true,
+                  );
+                });
+          },
           backgroundColor: Colors.grey,
           foregroundColor: Colors.white,
-          icon: Icons.details,
-          label: appTranslate('print'),
+          icon: Icons.menu,
+          label: appTranslate('actions'),
         ),
       ]),
       endActionPane: ActionPane(
@@ -115,6 +135,34 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
           ),
         ),
       ),
+    );
+  }
+
+  Row more_actions_menu() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.of(context).pop();
+            if (widget.onPrint != null) {
+              widget.onPrint!();
+            }
+          },
+          label: Text(appTranslate("print")),
+          icon: Icon(Icons.print),
+        ),
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.of(context).pop();
+            if (widget.onAddContact != null) {
+              widget.onAddContact!();
+            }
+          },
+          label: Text(appTranslate("add_contact")),
+          icon: Icon(Icons.person_add_alt),
+        ),
+      ],
     );
   }
 

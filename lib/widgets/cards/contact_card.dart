@@ -12,6 +12,7 @@ class ContactCard extends StatelessWidget {
     required this.onPhonePress,
     required this.onWhatsappPress,
     this.onDelete,
+    this.onEdit,
   });
 
   final String name;
@@ -19,6 +20,7 @@ class ContactCard extends StatelessWidget {
   final VoidCallback onPhonePress;
   final VoidCallback onWhatsappPress;
   final dynamic Function(BuildContext)? onDelete;
+  final dynamic Function(BuildContext)? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class ContactCard extends StatelessWidget {
       key: ValueKey(2),
       startActionPane: GeneralSubwidgets().slidableGeneralActionPane(
         onDelete: onDelete,
+        onEdit: onEdit,
       ),
       child: Container(
         decoration: BoxDecoration(

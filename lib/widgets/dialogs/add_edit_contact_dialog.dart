@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:flutter/material.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
@@ -10,9 +8,12 @@ import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_textfields.dart';
 
 class AddEditContactDialog extends StatefulWidget {
-  const AddEditContactDialog({
-    Key? key,
-  }) : super(key: key);
+  final String? name;
+  final String? phoneNumber;
+  final String? group;
+  const AddEditContactDialog(
+      {Key? key, this.name, this.phoneNumber, this.group})
+      : super(key: key);
 
   @override
   State<AddEditContactDialog> createState() => _AddEditContactDialogState();
@@ -27,13 +28,20 @@ class _AddEditContactDialogState extends State<AddEditContactDialog> {
   void initState() {
     super.initState();
     initControllers();
-    // initDialogEditContact();
+    initControllersHaveData();
   }
 
   void initControllers() {
     nameController = TextEditingController();
     phoneNumberController = TextEditingController();
     groupController = TextEditingController();
+  }
+
+  void initControllersHaveData() {
+    if (widget.name != null) nameController.text = widget.name!;
+    if (widget.phoneNumber != null)
+      phoneNumberController.text = widget.phoneNumber!;
+    if (widget.group != null) groupController.text = widget.group!;
   }
 
   @override
@@ -97,6 +105,9 @@ class _AddEditContactDialogState extends State<AddEditContactDialog> {
                 Expanded(
                   flex: 7,
                   child: AppDropDown(
+                      value: widget.group != null
+                          ? appTranslate(widget.group!)
+                          : null,
                       hintText: appTranslate("group"),
                       onChanged: (value) {
                         onChangeGroupDrpoDown(value);

@@ -19,15 +19,21 @@ class ContactsScreenBloc
   final Map<String, List<ContactModel>> contacts = {};
   Map<String, List<ContactModel>> filteredContacts = {};
   bool searchOpen = false;
+  bool showAllContacts = false;
   ContactsScreenBloc(this.contactsRepo)
       : super(ContactsScreenLoading(
-            contacts: {}, searchOpen: false, unTranslateContacts: {})) {
+            contacts: {},
+            searchOpen: false,
+            showAllContacts: false,
+            unTranslateContacts: {})) {
     on<ContactsScreenEventInitialize>(_contactsScreenEventInitialize);
     on<ContactsScreenEventOnPhonePress>(_contactsScreenEventOnPhonePress);
     on<ContactsScreenEventOnWhatsappPress>(_contactsScreenEventOnWhatsappPress);
     on<ContactsScreenEventOnSearchContact>(_contactsScreenEventOnSearchContact);
     on<ContactsScreenEventOnSearchToggleChange>(
         _contactsScreenEventOnSearchToggleChange);
+    on<ContactsScreenEventOnShowAllContactsToggleChange>(
+        _contactsScreenEventOnShowAllContactsToggleChange);
     on<ContactsScreenEventOnCloseCategory>(_contactsScreenEventOnCloseCategory);
     on<ContactsScreenEventOnOpenCategory>(_contactsScreenEventOnOpenCategory);
     on<ContactsScreenEventOnNewContactClicked>(
@@ -35,6 +41,10 @@ class ContactsScreenBloc
     on<ContactsScreenEventOnAddNewContactClicked>(
         _contactsScreenEventOnAddNewContactClicked);
     on<ContactsScreenEventOnDeleteContact>(_contactsScreenEventOnDeleteContact);
+    on<ContactsScreenEventOnEditContactDialog>(
+        _contactsScreenEventOnEditContactDialog);
+
+    on<ContactsScreenEventOnEditContact>(_contactsScreenEventOnEditContact);
   }
 
   FutureOr<void> _contactsScreenEventInitialize(
@@ -95,13 +105,29 @@ class ContactsScreenBloc
   ContactsScreenRefreshUI buildRefreshUI() => ContactsScreenRefreshUI(
       contacts: filteredContacts,
       searchOpen: searchOpen,
+      showAllContacts: showAllContacts,
       unTranslateContacts: unTranslateContacts);
 
   FutureOr<void> _contactsScreenEventOnSearchToggleChange(
       ContactsScreenEventOnSearchToggleChange event,
       Emitter<ContactsScreenState> emit) {
     searchOpen = !searchOpen;
+    showAllContacts = !showAllContacts;
     if (!searchOpen) {
+      contacts.keys.forEach((key) {
+        filteredContacts[key] = [];
+      });
+    } else {
+      filteredContacts.addAll(contacts);
+    }
+    emit(buildRefreshUI());
+  }
+
+  FutureOr<void> _contactsScreenEventOnShowAllContactsToggleChange(
+      ContactsScreenEventOnShowAllContactsToggleChange event,
+      Emitter<ContactsScreenState> emit) {
+    showAllContacts = !showAllContacts;
+    if (!showAllContacts) {
       contacts.keys.forEach((key) {
         filteredContacts[key] = [];
       });
@@ -137,50 +163,78 @@ class ContactsScreenBloc
     emit(ContactsScreenContactDialog(
         contacts: contacts,
         searchOpen: false,
+        showAllContacts: false,
         unTranslateContacts: unTranslateContacts));
   }
 
   FutureOr<void> _contactsScreenEventOnAddNewContactClicked(
       ContactsScreenEventOnAddNewContactClicked event,
       Emitter<ContactsScreenState> emit) async {
-    emit(ContactsScreenLoading(
-        contacts: contacts,
-        searchOpen: searchOpen,
-        unTranslateContacts: unTranslateContacts));
+    emit(buildLoadingScreen());
     await contactsRepo.uploadNewContact(
         name: event.name, phoneNumber: event.phoneNumber, group: event.group);
-    contacts.clear();
-    contacts.addAll(globalContactsListTranslated);
-    contacts.keys.forEach((key) {
-      filteredContacts[key] = [];
-    });
+    refreshGroups(true);
+
     emit(buildRefreshUI());
     kheasydevAppToast(
         appTranslate("contact_uploaded", arguments: {"name": event.name}));
   }
 
+  ContactsScreenLoading buildLoadingScreen() {
+    return ContactsScreenLoading(
+        contacts: contacts,
+        searchOpen: searchOpen,
+        showAllContacts: showAllContacts,
+        unTranslateContacts: unTranslateContacts);
+  }
+
   FutureOr<void> _contactsScreenEventOnDeleteContact(
       ContactsScreenEventOnDeleteContact event,
       Emitter<ContactsScreenState> emit) async {
-    emit(ContactsScreenLoading(
+    emit(buildLoadingScreen());
+    await contactsRepo.removeContact(name: event.name, group: event.group);
+    refreshGroups(true);
+    emit(buildRefreshUI());
+    kheasydevAppToast(
+        appTranslate("contact_deleted", arguments: {"name": event.name}));
+  }
+
+  FutureOr<void> _contactsScreenEventOnEditContactDialog(
+      ContactsScreenEventOnEditContactDialog event,
+      Emitter<ContactsScreenState> emit) {
+    emit(ContactsScreenContactEditDialog(
+        name: event.name,
+        phoneNumber: event.phoneNumber,
+        group: event.group,
         contacts: contacts,
         searchOpen: searchOpen,
+        showAllContacts: showAllContacts,
         unTranslateContacts: unTranslateContacts));
-    await contactsRepo.removeContact(name: event.name, group: event.group);
-    globalContactsList.forEach(
-      (key, value) {
-        List<ContactModel> contacts = [];
-        value.forEach((map) {
-          String name = map['name'] ?? '';
-          String phoneNumber = map['phoneNumber'] ?? '';
-          contacts.add(ContactModel(name: name, phoneNumber: phoneNumber));
-        });
-        unTranslateContacts[key] = contacts;
-      },
-    );
+  }
+
+  FutureOr<void> _contactsScreenEventOnEditContact(
+      ContactsScreenEventOnEditContact event,
+      Emitter<ContactsScreenState> emit) async {
+    emit(buildLoadingScreen());
+    await contactsRepo.removeContact(
+        name: event.oldName, group: event.oldGroup);
+    await contactsRepo.uploadNewContact(
+        name: event.name, phoneNumber: event.phoneNumber, group: event.group);
+    refreshGroups(true);
+    emit(buildRefreshUI());
+    kheasydevAppToast(
+        appTranslate("contact_updated", arguments: {"name": event.name}));
+  }
+
+  void refreshGroups(bool close) {
     contacts.clear();
     contacts.addAll(globalContactsListTranslated);
-    filteredContacts.addAll(contacts);
-    emit(buildRefreshUI());
+    if (close) {
+      contacts.keys.forEach((key) {
+        filteredContacts[key] = [];
+      });
+    } else {
+      filteredContacts.addAll(contacts);
+    }
   }
 }

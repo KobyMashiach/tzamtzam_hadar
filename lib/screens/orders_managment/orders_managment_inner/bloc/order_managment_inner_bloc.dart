@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:meta/meta.dart';
+import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/repos/contacts_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 
 part 'order_managment_inner_event.dart';
@@ -11,9 +14,11 @@ part 'order_managment_inner_state.dart';
 class OrderManagmentInnerBloc
     extends Bloc<OrderManagmentInnerEvent, OrderManagmentInnerState> {
   final OrdersRepo repo;
+  final ContactsRepo contactsRepo;
+
   Map<String, Map<String, OrderModel>> orders = {};
   List<OrderModel> allOrders = [];
-  OrderManagmentInnerBloc(this.repo)
+  OrderManagmentInnerBloc(this.repo, this.contactsRepo)
       : super(OrderManagmentInitial(orders: {}, allOrders: [])) {
     on<OrderManagmentEventInitial>(_orderManagmentEventInitial);
     on<OrderManagmentEventDeleteOrder>(_orderManagmentEventDeleteOrder);
@@ -22,6 +27,9 @@ class OrderManagmentInnerBloc
     on<OrderManagmentEventChangeOrderStatus>(
         _orderManagmentEventChangeOrderStatus);
     on<OrderManagmentEventOpenPrintDialog>(_orderManagmentEventOpenPrintDialog);
+    on<OrderManagmentEventOpenAddContactDialog>(
+        _orderManagmentEventOpenAddContactDialog);
+    on<OrderManagmentEventOnAddNewContact>(_orderManagmentEventOnAddNewContact);
   }
 
   FutureOr<void> _orderManagmentEventInitial(OrderManagmentEventInitial event,
@@ -67,5 +75,26 @@ class OrderManagmentInnerBloc
       Emitter<OrderManagmentInnerState> emit) {
     emit(OrderManagmentOpenPrintDialog(
         order: event.order, orders: orders, allOrders: allOrders));
+  }
+
+  FutureOr<void> _orderManagmentEventOpenAddContactDialog(
+      OrderManagmentEventOpenAddContactDialog event,
+      Emitter<OrderManagmentInnerState> emit) {
+    emit(OrderManagmentOpenAddContactDialog(
+        name: event.name,
+        phoneNumber: event.phoneNumber,
+        orders: orders,
+        allOrders: allOrders));
+  }
+
+  FutureOr<void> _orderManagmentEventOnAddNewContact(
+      OrderManagmentEventOnAddNewContact event,
+      Emitter<OrderManagmentInnerState> emit) async {
+    emit(OrderManagmentLoading(orders: orders, allOrders: allOrders));
+    await contactsRepo.uploadNewContact(
+        name: event.name, phoneNumber: event.phoneNumber, group: event.group);
+    emit(buildRefreshUI());
+    kheasydevAppToast(
+        appTranslate("contact_uploaded", arguments: {"name": event.name}));
   }
 }

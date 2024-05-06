@@ -35,11 +35,34 @@ class ContactsScreen extends StatelessWidget {
                   builder: (context) => AddEditContactDialog(),
                 );
                 if (contactData != null) {
-                  bloc.add(ContactsScreenEventOnAddNewContactClicked(
-                    name: contactData.$1,
-                    phoneNumber: contactData.$2,
-                    group: contactData.$3,
-                  ));
+                  bloc.add(
+                    ContactsScreenEventOnAddNewContactClicked(
+                      name: contactData.$1,
+                      phoneNumber: contactData.$2,
+                      group: contactData.$3,
+                    ),
+                  );
+                }
+              case const (ContactsScreenContactEditDialog):
+                final newState = state as ContactsScreenContactEditDialog;
+                final contactData = await showDialog(
+                  context: context,
+                  builder: (context) => AddEditContactDialog(
+                    name: newState.name,
+                    phoneNumber: newState.phoneNumber,
+                    group: newState.group,
+                  ),
+                );
+                if (contactData != null) {
+                  bloc.add(
+                    ContactsScreenEventOnEditContact(
+                      oldName: newState.name,
+                      oldGroup: newState.group,
+                      name: contactData.$1,
+                      phoneNumber: contactData.$2,
+                      group: contactData.$3,
+                    ),
+                  );
                 }
             }
           },
@@ -75,7 +98,12 @@ class ContactsScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox.shrink(),
+                                IconButton(
+                                    onPressed: () => bloc.add(
+                                        ContactsScreenEventOnShowAllContactsToggleChange()),
+                                    icon: Icon(state.showAllContacts
+                                        ? Icons.close_fullscreen
+                                        : Icons.open_in_full_rounded)),
                                 Text(
                                   appTranslate('contacts'),
                                   style: AppTextStyle().title,
@@ -154,6 +182,12 @@ class ContactsScreen extends StatelessWidget {
                                           onDelete: (context) => bloc.add(
                                               ContactsScreenEventOnDeleteContact(
                                                   name: contact.name,
+                                                  group: unTranslatedCategory)),
+                                          onEdit: (context) => bloc.add(
+                                              ContactsScreenEventOnEditContactDialog(
+                                                  name: contact.name,
+                                                  phoneNumber:
+                                                      contact.phoneNumber,
                                                   group: unTranslatedCategory)),
                                         );
                                       },

@@ -17,6 +17,9 @@ class ContactsScreenEventOnWhatsappPress extends ContactsScreenEvent {
 
 class ContactsScreenEventOnSearchToggleChange extends ContactsScreenEvent {}
 
+class ContactsScreenEventOnShowAllContactsToggleChange
+    extends ContactsScreenEvent {}
+
 class ContactsScreenEventOnSearchContact extends ContactsScreenEvent {
   final String nameOrPhone;
   ContactsScreenEventOnSearchContact(this.nameOrPhone);
@@ -47,4 +50,26 @@ class ContactsScreenEventOnDeleteContact extends ContactsScreenEvent {
   final String name;
   final String group;
   ContactsScreenEventOnDeleteContact({required this.name, required this.group});
+}
+
+class ContactsScreenEventOnEditContactDialog extends ContactsScreenEvent {
+  final String name;
+  final String phoneNumber;
+  final String group;
+  ContactsScreenEventOnEditContactDialog(
+      {required this.name, required this.phoneNumber, required this.group});
+}
+
+class ContactsScreenEventOnEditContact extends ContactsScreenEvent {
+  final String oldName;
+  final String oldGroup;
+  final String name;
+  final String phoneNumber;
+  final String group;
+  ContactsScreenEventOnEditContact(
+      {required this.oldName,
+      required this.oldGroup,
+      required this.name,
+      required this.phoneNumber,
+      required this.group});
 }

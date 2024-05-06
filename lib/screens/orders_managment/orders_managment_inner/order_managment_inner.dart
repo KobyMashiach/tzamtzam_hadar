@@ -1,13 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kh_easy_dev/widgets/navigate_page.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
+import 'package:tzamtzam_hadar/repos/contacts_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/orders_managment_inner/bloc/order_managment_inner_bloc.dart';
 import 'package:tzamtzam_hadar/tests/print_test.dart';
 import 'package:tzamtzam_hadar/widgets/cards/order_managment_card.dart';
+import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_contact_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/change_order_status_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
@@ -24,10 +28,14 @@ class OrderManagment extends StatelessWidget {
         RepositoryProvider<OrdersRepo>(
           create: (context) => OrdersRepo(context.read<OrdersDataSource>()),
         ),
+        RepositoryProvider<ContactsRepo>(
+          create: (context) => ContactsRepo(),
+        ),
       ],
       child: BlocProvider(
         create: (context) => OrderManagmentInnerBloc(
           context.read<OrdersRepo>(),
+          context.read<ContactsRepo>(),
         )..add(OrderManagmentEventInitial()),
         child: BlocConsumer<OrderManagmentInnerBloc, OrderManagmentInnerState>(
           listenWhen: (previous, current) =>
@@ -52,6 +60,23 @@ class OrderManagment extends StatelessWidget {
                 final newState = state as OrderManagmentOpenPrintDialog;
                 KheasydevNavigatePage()
                     .push(context, PrintTest(newState.order));
+              case const (OrderManagmentOpenAddContactDialog):
+                final newState = state as OrderManagmentOpenAddContactDialog;
+                final contactData = await showDialog(
+                  context: context,
+                  builder: (context) => AddEditContactDialog(
+                    name: newState.name,
+                    phoneNumber: newState.phoneNumber,
+                    group: "customers",
+                  ),
+                );
+                if (contactData != null) {
+                  bloc.add(OrderManagmentEventOnAddNewContact(
+                    name: contactData.$1,
+                    phoneNumber: contactData.$2,
+                    group: contactData.$3,
+                  ));
+                }
             }
           },
           builder: (context, state) {
@@ -82,8 +107,12 @@ class OrderManagment extends StatelessWidget {
                                 onChangeStatus: (context) => bloc.add(
                                     OrderManagmentEventChangeOrderStatusOpenDialog(
                                         order)),
-                                onPrint: (context) => bloc.add(
+                                onPrint: () => bloc.add(
                                     OrderManagmentEventOpenPrintDialog(order)),
+                                onAddContact: () => bloc.add(
+                                    OrderManagmentEventOpenAddContactDialog(
+                                        name: order.customerName,
+                                        phoneNumber: order.phoneNumber)),
                               );
                             },
                           ),

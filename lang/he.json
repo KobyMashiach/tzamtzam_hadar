@@ -130,5 +130,6 @@
     "change_status": "שינוי סטטוס הזמנה",
     "print": "הדפסה",
     "print_order": "הדפסת הזמנה מס׳ {{num}}",
-    "order_num_on_app": "מספר ההזמנה באפליקציה: {{num}}"
+    "order_num_on_app": "מספר ההזמנה באפליקציה: {{num}}",
+    "actions": "פעולות"
 }

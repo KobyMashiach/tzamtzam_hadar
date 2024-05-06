@@ -27,3 +27,23 @@ class OrderManagmentEventOpenPrintDialog extends OrderManagmentInnerEvent {
   final OrderModel order;
   OrderManagmentEventOpenPrintDialog(this.order);
 }
+
+class OrderManagmentEventOpenAddContactDialog extends OrderManagmentInnerEvent {
+  final String name;
+  final String phoneNumber;
+
+  OrderManagmentEventOpenAddContactDialog(
+      {required this.name, required this.phoneNumber});
+}
+
+class OrderManagmentEventOnAddNewContact extends OrderManagmentInnerEvent {
+  final String name;
+  final String phoneNumber;
+  final String group;
+
+  OrderManagmentEventOnAddNewContact({
+    required this.name,
+    required this.phoneNumber,
+    required this.group,
+  });
+}
