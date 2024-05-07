@@ -5,6 +5,11 @@ abstract class OrderManagmentInnerEvent {}
 
 class OrderManagmentEventInitial extends OrderManagmentInnerEvent {}
 
+class OrderManagmentEventDeleteOrderDialog extends OrderManagmentInnerEvent {
+  final OrderModel order;
+  OrderManagmentEventDeleteOrderDialog(this.order);
+}
+
 class OrderManagmentEventDeleteOrder extends OrderManagmentInnerEvent {
   final OrderModel order;
   OrderManagmentEventDeleteOrder(this.order);

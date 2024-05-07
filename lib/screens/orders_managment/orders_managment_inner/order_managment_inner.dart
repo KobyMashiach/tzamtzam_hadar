@@ -13,6 +13,7 @@ import 'package:tzamtzam_hadar/tests/print_test.dart';
 import 'package:tzamtzam_hadar/widgets/cards/order_managment_card.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_contact_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/change_order_status_dialog.dart';
+import 'package:tzamtzam_hadar/widgets/dialogs/general_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/sort_orders_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
@@ -87,6 +88,19 @@ class OrderManagment extends StatelessWidget {
                 );
                 if (sortCategory != null && sortCategory != false)
                   bloc.add(OrderManagmentEventOnSorted(sortCategory));
+
+              case const (OrderManagmentOnDeleteDialog):
+                final newState = state as OrderManagmentOnDeleteDialog;
+                final userChoice = await showDialog(
+                  context: context,
+                  builder: (context) => GeneralDialog(
+                      title: "${appTranslate("sure_delete_order", arguments: {
+                        "num": newState.order.orderId
+                      })}\n${appTranslate("action_irreversible")}"),
+                );
+                if (userChoice == true) {
+                  bloc.add(OrderManagmentEventDeleteOrder(newState.order));
+                }
             }
           },
           builder: (context, state) {
@@ -121,8 +135,8 @@ class OrderManagment extends StatelessWidget {
 
                             return OrderManagmentCard(
                               order: order,
-                              onDelete: (context) => bloc
-                                  .add(OrderManagmentEventDeleteOrder(order)),
+                              onDelete: (context) => bloc.add(
+                                  OrderManagmentEventDeleteOrderDialog(order)),
                               onChangeStatus: (context) => bloc.add(
                                   OrderManagmentEventChangeOrderStatusOpenDialog(
                                       order)),

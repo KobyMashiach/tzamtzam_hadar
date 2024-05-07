@@ -23,6 +23,8 @@ class OrderManagmentInnerBloc
   OrderManagmentInnerBloc(this.repo, this.contactsRepo)
       : super(OrderManagmentInitial(orders: {}, allOrders: [])) {
     on<OrderManagmentEventInitial>(_orderManagmentEventInitial);
+    on<OrderManagmentEventDeleteOrderDialog>(
+        _orderManagmentEventDeleteOrderDialog);
     on<OrderManagmentEventDeleteOrder>(_orderManagmentEventDeleteOrder);
     on<OrderManagmentEventChangeOrderStatusOpenDialog>(
         _orderManagmentEventChangeOrderStatusOpenDialog);
@@ -48,12 +50,20 @@ class OrderManagmentInnerBloc
     ));
   }
 
+  FutureOr<void> _orderManagmentEventDeleteOrderDialog(
+      OrderManagmentEventDeleteOrderDialog event,
+      Emitter<OrderManagmentInnerState> emit) {
+    emit(OrderManagmentOnDeleteDialog(
+        order: event.order, orders: orders, allOrders: allOrders));
+  }
+
   FutureOr<void> _orderManagmentEventDeleteOrder(
       OrderManagmentEventDeleteOrder event,
       Emitter<OrderManagmentInnerState> emit) async {
     await repo.deleteOrder(event.order);
     allOrders.removeWhere((element) => element.orderId == event.order.orderId);
-
+    kheasydevAppToast(appTranslate("order_deleted",
+        arguments: {"name": event.order.orderId}));
     emit(buildRefreshUI());
   }
 

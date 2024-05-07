@@ -116,6 +116,7 @@
     "send_item_uploaded": "הפריט {{name}} נוצר בהצלחה",
     "send_item_updated": "הפריט {{name}} התעדכן בהצלחה",
     "send_item_deleted": "הפריט {{name}} נמחק בהצלחה",
+    "order_deleted": "ההזמנה {{name}} נמחקה בהצלחה",
     "add_contact": "הוסף איש קשר",
     "name": "שם",
     "group": "קבוצה",
@@ -135,5 +136,7 @@
     "filter": "סנן",
     "filter_orders": "סנן הזמנות",
     "mark_all": "סמן הכל",
-    "unmark_all": "בטל סימון מכולם"
+    "unmark_all": "בטל סימון מכולם",
+    "sure_delete_order": "האם אתה בטוח שאתה רוצה למחוק את ההזמנה {{num}}?",
+    "action_irreversible": "פעולה זו הינה פעולה בלתי הפיכה"
 }
