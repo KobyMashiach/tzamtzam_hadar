@@ -52,3 +52,8 @@ final class OrderManagmentOpenAddContactDialog
       required super.orders,
       required super.allOrders});
 }
+
+final class OrderManagmentOpenSortDialog extends OrderManagmentNavigatorState {
+  OrderManagmentOpenSortDialog(
+      {required super.orders, required super.allOrders});
+}

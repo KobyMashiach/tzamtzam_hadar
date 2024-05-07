@@ -18,6 +18,7 @@ class OrderManagmentInnerBloc
 
   Map<String, Map<String, OrderModel>> orders = {};
   List<OrderModel> allOrders = [];
+  List<OrderModel> filtersOrders = [];
   OrderManagmentInnerBloc(this.repo, this.contactsRepo)
       : super(OrderManagmentInitial(orders: {}, allOrders: [])) {
     on<OrderManagmentEventInitial>(_orderManagmentEventInitial);
@@ -30,34 +31,45 @@ class OrderManagmentInnerBloc
     on<OrderManagmentEventOpenAddContactDialog>(
         _orderManagmentEventOpenAddContactDialog);
     on<OrderManagmentEventOnAddNewContact>(_orderManagmentEventOnAddNewContact);
+    on<OrderManagmentEventOnSortClicked>(_orderManagmentEventOnSortClicked);
+    on<OrderManagmentEventOnSorted>(_orderManagmentEventOnSorted);
   }
 
   FutureOr<void> _orderManagmentEventInitial(OrderManagmentEventInitial event,
       Emitter<OrderManagmentInnerState> emit) async {
     final data = await repo.getAllOrders();
     allOrders = data.$1;
+    filtersOrders.addAll(allOrders);
     orders = data.$2;
-    emit(OrderManagmentInitial(orders: orders, allOrders: allOrders));
+    emit(OrderManagmentInitial(
+      orders: orders,
+      allOrders: allOrders,
+    ));
   }
 
   FutureOr<void> _orderManagmentEventDeleteOrder(
       OrderManagmentEventDeleteOrder event,
       Emitter<OrderManagmentInnerState> emit) async {
     await repo.deleteOrder(event.order);
-    final order = allOrders
-        .removeWhere((element) => element.orderId == event.order.orderId);
+    allOrders.removeWhere((element) => element.orderId == event.order.orderId);
 
     emit(buildRefreshUI());
   }
 
-  OrderManagmentInitial buildRefreshUI() =>
-      OrderManagmentInitial(orders: orders, allOrders: allOrders);
+  OrderManagmentInitial buildRefreshUI({bool? filtered}) =>
+      OrderManagmentInitial(
+        orders: orders,
+        allOrders: filtered == true ? filtersOrders : allOrders,
+      );
 
   FutureOr<void> _orderManagmentEventChangeOrderStatusOpenDialog(
       OrderManagmentEventChangeOrderStatusOpenDialog event,
       Emitter<OrderManagmentInnerState> emit) {
     emit(OrderManagmentChangeStatusDialog(
-        order: event.order, orders: orders, allOrders: allOrders));
+      order: event.order,
+      orders: orders,
+      allOrders: allOrders,
+    ));
   }
 
   FutureOr<void> _orderManagmentEventChangeOrderStatus(
@@ -74,27 +86,69 @@ class OrderManagmentInnerBloc
       OrderManagmentEventOpenPrintDialog event,
       Emitter<OrderManagmentInnerState> emit) {
     emit(OrderManagmentOpenPrintDialog(
-        order: event.order, orders: orders, allOrders: allOrders));
+      order: event.order,
+      orders: orders,
+      allOrders: allOrders,
+    ));
   }
 
   FutureOr<void> _orderManagmentEventOpenAddContactDialog(
       OrderManagmentEventOpenAddContactDialog event,
       Emitter<OrderManagmentInnerState> emit) {
     emit(OrderManagmentOpenAddContactDialog(
-        name: event.name,
-        phoneNumber: event.phoneNumber,
-        orders: orders,
-        allOrders: allOrders));
+      name: event.name,
+      phoneNumber: event.phoneNumber,
+      orders: orders,
+      allOrders: allOrders,
+    ));
   }
 
   FutureOr<void> _orderManagmentEventOnAddNewContact(
       OrderManagmentEventOnAddNewContact event,
       Emitter<OrderManagmentInnerState> emit) async {
-    emit(OrderManagmentLoading(orders: orders, allOrders: allOrders));
+    emit(OrderManagmentLoading(
+      orders: orders,
+      allOrders: allOrders,
+    ));
     await contactsRepo.uploadNewContact(
-        name: event.name, phoneNumber: event.phoneNumber, group: event.group);
+      name: event.name,
+      phoneNumber: event.phoneNumber,
+      group: event.group,
+    );
     emit(buildRefreshUI());
     kheasydevAppToast(
         appTranslate("contact_uploaded", arguments: {"name": event.name}));
+  }
+
+  FutureOr<void> _orderManagmentEventOnSortClicked(
+      OrderManagmentEventOnSortClicked event,
+      Emitter<OrderManagmentInnerState> emit) {
+    emit(OrderManagmentOpenSortDialog(
+      orders: orders,
+      allOrders: allOrders,
+    ));
+  }
+
+  FutureOr<void> _orderManagmentEventOnSorted(OrderManagmentEventOnSorted event,
+      Emitter<OrderManagmentInnerState> emit) {
+    filtersOrders.clear();
+    filtersOrders.addAll(allOrders);
+    final bool done = event.sortCategory[0];
+    final bool process = event.sortCategory[1];
+    final bool hold = event.sortCategory[2];
+
+    filtersOrders.removeWhere((element) {
+      if (!done && element.status == "done") {
+        return true;
+      }
+      if (!process && element.status == "progress") {
+        return true;
+      }
+      if (!hold && element.status == "hold") {
+        return true;
+      }
+      return false;
+    });
+    emit(buildRefreshUI(filtered: true));
   }
 }

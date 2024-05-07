@@ -47,3 +47,11 @@ class OrderManagmentEventOnAddNewContact extends OrderManagmentInnerEvent {
     required this.group,
   });
 }
+
+class OrderManagmentEventOnSortClicked extends OrderManagmentInnerEvent {}
+
+class OrderManagmentEventOnSorted extends OrderManagmentInnerEvent {
+  final List<bool> sortCategory;
+
+  OrderManagmentEventOnSorted(this.sortCategory);
+}

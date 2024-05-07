@@ -13,6 +13,7 @@ import 'package:tzamtzam_hadar/tests/print_test.dart';
 import 'package:tzamtzam_hadar/widgets/cards/order_managment_card.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_contact_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/change_order_status_dialog.dart';
+import 'package:tzamtzam_hadar/widgets/dialogs/sort_orders_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
 class OrderManagment extends StatelessWidget {
@@ -77,65 +78,60 @@ class OrderManagment extends StatelessWidget {
                     group: contactData.$3,
                   ));
                 }
+              case const (OrderManagmentOpenSortDialog):
+                final sortCategory = await showDialog(
+                  context: context,
+                  builder: (context) => SortOrdersDialog(),
+                );
+                if (sortCategory != null)
+                  bloc.add(OrderManagmentEventOnSorted(sortCategory));
             }
           },
           builder: (context, state) {
             final bloc = context.read<OrderManagmentInnerBloc>();
+            log(name: "state", state.runtimeType.toString());
             return Scaffold(
               appBar: appAppBar(title: appTranslate('orders_managment')),
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () => bloc.add(OrderManagmentEventOnSortClicked()),
+                label: Text(appTranslate("filter")),
+                icon: Icon(Icons.sort),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
               body: state.allOrders.isEmpty
                   ? Center(
                       child: Text(appTranslate("not_order_found"),
                           style: AppTextStyle().title),
                     )
-                  : SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SizedBox(
-                          height: screenHeight,
-                          child: ListView.separated(
-                            itemCount: state.allOrders.length,
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 8),
-                            itemBuilder: (context, index) {
-                              final order = state.allOrders[index];
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                          top: 12, left: 12, right: 12, bottom: 80),
+                      child: SizedBox(
+                        height: screenHeight,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: state.allOrders.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final order = state.allOrders[index];
 
-                              return OrderManagmentCard(
-                                order: order,
-                                onDelete: (context) => bloc
-                                    .add(OrderManagmentEventDeleteOrder(order)),
-                                onChangeStatus: (context) => bloc.add(
-                                    OrderManagmentEventChangeOrderStatusOpenDialog(
-                                        order)),
-                                onPrint: () => bloc.add(
-                                    OrderManagmentEventOpenPrintDialog(order)),
-                                onAddContact: () => bloc.add(
-                                    OrderManagmentEventOpenAddContactDialog(
-                                        name: order.customerName,
-                                        phoneNumber: order.phoneNumber)),
-                              );
-                            },
-                          ),
-
-                          // child: ListView.separated(
-                          //   itemCount: state.orders.length,
-                          //   separatorBuilder: (context, index) =>
-                          //       SizedBox(height: 8),
-                          //   itemBuilder: (context, index) {
-                          //     final orderList = state.orders[index];
-                          //     final order = state.orders[index];
-
-                          //     return OrderManagmentCard(
-                          //       order: newOrder!.values.first,
-                          //       onDelete: (context) => bloc.add(
-                          //           OrderManagmentEventDeleteOrder(
-                          //               newOrder.values.first)),
-                          //       onChangeStatus: (context) => bloc.add(
-                          //           OrderManagmentEventChangeOrderStatusOpenDialog(
-                          //               newOrder.values.first)),
-                          //     );
-                          //   },
-                          // ),
+                            return OrderManagmentCard(
+                              order: order,
+                              onDelete: (context) => bloc
+                                  .add(OrderManagmentEventDeleteOrder(order)),
+                              onChangeStatus: (context) => bloc.add(
+                                  OrderManagmentEventChangeOrderStatusOpenDialog(
+                                      order)),
+                              onPrint: () => bloc.add(
+                                  OrderManagmentEventOpenPrintDialog(order)),
+                              onAddContact: () => bloc.add(
+                                  OrderManagmentEventOpenAddContactDialog(
+                                      name: order.customerName,
+                                      phoneNumber: order.phoneNumber)),
+                            );
+                          },
                         ),
                       ),
                     ),

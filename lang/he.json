@@ -131,5 +131,7 @@
     "print": "הדפסה",
     "print_order": "הדפסת הזמנה מס׳ {{num}}",
     "order_num_on_app": "מספר ההזמנה באפליקציה: {{num}}",
-    "actions": "פעולות"
+    "actions": "פעולות",
+    "filter": "סנן",
+    "filter_orders": "סנן הזמנות"
 }

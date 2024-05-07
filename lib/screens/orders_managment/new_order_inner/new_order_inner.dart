@@ -260,6 +260,7 @@ class _NewOrderState extends State<NewOrder> {
       },
       hintText: appTranslate("categories"),
       listValues: categories,
+      value: category != null ? category : null,
     );
   }
 
