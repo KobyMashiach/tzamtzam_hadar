@@ -106,6 +106,7 @@ class OrderManagment extends StatelessWidget {
           builder: (context, state) {
             final bloc = context.read<OrderManagmentInnerBloc>();
             log(name: "state", state.runtimeType.toString());
+
             return Scaffold(
               appBar: appAppBar(title: appTranslate('orders_managment')),
               floatingActionButton: FloatingActionButton.extended(
@@ -115,42 +116,48 @@ class OrderManagment extends StatelessWidget {
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
-              body: state.allOrders.isEmpty
+              body: state is OrderManagmentLoading
                   ? Center(
-                      child: Text(appTranslate("not_order_found"),
-                          style: AppTextStyle().title),
+                      child: CircularProgressIndicator(),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.only(
-                          top: 12, left: 12, right: 12, bottom: 80),
-                      child: SizedBox(
-                        height: screenHeight,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: state.allOrders.length,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 8),
-                          itemBuilder: (context, index) {
-                            final order = state.allOrders[index];
+                  : state.allOrders.isEmpty
+                      ? Center(
+                          child: Text(appTranslate("not_order_found"),
+                              style: AppTextStyle().title),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              top: 12, left: 12, right: 12, bottom: 80),
+                          child: SizedBox(
+                            height: screenHeight,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              itemCount: state.allOrders.length,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8),
+                              itemBuilder: (context, index) {
+                                final order = state.allOrders[index];
 
-                            return OrderManagmentCard(
-                              order: order,
-                              onDelete: (context) => bloc.add(
-                                  OrderManagmentEventDeleteOrderDialog(order)),
-                              onChangeStatus: (context) => bloc.add(
-                                  OrderManagmentEventChangeOrderStatusOpenDialog(
-                                      order)),
-                              onPrint: () => bloc.add(
-                                  OrderManagmentEventOpenPrintDialog(order)),
-                              onAddContact: () => bloc.add(
-                                  OrderManagmentEventOpenAddContactDialog(
-                                      name: order.customerName,
-                                      phoneNumber: order.phoneNumber)),
-                            );
-                          },
+                                return OrderManagmentCard(
+                                  order: order,
+                                  onDelete: (context) => bloc.add(
+                                      OrderManagmentEventDeleteOrderDialog(
+                                          order)),
+                                  onChangeStatus: (context) => bloc.add(
+                                      OrderManagmentEventChangeOrderStatusOpenDialog(
+                                          order)),
+                                  onPrint: () => bloc.add(
+                                      OrderManagmentEventOpenPrintDialog(
+                                          order)),
+                                  onAddContact: () => bloc.add(
+                                      OrderManagmentEventOpenAddContactDialog(
+                                          name: order.customerName,
+                                          phoneNumber: order.phoneNumber)),
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
             );
           },
         ),

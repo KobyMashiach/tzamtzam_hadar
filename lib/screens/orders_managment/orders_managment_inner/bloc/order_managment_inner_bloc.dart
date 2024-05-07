@@ -40,6 +40,7 @@ class OrderManagmentInnerBloc
 
   FutureOr<void> _orderManagmentEventInitial(OrderManagmentEventInitial event,
       Emitter<OrderManagmentInnerState> emit) async {
+    emit(OrderManagmentLoading(orders: orders, allOrders: allOrders));
     final data = await repo.getAllOrders();
     allOrders = data.$1;
     filtersOrders.addAll(allOrders);
