@@ -19,6 +19,7 @@ class OrderManagmentInnerBloc
   Map<String, Map<String, OrderModel>> orders = {};
   List<OrderModel> allOrders = [];
   List<OrderModel> filtersOrders = [];
+  List<bool> filterOrders = [true, true, true];
   OrderManagmentInnerBloc(this.repo, this.contactsRepo)
       : super(OrderManagmentInitial(orders: {}, allOrders: [])) {
     on<OrderManagmentEventInitial>(_orderManagmentEventInitial);
@@ -124,27 +125,22 @@ class OrderManagmentInnerBloc
       OrderManagmentEventOnSortClicked event,
       Emitter<OrderManagmentInnerState> emit) {
     emit(OrderManagmentOpenSortDialog(
-      orders: orders,
-      allOrders: allOrders,
-    ));
+        orders: orders, allOrders: allOrders, filterOrders: filterOrders));
   }
 
   FutureOr<void> _orderManagmentEventOnSorted(OrderManagmentEventOnSorted event,
       Emitter<OrderManagmentInnerState> emit) {
     filtersOrders.clear();
     filtersOrders.addAll(allOrders);
-    final bool done = event.sortCategory[0];
-    final bool process = event.sortCategory[1];
-    final bool hold = event.sortCategory[2];
-
+    filterOrders = event.sortCategory;
     filtersOrders.removeWhere((element) {
-      if (!done && element.status == "done") {
+      if (!filterOrders[0] && element.status == "done") {
         return true;
       }
-      if (!process && element.status == "progress") {
+      if (!filterOrders[1] && element.status == "progress") {
         return true;
       }
-      if (!hold && element.status == "hold") {
+      if (!filterOrders[2] && element.status == "hold") {
         return true;
       }
       return false;

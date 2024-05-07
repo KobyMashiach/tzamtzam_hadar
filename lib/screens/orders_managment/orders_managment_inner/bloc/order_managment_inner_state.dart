@@ -54,6 +54,7 @@ final class OrderManagmentOpenAddContactDialog
 }
 
 final class OrderManagmentOpenSortDialog extends OrderManagmentNavigatorState {
+  final List<bool>? filterOrders;
   OrderManagmentOpenSortDialog(
-      {required super.orders, required super.allOrders});
+      {required super.orders, required super.allOrders, this.filterOrders});
 }

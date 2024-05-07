@@ -79,11 +79,13 @@ class OrderManagment extends StatelessWidget {
                   ));
                 }
               case const (OrderManagmentOpenSortDialog):
+                final newState = state as OrderManagmentOpenSortDialog;
                 final sortCategory = await showDialog(
                   context: context,
-                  builder: (context) => SortOrdersDialog(),
+                  builder: (context) => SortOrdersDialog(
+                      checkboxesOldValues: newState.filterOrders),
                 );
-                if (sortCategory != null)
+                if (sortCategory != null && sortCategory != false)
                   bloc.add(OrderManagmentEventOnSorted(sortCategory));
             }
           },

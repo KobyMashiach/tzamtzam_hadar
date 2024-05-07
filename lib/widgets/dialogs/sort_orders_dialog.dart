@@ -18,6 +18,7 @@ class SortOrdersDialog extends StatefulWidget {
 
 class _SortOrdersDialogState extends State<SortOrdersDialog> {
   List<bool> checkboxesValues = [true, true, true];
+  bool allMarked = true;
 
   @override
   void initState() {
@@ -25,13 +26,22 @@ class _SortOrdersDialogState extends State<SortOrdersDialog> {
     if (widget.checkboxesOldValues != null) {
       checkboxesValues = widget.checkboxesOldValues!;
     }
+    checkAllMarked();
+  }
+
+  void checkAllMarked() {
+    if (checkboxesValues.contains(false)) {
+      allMarked = false;
+    } else {
+      allMarked = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.of(context).size.height;
     return KheasydevDialog(
-      height: sizeScreen * 0.2,
+      height: sizeScreen * 0.30,
       primaryColor: Colors.white,
       title: appTranslate("filter_orders"),
       buttons: [
@@ -45,24 +55,46 @@ class _SortOrdersDialogState extends State<SortOrdersDialog> {
             text: appTranslate('cancel'),
             type: GenericButtonType.outlined,
             onPressed: () {
-              Navigator.of(context)
-                  .pop(widget.checkboxesOldValues ?? [true, true, true]);
+              Navigator.of(context).pop(false);
             }),
       ],
       child: SizedBox(
         width: 0,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: OrderStatus.values.length,
-            itemBuilder: (context, index) => CheckboxListTile(
-              value: checkboxesValues[index],
-              onChanged: (value) => setState(() {
-                checkboxesValues[index] = value!;
-              }),
-              title: Text(OrderStatusX.getAllValuesString()[index]),
-            ),
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: OrderStatus.values.length,
+                itemBuilder: (context, index) => CheckboxListTile(
+                  value: checkboxesValues[index],
+                  onChanged: (value) => setState(() {
+                    checkboxesValues[index] = value!;
+                    checkAllMarked();
+                  }),
+                  title: Text(OrderStatusX.getAllValuesString()[index]),
+                ),
+              ),
+              SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    if (allMarked) {
+                      checkboxesValues = [false, false, false];
+                    } else {
+                      checkboxesValues = [true, true, true];
+                    }
+                    allMarked = !allMarked;
+                  });
+                },
+                label:
+                    Text(appTranslate(!allMarked ? "mark_all" : "unmark_all")),
+                icon: Icon(!allMarked
+                    ? Icons.check_box_outline_blank
+                    : Icons.check_box),
+              )
+            ],
           ),
         ),
       ),
