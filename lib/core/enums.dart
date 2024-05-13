@@ -42,13 +42,15 @@ extension OrderStatusX on OrderStatus {
 enum MapsEnums {
   contactsList,
   send_files_map,
-  main_categories;
+  main_categories,
+  icon_list;
 
   String getString() {
     return switch (this) {
       MapsEnums.contactsList => 'contactsList',
       MapsEnums.send_files_map => 'send_files_map',
       MapsEnums.main_categories => 'main_categories',
+      MapsEnums.icon_list => 'icon_list',
     };
   }
 }

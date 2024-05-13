@@ -70,6 +70,9 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
     buildMaps(globalContactsList, globalContactsListTranslated,
         MapsEnums.contactsList.getString(), allData);
 
+    buildMaps(globalIcons, globalIconsTranslated,
+        MapsEnums.icon_list.getString(), allData);
+
     emit(SplashScreenNavigationToSendFilesScreen(allData: allData));
   }
 
@@ -102,13 +105,6 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
         noTran.entries.map((entry) => MapEntry<String, dynamic>(
             appTranslate(entry.key), getMainCategoriesWidget(entry.value))),
       ));
-    } else if (type == MapsEnums.send_files_map.getString()) {
-      tran.addAll(
-        Map<String, dynamic>.fromEntries(
-          noTran.entries.map(
-              (entry) => MapEntry<String, dynamic>(entry.key, entry.value)),
-        ),
-      );
     } else if (type == MapsEnums.contactsList.getString()) {
       noTran.forEach(
         (key, value) {
@@ -121,6 +117,15 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
           tran[appTranslate(key)] = contacts;
         },
       );
+    } else if (type == MapsEnums.send_files_map.getString()) {
+      tran.addAll(
+        Map<String, dynamic>.fromEntries(
+          noTran.entries.map(
+              (entry) => MapEntry<String, dynamic>(entry.key, entry.value)),
+        ),
+      );
+    } else {
+      tran.addAll(noTran);
     }
   }
 

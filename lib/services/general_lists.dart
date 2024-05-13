@@ -33,6 +33,9 @@ final Map<String, dynamic> globalSendFilesTranslated = {};
 final Map<dynamic, dynamic> globalContactsList = {};
 final Map<String, List<ContactModel>> globalContactsListTranslated = {};
 
+final Map<dynamic, dynamic> globalIcons = {};
+final Map<dynamic, dynamic> globalIconsTranslated = {};
+
 Map<String, dynamic> sendFilesMap() => {
       "vkiosk": {
         "type": "images",

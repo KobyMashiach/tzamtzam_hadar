@@ -138,5 +138,6 @@
     "mark_all": "סמן הכל",
     "unmark_all": "בטל סימון מכולם",
     "sure_delete_order": "האם אתה בטוח שאתה רוצה למחוק את ההזמנה {{num}}?",
-    "action_irreversible": "פעולה זו הינה פעולה בלתי הפיכה"
+    "action_irreversible": "פעולה זו הינה פעולה בלתי הפיכה",
+    "symbols": "סמלים"
 }

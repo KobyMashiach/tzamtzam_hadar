@@ -278,15 +278,19 @@ class _AddEditSendFilesDialogState extends State<AddEditSendFilesDialog> {
           onPressed: () async {
             final userChoice = await showDialog(
               context: context,
-              builder: (context) => ChooseImageDialog(),
+              builder: (context) => ChooseImageDialog(qrCode: qrCode),
             );
             if (userChoice != null) {
-              qrCode == true
-                  ? qrImage = await GeneralFunctions().chooseImage(userChoice)
-                  : image = await GeneralFunctions().chooseImage(userChoice);
-              qrCode == true
-                  ? displayQrCode = Image.file(File(qrImage!.path))
-                  : displayImage = Image.file(File(image!.path));
+              if (userChoice is String) {
+                await imageFromString(qrCode, userChoice);
+              } else {
+                qrCode == true
+                    ? qrImage = await GeneralFunctions().chooseImage(userChoice)
+                    : image = await GeneralFunctions().chooseImage(userChoice);
+                qrCode == true
+                    ? displayQrCode = Image.file(File(qrImage!.path))
+                    : displayImage = Image.file(File(image!.path));
+              }
             }
 
             setState(() {});
@@ -304,15 +308,7 @@ class _AddEditSendFilesDialogState extends State<AddEditSendFilesDialog> {
               ),
             );
             if (userChoice != null && userChoice != "") {
-              if (qrCode == true) {
-                qrImage =
-                    await GeneralFunctions().getImageFileFromUrl(userChoice);
-                displayQrCode = Image.file(File(qrImage!.path));
-              } else {
-                image =
-                    await GeneralFunctions().getImageFileFromUrl(userChoice);
-                displayImage = Image.file(File(image!.path));
-              }
+              await imageFromString(qrCode, userChoice);
             }
             setState(() {});
           },
@@ -321,5 +317,15 @@ class _AddEditSendFilesDialogState extends State<AddEditSendFilesDialog> {
         ),
       ],
     );
+  }
+
+  Future<void> imageFromString(bool qrCode, String userChoice) async {
+    if (qrCode == true) {
+      qrImage = await GeneralFunctions().getImageFileFromUrl(userChoice);
+      displayQrCode = Image.file(File(qrImage!.path));
+    } else {
+      image = await GeneralFunctions().getImageFileFromUrl(userChoice);
+      displayImage = Image.file(File(image!.path));
+    }
   }
 }
