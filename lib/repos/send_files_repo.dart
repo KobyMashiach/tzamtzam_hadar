@@ -22,11 +22,12 @@ class SendFilesRepo {
         docName: 'last_update',
         values: {"lastUpdate": Timestamp.fromDate(DateTime.now())});
     String qrImageUrl = "";
-    final imageUrl =
-        await uploadImageToStorage(path: "sendFiles/$title", imageFile: image);
+
+    final imageUrl = await uploadImageToStorage(
+        path: "sendFiles/$title", imageFile: image, imageName: "image");
     if (qrImage != null)
       qrImageUrl = await uploadImageToStorage(
-          path: "sendFiles/$title", imageFile: qrImage, qrImage: true);
+          path: "sendFiles/$title", imageFile: qrImage, imageName: "qrImage");
 
     globalSendFiles.addAll({
       title: {

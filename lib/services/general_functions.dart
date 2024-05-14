@@ -11,7 +11,12 @@ class GeneralFunctions {
 
   openWeb(String url) async {
     String openUrl;
-    if (!url.startsWith('mailto:') &&
+    if (!url.startsWith('02') || !url.startsWith('05')) {
+      final String changeUrlToIsrael = "972${url.substring(1, url.length)}";
+
+      openUrl = 'https://wa.me/$changeUrlToIsrael';
+      // openUrl = 'tel:$url';
+    } else if (!url.startsWith('mailto:') &&
         !url.startsWith("tel:") &&
         !url.startsWith('https://') &&
         !url.startsWith('http://')) {

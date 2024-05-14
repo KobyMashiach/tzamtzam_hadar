@@ -210,6 +210,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () async {
+                      if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "finish order");
                       bloc.add(NewOrderEventNavToHomeScreen());
@@ -221,6 +222,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
+                      if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "new order to new customer");
                       bloc.add(NewOrderOnNewOrder(newCustomer: true));
@@ -233,6 +235,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
+                      if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       bloc.add(NewOrderOnNewOrder(newCustomer: false));
                     },
@@ -518,7 +521,6 @@ class _NewOrderState extends State<NewOrder> {
   }
 
   saveOrder(NewOrderInnerBloc bloc) {
-    if (!orderValidation(context)) return;
     bloc.add(NewOrderEventAddOrder(
         customerName: _customerName.text,
         phoneNumber: _customerPhoneNumber.text,

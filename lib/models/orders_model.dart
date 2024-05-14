@@ -89,7 +89,7 @@ class OrderModel extends HiveObject {
       photoType: map['photoType'] as String? ?? "",
       photoFill: map['photoFill'] as String? ?? "",
       canvasSize: map['canvasSize'] as String? ?? "",
-      sublimationProduct: map['photoFsublimationProductill'] as String? ?? "",
+      sublimationProduct: map['sublimationProduct'] as String? ?? "",
       amount: map['amount'] as int,
       status: map['status'] as String,
     );

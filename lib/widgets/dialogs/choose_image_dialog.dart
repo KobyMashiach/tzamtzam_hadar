@@ -19,6 +19,7 @@ class ChooseImageDialog extends StatefulWidget {
 
 class _ChooseImageDialogState extends State<ChooseImageDialog> {
   bool expanded = false;
+  bool asGridView = false;
   @override
   Widget build(BuildContext context) {
     return KheasydevDialog(
@@ -52,32 +53,72 @@ class _ChooseImageDialogState extends State<ChooseImageDialog> {
           ),
       ],
       child: expanded
-          ? GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-              itemCount: globalIcons.length,
-              itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      Navigator.of(context)
-                          .pop(globalIcons.values.elementAt(index));
+          ? Column(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        asGridView = !asGridView;
+                      });
                     },
-                    child: Column(
-                      children: [
-                        networkLoadingImages(
-                            globalIcons.values.elementAt(index)),
-                        Text(
-                          (appTranslate(globalIcons.keys.elementAt(index))),
-                        ),
-                      ],
-                    ),
-                  )
-              // as Map<String, Map<String,String>>[]
-              // crossAxisCount: 3,
-              // children: networkLoadingImages(globalIcons.values),
-              )
+                    icon: Icon(asGridView ? Icons.grid_on : Icons.list)),
+                SizedBox(
+                    height: asGridView ? 300 : 100,
+                    child: asGridView ? displayGridView() : displayListView()),
+                // asGridView
+                //     ? displayGridView()
+                //     : SizedBox(height: 120, child: displayListView()),
+              ],
+            )
           : null,
+    );
+  }
+
+  GridView displayGridView() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+      ),
+      itemCount: globalIcons.length,
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop(globalIcons.values.elementAt(index));
+        },
+        child: Column(
+          children: [
+            networkLoadingImages(globalIcons.values.elementAt(index)),
+            Text(
+              (appTranslate(globalIcons.keys.elementAt(index))),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ListView displayListView() {
+    return ListView.separated(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: globalIcons.length,
+      separatorBuilder: (context, index) => SizedBox(width: 12),
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop(globalIcons.values.elementAt(index));
+        },
+        child: Column(
+          children: [
+            SizedBox(
+                child:
+                    networkLoadingImages(globalIcons.values.elementAt(index))),
+            Text(
+              (appTranslate(globalIcons.keys.elementAt(index))),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -70,9 +70,11 @@ Future<dynamic> firestoreGetDataFromDoc(
 }
 
 Future<String> uploadImageToStorage(
-    {required String path, required XFile imageFile, bool? qrImage}) async {
+    {required String path,
+    required XFile imageFile,
+    required String imageName}) async {
   String downloadUrl = "";
-  final String imageName = qrImage == true ? "qrImage" : "image";
+
   Reference storageReference =
       FirebaseStorage.instance.ref().child('$path/$imageName');
   UploadTask uploadTask = storageReference.putFile(File(imageFile.path));

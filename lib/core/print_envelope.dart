@@ -11,8 +11,8 @@ import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
-class PrintTest extends StatelessWidget {
-  const PrintTest(this.order, {Key? key}) : super(key: key);
+class PrintEnvelope extends StatelessWidget {
+  const PrintEnvelope(this.order, {Key? key}) : super(key: key);
 
   final OrderModel order;
 
@@ -107,6 +107,13 @@ class PrintTest extends StatelessWidget {
                 ),
                 if (order.notes != null && order.notes != "")
                   notesText(font, fontSmallSize),
+                if (order.category == appTranslate("canvas"))
+                  buttonText(
+                      "${appTranslate("canvas")} ${appTranslate("in_size")} ${order.canvasSize}",
+                      font,
+                      fontSmallSize),
+                if (order.category == appTranslate("sublimation"))
+                  buttonText(order.sublimationProduct!, font, fontSmallSize),
               ],
             ),
           );
@@ -126,6 +133,24 @@ class PrintTest extends StatelessWidget {
         width: 100,
         child: pw.Text(
           order.notes!,
+          style: pw.TextStyle(
+            font: font,
+            fontSize: fontSmallSize,
+          ),
+        ),
+      ),
+    );
+  }
+
+  pw.Positioned buttonText(String text, pw.Font font, double fontSmallSize) {
+    return pw.Positioned(
+      top: 500,
+      left: 60,
+      child: pw.SizedBox(
+        height: 120,
+        width: 100,
+        child: pw.Text(
+          text,
           style: pw.TextStyle(
             font: font,
             fontSize: fontSmallSize,

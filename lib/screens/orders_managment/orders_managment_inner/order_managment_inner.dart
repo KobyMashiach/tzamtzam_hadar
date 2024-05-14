@@ -9,7 +9,7 @@ import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
 import 'package:tzamtzam_hadar/repos/contacts_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/orders_managment_inner/bloc/order_managment_inner_bloc.dart';
-import 'package:tzamtzam_hadar/tests/print_test.dart';
+import 'package:tzamtzam_hadar/core/print_envelope.dart';
 import 'package:tzamtzam_hadar/widgets/cards/order_managment_card.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/add_edit_contact_dialog.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/change_order_status_dialog.dart';
@@ -61,7 +61,7 @@ class OrderManagment extends StatelessWidget {
               case const (OrderManagmentOpenPrintDialog):
                 final newState = state as OrderManagmentOpenPrintDialog;
                 KheasydevNavigatePage()
-                    .push(context, PrintTest(newState.order));
+                    .push(context, PrintEnvelope(newState.order));
               case const (OrderManagmentOpenAddContactDialog):
                 final newState = state as OrderManagmentOpenAddContactDialog;
                 final contactData = await showDialog(
