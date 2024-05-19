@@ -6,28 +6,45 @@ import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/widgets/general/appbar.dart';
 
-class PrintEnvelope extends StatelessWidget {
+class PrintEnvelope extends StatefulWidget {
   const PrintEnvelope(this.order, {Key? key}) : super(key: key);
 
   final OrderModel order;
 
   @override
+  State<PrintEnvelope> createState() => _PrintEnvelopeState();
+}
+
+class _PrintEnvelopeState extends State<PrintEnvelope> {
+  bool showImage = true;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appAppBar(
-          title:
-              appTranslate("print_order", arguments: {"num": order.orderId})),
+          title: appTranslate("print_order",
+              arguments: {"num": widget.order.orderId})),
       body: PdfPreview(
         canChangePageFormat: false,
         canChangeOrientation: false,
         canDebug: false,
-        onPrinted: (context) {},
-        build: (format) => _generatePdf(format, order.orderId),
+        actions: [
+          Switch(
+            activeColor: AppColor.primaryColor,
+            value: showImage,
+            onChanged: (bool value) {
+              setState(() {
+                showImage = !showImage;
+              });
+            },
+          ),
+        ],
+        build: (format) => _generatePdf(format, widget.order.orderId),
       ),
     );
   }
@@ -51,71 +68,81 @@ class PrintEnvelope extends StatelessWidget {
             ignoreMargins: true,
             child: pw.Stack(
               children: [
-                pw.Image(netImage, fit: pw.BoxFit.fill),
+                if (showImage) pw.Image(netImage, fit: pw.BoxFit.fill),
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Row(
                       children: [
-                        pw.SizedBox(width: 80),
-                        top2Columns(order.customerName, order.date,
-                            order.category, false, font, fontSize),
-                        pw.SizedBox(width: 200),
-                        top2Columns("", order.employeeName!, order.time, true,
-                            font, fontSize),
+                        pw.SizedBox(width: 88),
+                        top2Columns(
+                            widget.order.customerName,
+                            widget.order.date,
+                            widget.order.category,
+                            false,
+                            font,
+                            fontSize),
+                        pw.SizedBox(width: 184),
+                        top2Columns("", widget.order.employeeName!,
+                            widget.order.time, true, font, fontSize),
                       ],
                     ),
                     pw.SizedBox(height: 118),
-                    paddingRightText(order.customerName, 120, font, fontSize),
-                    pw.SizedBox(height: 12),
-                    paddingRightText(order.phoneNumber, 88, font, fontSize),
-                    pw.SizedBox(height: 40),
-                    paddingRightText(order.date, 84, font, fontSmallSize),
-                    pw.SizedBox(height: 69),
                     paddingRightText(
-                        order.amount.toString(), 108, font, fontSmallSize),
+                        widget.order.customerName, 120, font, fontSize),
+                    pw.SizedBox(height: 20),
+                    paddingRightText(
+                        widget.order.phoneNumber, 88, font, fontSize),
+                    pw.SizedBox(height: 48),
+                    paddingRightText(
+                        widget.order.date, 88, font, fontSmallSize),
+                    pw.SizedBox(height: 76),
+                    paddingRightText(widget.order.amount.toString(), 112, font,
+                        fontSmallSize),
                     // canvas , pictures, sublimation, general
-                    if (order.category == appTranslate("pictures"))
+                    if (widget.order.category == appTranslate("pictures"))
                       pw.Expanded(
                         child: markImagesFillType(font, fontSmallSize),
                       ),
                   ],
                 ),
                 pw.Positioned(
-                  top: 500,
-                  right: 100,
+                  top: 524,
+                  right: 104,
                   child: pw.Text(
-                    order.employeeName!,
+                    widget.order.employeeName!,
                     style: pw.TextStyle(font: font, fontSize: fontSize),
                   ),
                 ),
-                if (order.category == appTranslate("pictures"))
+                if (widget.order.category == appTranslate("pictures"))
                   pw.Positioned(
                     top: getPictureSizeIndex(),
-                    left: 204,
+                    left: 190,
                     child: pw.Text(
                       "X",
                       style: pw.TextStyle(font: font, fontSize: fontSmallSize),
                     ),
                   ),
                 pw.Positioned(
-                  top: 324,
-                  left: 60,
+                  top: 300,
+                  left: 52,
                   child: pw.Text(
                     appTranslate("order_num_on_app",
-                        arguments: {"num": order.orderId}),
+                        arguments: {"num": widget.order.orderId}),
                     style: pw.TextStyle(font: font, fontSize: fontSmallSize),
                   ),
                 ),
-                if (order.notes != null && order.notes != "")
+                if (widget.order.notes != null && widget.order.notes != "")
                   notesText(font, fontSmallSize),
-                if (order.category == appTranslate("canvas"))
+                orederTimeText(font, fontSmallSize),
+                if (widget.order.category == appTranslate("canvas"))
                   buttonText(
-                      "${appTranslate("canvas")} ${appTranslate("in_size")} ${order.canvasSize}",
+                      "${appTranslate("canvas")} ${appTranslate("in_size")} ${widget.order.canvasSize}",
                       font,
                       fontSmallSize),
-                if (order.category == appTranslate("sublimation"))
-                  buttonText(order.sublimationProduct!, font, fontSmallSize),
+                if (widget.order.category == appTranslate("sublimation"))
+                  buttonText(
+                      widget.order.sublimationProduct!, font, fontSmallSize),
               ],
             ),
           );
@@ -128,13 +155,31 @@ class PrintEnvelope extends StatelessWidget {
 
   pw.Positioned notesText(pw.Font font, double fontSmallSize) {
     return pw.Positioned(
-      top: 342,
-      left: 60,
+      top: 320,
+      left: 56,
       child: pw.SizedBox(
         height: 120,
         width: 100,
         child: pw.Text(
-          order.notes!,
+          widget.order.notes!,
+          style: pw.TextStyle(
+            font: font,
+            fontSize: fontSmallSize,
+          ),
+        ),
+      ),
+    );
+  }
+
+  pw.Positioned orederTimeText(pw.Font font, double fontSmallSize) {
+    return pw.Positioned(
+      bottom: -50,
+      left: 0,
+      child: pw.SizedBox(
+        height: 120,
+        width: 100,
+        child: pw.Text(
+          widget.order.time,
           style: pw.TextStyle(
             font: font,
             fontSize: fontSmallSize,
@@ -147,7 +192,7 @@ class PrintEnvelope extends StatelessWidget {
   pw.Positioned buttonText(String text, pw.Font font, double fontSmallSize) {
     return pw.Positioned(
       top: 500,
-      left: 60,
+      left: 56,
       child: pw.SizedBox(
         height: 120,
         width: 100,
@@ -163,9 +208,14 @@ class PrintEnvelope extends StatelessWidget {
   }
 
   double getPictureSizeIndex() {
-    final int index =
-        globalPicturesSizes.indexWhere((element) => element == order.photoSize);
-    return 346 + (index * 16);
+    int index = -1;
+    if (widget.order.photoSize == "אחר") {
+      index = 10;
+    } else {
+      index = globalPicturesSizes
+          .indexWhere((element) => element == widget.order.photoSize);
+    }
+    return 356 + (index * 17);
   }
 
   pw.Widget markImagesFillType(pw.Font font, double fontSize) {
@@ -174,15 +224,18 @@ class PrintEnvelope extends StatelessWidget {
         pw.Column(
           children: [
             pw.SizedBox(
-                height: order.photoType == appTranslate("matte") ? 27 : 7),
-            paddingRightText("X", 90, font, fontSize),
+                height:
+                    widget.order.photoType == appTranslate("matte") ? 30 : 10),
+            paddingRightText("X", 94, font, fontSize),
           ],
         ),
         pw.Column(
           children: [
             pw.SizedBox(
-                height: order.photoFill == appTranslate("fit_type") ? 27 : 7),
-            paddingRightText("X", 40, font, fontSize),
+                height: widget.order.photoFill == appTranslate("fit_type")
+                    ? 30
+                    : 10),
+            paddingRightText("X", 44, font, fontSize),
           ],
         ),
       ],
@@ -205,7 +258,7 @@ class PrintEnvelope extends StatelessWidget {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.end,
       children: [
-        pw.SizedBox(height: leftColumn ? 32 : 15),
+        pw.SizedBox(height: leftColumn ? 24 : 4),
         pw.Text(text1, style: pw.TextStyle(font: font, fontSize: fontSize)),
         pw.SizedBox(height: 8),
         pw.Text(text2, style: pw.TextStyle(font: font, fontSize: fontSize)),
