@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 
 class OrdersDataSource {
   static const _orderBox = OrderModel.hiveKey;

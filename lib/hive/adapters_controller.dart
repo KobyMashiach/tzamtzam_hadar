@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/models/user_permissions.dart';
 
 class AdaptersController {

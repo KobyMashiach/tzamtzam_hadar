@@ -5,7 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
@@ -105,6 +106,16 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
 
   FutureOr<void> _newOrderEventAddOrder(
       NewOrderEventAddOrder event, Emitter<NewOrderInnerState> emit) {
+    final orderList = [
+      OrderInModel(
+        amount: event.amount,
+        canvasSize: event.canvasSize,
+        photoSize: event.photoSize,
+        photoFill: event.photoFill,
+        photoType: event.photoType,
+        sublimationProduct: event.sublimationProduct,
+      )
+    ];
     order = OrderModel(
         orderId: orderId,
         date: date,
@@ -120,7 +131,8 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         notes: event.notes,
         sublimationProduct: event.sublimationProduct,
         amount: event.amount,
-        status: OrderStatus.progress.getStringToFirestore());
+        status: OrderStatus.progress.getStringToFirestore(),
+        orderInList: orderList);
     localDB.addOrder(order: order!);
     repo.newOrUpdateOrderToFirestore(order!);
   }

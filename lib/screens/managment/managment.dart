@@ -8,7 +8,7 @@ import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/lists_maps_data_source.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/lists_maps_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/repos/send_files_repo.dart';

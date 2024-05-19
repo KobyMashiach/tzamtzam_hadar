@@ -5,7 +5,7 @@ import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/services/general_subwidgets.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/general_dialog.dart';

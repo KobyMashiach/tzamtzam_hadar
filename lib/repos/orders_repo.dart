@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tzamtzam_hadar/core/enums.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/services/firestore_data.dart';
 
 class OrdersRepo {
@@ -35,7 +36,7 @@ class OrdersRepo {
       }
       if (value.isNotEmpty) {
         value.forEach((innerKey, innerValue) {
-          OrderModel order = OrderModel.fromMap(innerValue);
+          OrderModel order = OrderModel.fromJson(innerValue);
           orders[key]![innerKey] = order;
           allOrders.add(order);
         });
@@ -53,13 +54,17 @@ class OrdersRepo {
   }
 
   void newOrUpdateOrderToFirestore(OrderModel order) {
-    final Map<String, dynamic> orderMap = order.toMap();
+    //TODO: from here
+    final Map<String, dynamic> orderMap = order.toJson();
+    List<OrderInModel> orderIn = orderMap["orderInList"];
+    final checkJson = orderIn.first.toJson();
+    orderMap["orderInList"] = [checkJson];
     firestoreUpdateDoc(collection,
         docName: order.status, values: {order.orderId: orderMap});
   }
 
   void changeOrderStatusToFirestore(OrderModel order, String status) {
-    final Map<String, dynamic> orderMap = order.toMap();
+    final Map<String, dynamic> orderMap = order.toJson();
     orderMap["status"] = status;
     firestoreUpdateDoc(collection,
         docName: status, values: {order.orderId: orderMap});

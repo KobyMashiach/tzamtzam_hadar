@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:meta/meta.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
-import 'package:tzamtzam_hadar/models/orders_model.dart';
+import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/repos/contacts_repo.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 
@@ -88,9 +89,9 @@ class OrderManagmentInnerBloc
       OrderManagmentEventChangeOrderStatus event,
       Emitter<OrderManagmentInnerState> emit) async {
     repo.changeOrderStatusToFirestore(event.order, event.status);
-    final order = allOrders
+    OrderModel order = allOrders
         .firstWhere((element) => element.orderId == event.order.orderId);
-    order.status = event.status;
+    allOrders[allOrders.indexOf(order)] = order.copyWith(status: event.status);
     emit(buildRefreshUI());
   }
 
