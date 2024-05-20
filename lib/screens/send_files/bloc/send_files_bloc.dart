@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:meta/meta.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/models/send_files_model.dart';
 import 'package:tzamtzam_hadar/repos/send_files_repo.dart';
-import 'package:tzamtzam_hadar/services/firestore_data.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 
 part 'send_files_event.dart';

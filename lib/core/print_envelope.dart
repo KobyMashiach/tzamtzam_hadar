@@ -83,7 +83,7 @@ class _PrintEnvelopeState extends State<PrintEnvelope> {
                             font,
                             fontSize),
                         pw.SizedBox(width: 184),
-                        top2Columns("", widget.order.employeeName!,
+                        top2Columns("", widget.order.employeeName,
                             widget.order.time, true, font, fontSize),
                       ],
                     ),
@@ -110,7 +110,7 @@ class _PrintEnvelopeState extends State<PrintEnvelope> {
                   top: 524,
                   right: 104,
                   child: pw.Text(
-                    widget.order.employeeName!,
+                    widget.order.employeeName,
                     style: pw.TextStyle(font: font, fontSize: fontSize),
                   ),
                 ),

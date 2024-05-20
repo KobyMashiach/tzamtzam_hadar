@@ -119,3 +119,18 @@ final class NewOrderNavigationNavToHomeScreen extends NewOrderNavigationState {
       required super.canvasSizes,
       required super.sublimationProducts});
 }
+
+final class NewOrderNavigationDeleteItemDialog extends NewOrderNavigationState {
+  final int index;
+  NewOrderNavigationDeleteItemDialog(
+      {required this.index,
+      required super.date,
+      required super.time,
+      required super.orderId,
+      required super.categories,
+      required super.picturesSizes,
+      required super.picturesTypes,
+      required super.picturesFill,
+      required super.canvasSizes,
+      required super.sublimationProducts});
+}

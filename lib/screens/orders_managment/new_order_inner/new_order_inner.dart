@@ -1,11 +1,12 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kh_easy_dev/kh_easy_dev.dart';
+import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/orders_data_source.dart';
+import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
 import 'package:tzamtzam_hadar/repos/orders_repo.dart';
 import 'package:tzamtzam_hadar/screens/orders_managment/new_order_inner/bloc/new_order_inner_bloc.dart';
 import 'package:tzamtzam_hadar/widgets/design/fields/app_dropdown.dart';
@@ -53,6 +54,8 @@ class _NewOrderState extends State<NewOrder> {
   bool pictureTypesExpanded = false;
   bool pictureFillExpanded = false;
 
+  List<bool> itemsExpandedList = [true];
+
   @override
   void initState() {
     _customerName = TextEditingController();
@@ -93,13 +96,19 @@ class _NewOrderState extends State<NewOrder> {
         child: BlocConsumer<NewOrderInnerBloc, NewOrderInnerState>(
           listenWhen: (previous, current) => current is NewOrderNavigationState,
           buildWhen: (previous, current) => current is! NewOrderNavigationState,
-          listener: (context, state) {
-            //TODO: add ask printing dialog
+          listener: (context, state) async {
             switch (state.runtimeType) {
               case const (NewOrderNavigationNavToHomeScreen):
                 //TODO: change to popuntil
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
+
+              case const (NewOrderNavigationDeleteItemDialog):
+                final newState = state as NewOrderNavigationDeleteItemDialog;
+                await showDialog(
+                  context: context,
+                  builder: (context) => delete_item_dialog(context, newState),
+                );
             }
           },
           builder: (context, state) {
@@ -118,77 +127,139 @@ class _NewOrderState extends State<NewOrder> {
             canvasSizes = state.canvasSizes;
             sublimationProducts = state.sublimationProducts;
             return Scaffold(
-                appBar: appAppBar(title: appTranslate("new_order")),
-                floatingActionButton: keyboardDisable == 0
-                    ? FloatingActionButton.extended(
-                        onPressed: () {
-                          doneOrderMenu(context, bloc, state, screenHeight);
-                        },
-                        label: Text(appTranslate("finish_order")),
-                        icon: Icon(Icons.done),
-                      )
-                    : SizedBox.shrink(),
-                body: state is NewOrderOnLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : Padding(
-                        padding:
-                            const EdgeInsets.only(top: 24, right: 24, left: 24),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            height: _getScreenHeight(screenHeight),
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: Text(
-                                    appTranslate('order_number',
-                                        arguments: {"num": state.orderId}),
-                                    style: AppTextStyle().title,
-                                  ),
-                                ),
-                                heightSpace(),
-                                dateAndTime(context, state),
-                                heightSpace(),
-                                nameAndPhoneFields(context),
-                                categoriesDropdown(context),
-                                heightSpace(),
-                                getCategoryField(context),
-                                heightSpace(),
-                                amountOfProduct(context),
-                                AppTextField(
-                                  hintText: appTranslate('employee_name'),
-                                  controller: _employeeName,
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                ),
-                                Expanded(
-                                  child: AppTextField(
-                                    hintText: appTranslate('notes'),
-                                    controller: _notes,
-                                    maxLines: 5,
-                                    textInputAction: TextInputAction.newline,
-                                    keyboard: TextInputType.multiline,
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                  ),
-                                ),
-                              ],
-                            ),
+              appBar: appAppBar(title: appTranslate("new_order")),
+              floatingActionButton: keyboardDisable == 0
+                  ? FloatingActionButton.extended(
+                      onPressed: () {
+                        doneOrderMenu(context, bloc, state, screenHeight);
+                      },
+                      label: Text(appTranslate("finish_order")),
+                      icon: Icon(Icons.done),
+                    )
+                  : SizedBox.shrink(),
+              body: state is NewOrderOnLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : Padding(
+                      padding:
+                          const EdgeInsets.only(top: 24, right: 24, left: 24),
+                      child: SingleChildScrollView(
+                        child: SizedBox(
+                          height: _getScreenHeight(screenHeight),
+                          child: Column(
+                            children: [
+                              orderNumberTitle(state),
+                              heightSpace(),
+                              dateAndTime(context, state),
+                              heightSpace(),
+                              nameAndPhoneFields(context),
+                              itemExpanded(context, bloc),
+                              addItemButtom(),
+                              employeeNameTextField(),
+                              notesTextField(),
+                            ],
                           ),
                         ),
-                      ));
+                      ),
+                    ),
+            );
           },
         ),
       ),
     );
   }
 
+  Center orderNumberTitle(NewOrderInnerState state) {
+    return Center(
+      child: Text(
+        appTranslate('order_number', arguments: {"num": state.orderId}),
+        style: AppTextStyle().title,
+      ),
+    );
+  }
+
+  AppTextField employeeNameTextField() {
+    return AppTextField(
+      hintText: appTranslate('employee_name'),
+      controller: _employeeName,
+      padding: EdgeInsets.symmetric(vertical: 8),
+    );
+  }
+
+  Expanded notesTextField() {
+    return Expanded(
+      child: AppTextField(
+        hintText: appTranslate('notes'),
+        controller: _notes,
+        maxLines: 5,
+        textInputAction: TextInputAction.newline,
+        keyboard: TextInputType.multiline,
+        padding: EdgeInsets.symmetric(vertical: 8),
+      ),
+    );
+  }
+
+  Container addItemButtom() {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        style: ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(
+            AppColor.primaryColor,
+          ),
+        ),
+        onPressed: () {
+          itemsExpandedList = itemsExpandedList.map((_) => false).toList();
+          itemsExpandedList.add(true);
+          setState(() {});
+        },
+        icon: Icon(Icons.add_circle_outline_rounded),
+        label: Text(appTranslate("add_item")),
+      ),
+    );
+  }
+
+  KheasydevDialog delete_item_dialog(
+      BuildContext context, NewOrderNavigationDeleteItemDialog state) {
+    return KheasydevDialog(
+      title: appTranslate("are_you_sure"),
+      description: appTranslate("delete_item_description"),
+      primaryColor: Colors.white,
+      buttons: [
+        GenericButtonModel(
+            text: appTranslate("no"),
+            type: GenericButtonType.outlined,
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+        GenericButtonModel(
+            text: appTranslate("yes"),
+            type: GenericButtonType.outlined,
+            onPressed: () {
+              itemsExpandedList = itemsExpandedList.map((_) => false).toList();
+              setState(() {
+                itemsExpandedList.removeAt(state.index);
+              });
+              setState(() {});
+              Navigator.of(context).pop();
+            }),
+      ],
+    );
+  }
+
   SizedBox heightSpace() => SizedBox(height: 12);
 
   double _getScreenHeight(double screenHeight) {
-    return (pictureSizesExpanded ||
-            pictureFillExpanded ||
-            pictureTypesExpanded ||
-            canvasSizeExpanded)
-        ? screenHeight * 1.3
-        : screenHeight;
+    double newScreenHeight = screenHeight;
+    if (pictureSizesExpanded ||
+        pictureFillExpanded ||
+        pictureTypesExpanded ||
+        canvasSizeExpanded) {
+      newScreenHeight = screenHeight * 1.3;
+    }
+    if (itemsExpandedList.contains(true)) {
+      newScreenHeight = newScreenHeight * 1.2;
+    }
+    return newScreenHeight;
   }
 
   Future<void> doneOrderMenu(BuildContext context, NewOrderInnerBloc bloc,
@@ -405,7 +476,10 @@ class _NewOrderState extends State<NewOrder> {
   }
 
   void saveValue(String value, String title) {
-    closeAllExpanded(value);
+    pictureFillExpanded = false;
+    pictureTypesExpanded = false;
+    pictureSizesExpanded = false;
+
     switch (getValueIndex(title)) {
       case 0:
         pictureSize = value;
@@ -554,5 +628,113 @@ class _NewOrderState extends State<NewOrder> {
     pictureSizesExpanded = false;
     pictureTypesExpanded = false;
     pictureFillExpanded = false;
+  }
+
+  Widget itemExpanded(
+    BuildContext context,
+    NewOrderInnerBloc bloc,
+  ) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: itemsExpandedList.length,
+      itemBuilder: (context, index) {
+        final bool itemExpanded = itemsExpandedList[index];
+        return Column(
+          children: [
+            itemElevatedButton(index, itemExpanded),
+            AnimatedCrossFade(
+              duration: Duration(milliseconds: 300),
+              crossFadeState: itemExpanded
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              firstChild: itemExpandedContainer(context, bloc, index),
+              secondChild: SizedBox.shrink(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Container itemExpandedContainer(
+      BuildContext context, NewOrderInnerBloc bloc, int index) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColor.shadowColor),
+        borderRadius: BorderRadius.circular(34),
+      ),
+      child: Column(
+        children: [
+          categoriesDropdown(context),
+          heightSpace(),
+          getCategoryField(context),
+          heightSpace(),
+          amountOfProduct(context),
+          inItemButton(
+            bloc,
+            index,
+            title: appTranslate("save_item"),
+            color: Color(0xFF21B7CA),
+            icon: Icons.save_outlined,
+            onPressed: () {
+              //TODO: orderInModel from here
+              // OrderInModel(amount: amount,canvasSize: ,photoFill: ,photoSize: ,photoType: ,sublimationProduct: );
+            },
+          ),
+          inItemButton(
+            bloc,
+            index,
+            title: appTranslate("delete_item"),
+            color: Colors.red,
+            icon: Icons.remove_circle_outline_rounded,
+            onPressed: () => bloc.add(NewOrderOnDeleteItem(index: index)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ElevatedButton itemElevatedButton(int index, bool itemExpanded) {
+    return ElevatedButton.icon(
+      onPressed: () {
+        if (itemsExpandedList[index] == true) {
+          itemsExpandedList[index] = false;
+        } else {
+          itemsExpandedList = itemsExpandedList.map((_) => false).toList();
+
+          itemsExpandedList[index] = true;
+        }
+        setState(() {});
+      },
+      icon: Icon(itemExpanded ? Icons.arrow_upward : Icons.arrow_downward),
+      label: Text("${appTranslate("product")} ${index + 1}"),
+    );
+  }
+
+  Padding inItemButton(NewOrderInnerBloc bloc, int index,
+      {required String title,
+      required Color color,
+      required IconData icon,
+      required VoidCallback onPressed}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Container(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(color),
+          ),
+          onPressed: onPressed,
+          icon: Icon(
+            icon,
+            color: Colors.white,
+          ),
+          label: Text(
+            title,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 }

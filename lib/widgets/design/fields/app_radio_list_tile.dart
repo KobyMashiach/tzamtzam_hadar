@@ -34,6 +34,7 @@ class _AppRadioListTileState extends State<AppRadioListTile> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: widget.crossAxisCount ?? 3,
+      crossAxisSpacing: 20,
       children: widget.listValues.map((String pictureSize) {
         return RadioListTile<String>(
             title: Text(pictureSize),

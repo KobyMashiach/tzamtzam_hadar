@@ -47,3 +47,8 @@ class NewOrderOnNewOrder extends NewOrderInnerEvent {
   final bool newCustomer;
   NewOrderOnNewOrder({required this.newCustomer});
 }
+
+class NewOrderOnDeleteItem extends NewOrderInnerEvent {
+  final int index;
+  NewOrderOnDeleteItem({required this.index});
+}

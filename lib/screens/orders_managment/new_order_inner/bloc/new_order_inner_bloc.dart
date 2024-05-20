@@ -25,6 +25,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
   List<String> canvasSizes = [];
   List<String> sublimationProducts = [];
   OrderModel? order;
+  List<OrderInModel> orderInList = [];
 
   final OrdersDataSource localDB;
   final OrdersRepo repo;
@@ -44,6 +45,7 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
     on<NewOrderEventAmountChange>(_newOrderEventAmountChange);
     on<NewOrderEventNavToHomeScreen>(_newOrderEventNavToHomeScreen);
     on<NewOrderOnNewOrder>(_newOrderOnNewOrder);
+    on<NewOrderOnDeleteItem>(_newOrderOnDeleteItem);
   }
 
   FutureOr<void> _newOrderEventInitial(
@@ -170,6 +172,21 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
       NewOrderOnNewOrder event, Emitter<NewOrderInnerState> emit) {
     emit(NewOrderOnNewOrderState(
         newCustomer: event.newCustomer,
+        date: date,
+        time: time,
+        orderId: orderId,
+        categories: productsCategories,
+        picturesSizes: picturesSizes,
+        picturesTypes: picturesTypes,
+        picturesFill: picturesFill,
+        canvasSizes: canvasSizes,
+        sublimationProducts: sublimationProducts));
+  }
+
+  FutureOr<void> _newOrderOnDeleteItem(
+      NewOrderOnDeleteItem event, Emitter<NewOrderInnerState> emit) {
+    emit(NewOrderNavigationDeleteItemDialog(
+        index: event.index,
         date: date,
         time: time,
         orderId: orderId,
