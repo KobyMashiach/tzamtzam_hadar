@@ -14,26 +14,18 @@ class NewOrderEventAddOrder extends NewOrderInnerEvent {
   final String phoneNumber;
   final String category;
   final String employeeName;
-  final int amount;
+  // final int amount;
   final String? notes;
-  final String? photoSize;
-  final String? photoType;
-  final String? photoFill;
-  final String? canvasSize;
-  final String? sublimationProduct;
+  final List<OrderInModel> itemsList;
 
-  NewOrderEventAddOrder(
-      {required this.customerName,
-      required this.phoneNumber,
-      required this.category,
-      required this.employeeName,
-      required this.amount,
-      this.notes,
-      this.photoSize,
-      this.photoType,
-      this.photoFill,
-      this.canvasSize,
-      this.sublimationProduct});
+  NewOrderEventAddOrder({
+    required this.customerName,
+    required this.phoneNumber,
+    required this.category,
+    required this.employeeName,
+    required this.itemsList,
+    this.notes,
+  });
 }
 
 class NewOrderEventAmountChange extends NewOrderInnerEvent {

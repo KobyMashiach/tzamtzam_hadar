@@ -108,16 +108,16 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
 
   FutureOr<void> _newOrderEventAddOrder(
       NewOrderEventAddOrder event, Emitter<NewOrderInnerState> emit) {
-    final orderList = [
-      OrderInModel(
-        amount: event.amount,
-        canvasSize: event.canvasSize,
-        photoSize: event.photoSize,
-        photoFill: event.photoFill,
-        photoType: event.photoType,
-        sublimationProduct: event.sublimationProduct,
-      )
-    ];
+    // final orderList =  [
+    //   OrderInModel(
+    //     amount: event.amount,
+    //     canvasSize: event.canvasSize,
+    //     photoSize: event.photoSize,
+    //     photoFill: event.photoFill,
+    //     photoType: event.photoType,
+    //     sublimationProduct: event.sublimationProduct,
+    //   )
+    // ];
     order = OrderModel(
         orderId: orderId,
         date: date,
@@ -126,15 +126,15 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         phoneNumber: event.phoneNumber,
         category: event.category,
         employeeName: event.employeeName,
-        canvasSize: event.canvasSize,
-        photoSize: event.photoSize,
-        photoFill: event.photoFill,
-        photoType: event.photoType,
+        // canvasSize: event.canvasSize,
+        // photoSize: event.photoSize,
+        // photoFill: event.photoFill,
+        // photoType: event.photoType,
         notes: event.notes,
-        sublimationProduct: event.sublimationProduct,
-        amount: event.amount,
+        // sublimationProduct: event.sublimationProduct,
+        amount: 0,
         status: OrderStatus.progress.getStringToFirestore(),
-        orderInList: orderList);
+        orderInList: event.itemsList);
     localDB.addOrder(order: order!);
     repo.newOrUpdateOrderToFirestore(order!);
   }

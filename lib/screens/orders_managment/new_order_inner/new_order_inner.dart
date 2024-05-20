@@ -26,7 +26,7 @@ class _NewOrderState extends State<NewOrder> {
   late TextEditingController _customerPhoneNumber;
   late TextEditingController _employeeName;
   late TextEditingController _notes;
-  late TextEditingController _amount;
+  // late TextEditingController _amount;
   // int _amount = 0;
 
   // categories
@@ -35,26 +35,27 @@ class _NewOrderState extends State<NewOrder> {
 
   // canvases
   late List<String> canvasSizes;
-  String? canvasSize;
+  // String? canvasSize;
   bool canvasSizeExpanded = false;
 
   // sublimation
   late List<String> sublimationProducts;
-  String? sublimationProduct;
+  // String? sublimationProduct;
   bool sublimationProductExpanded = false;
 
   // pictures
   late List<String> picturesSizes;
   late List<String> picturesTypes;
   late List<String> picturesFill;
-  String? pictureSize;
-  String? pictureType;
-  String? pictureFill;
+  // String? pictureSize;
+  // String? pictureType;
+  // String? pictureFill;
   bool pictureSizesExpanded = false;
   bool pictureTypesExpanded = false;
   bool pictureFillExpanded = false;
 
   List<bool> itemsExpandedList = [true];
+  List<OrderInModel> itemsList = [OrderInModel(amount: 0)];
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class _NewOrderState extends State<NewOrder> {
     _customerPhoneNumber = TextEditingController();
     _employeeName = TextEditingController();
     _notes = TextEditingController();
-    _amount = TextEditingController();
+    // _amount = TextEditingController();
     super.initState();
   }
 
@@ -210,6 +211,7 @@ class _NewOrderState extends State<NewOrder> {
         onPressed: () {
           itemsExpandedList = itemsExpandedList.map((_) => false).toList();
           itemsExpandedList.add(true);
+          itemsList.add(OrderInModel(amount: 0));
           setState(() {});
         },
         icon: Icon(Icons.add_circle_outline_rounded),
@@ -281,7 +283,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () async {
-                      if (!orderValidation(context)) return;
+                      //  TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "finish order");
                       bloc.add(NewOrderEventNavToHomeScreen());
@@ -293,7 +295,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      if (!orderValidation(context)) return;
+                      // TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "new order to new customer");
                       bloc.add(NewOrderOnNewOrder(newCustomer: true));
@@ -306,7 +308,7 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      if (!orderValidation(context)) return;
+                      // TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       bloc.add(NewOrderOnNewOrder(newCustomer: false));
                     },
@@ -373,23 +375,23 @@ class _NewOrderState extends State<NewOrder> {
     );
   }
 
-  Widget getCategoryField(BuildContext context) {
+  Widget getCategoryField(BuildContext context, int index) {
     if (categories.isNotEmpty) {
       if (category == categories[0])
         return Column(
-          children: subCategories(context, title: 'canvas_size'),
+          children: subCategories(context, title: 'canvas_size', index: index),
         );
       else if (category == categories[1]) {
         return Column(
           children: [
-            ...subCategories(context, title: 'size'),
-            ...subCategories(context, title: 'type'),
-            ...subCategories(context, title: 'fill'),
+            ...subCategories(context, title: 'size', index: index),
+            ...subCategories(context, title: 'type', index: index),
+            ...subCategories(context, title: 'fill', index: index),
           ],
         );
       } else if (category == categories[2]) {
         return Column(
-          children: subCategories(context, title: 'product'),
+          children: subCategories(context, title: 'product', index: index),
         );
       } else if (category == categories[3]) {
         return Text(appTranslate("write_in_notes"));
@@ -398,7 +400,7 @@ class _NewOrderState extends State<NewOrder> {
     return SizedBox.shrink();
   }
 
-  Row amountOfProduct(BuildContext context) {
+  Row amountOfProduct(BuildContext context, int index) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -411,11 +413,13 @@ class _NewOrderState extends State<NewOrder> {
             child: AppTextField(
           hintText: '0',
           hintTextCenter: true,
-          controller: _amount,
+          // controller: _amount,
           keyboard: TextInputType.number,
           onChanged: (value) {
             setState(() {
-              _amount.text = value;
+              // _amount.text = value;
+              itemsList[index] =
+                  itemsList[index].copyWith(amount: int.parse(value));
             });
           },
           padding: EdgeInsets.all(0),
@@ -428,7 +432,8 @@ class _NewOrderState extends State<NewOrder> {
     );
   }
 
-  List<Widget> subCategories(BuildContext context, {required String title}) {
+  List<Widget> subCategories(BuildContext context,
+      {required String title, required int index}) {
     return [
       heightSpace(),
       GestureDetector(
@@ -462,7 +467,7 @@ class _NewOrderState extends State<NewOrder> {
               onChanged: (value) {
                 log(name: "choose", "$title:$value");
                 setState(() {
-                  saveValue(value, title);
+                  saveValue(value, title, index);
                 });
               },
               listValues: getExpandedList(title),
@@ -475,22 +480,27 @@ class _NewOrderState extends State<NewOrder> {
     ];
   }
 
-  void saveValue(String value, String title) {
+  void saveValue(String value, String title, index) {
     pictureFillExpanded = false;
     pictureTypesExpanded = false;
     pictureSizesExpanded = false;
 
     switch (getValueIndex(title)) {
       case 0:
-        pictureSize = value;
+        itemsList[index] = itemsList[index].copyWith(photoSize: value);
+      // pictureSize = value;
       case 1:
-        pictureType = value;
+        itemsList[index] = itemsList[index].copyWith(photoType: value);
+      // pictureType = value;
       case 2:
-        pictureFill = value;
+        itemsList[index] = itemsList[index].copyWith(photoFill: value);
+      // pictureFill = value;
       case 3:
-        canvasSize = value;
+        itemsList[index] = itemsList[index].copyWith(canvasSize: value);
+      // canvasSize = value;
       default:
-        sublimationProduct = value;
+        itemsList[index] = itemsList[index].copyWith(sublimationProduct: value);
+      // sublimationProduct = value;
     }
   }
 
@@ -556,57 +566,54 @@ class _NewOrderState extends State<NewOrder> {
     };
   }
 
-  bool orderValidation(BuildContext context) {
-    if (_customerName.text.isEmpty ||
-        _customerPhoneNumber.text.isEmpty ||
-        _employeeName.text.isEmpty) {
-      kheasydevAppToast(appTranslate("missing_customer_employee_details"));
-      return false;
-    }
-    if (category == categories[0]) {
-      if (canvasSize == null || canvasSize!.isEmpty) {
-        kheasydevAppToast(appTranslate("missing_canvas_size"));
-        return false;
-      }
-    }
-    if (category == categories[1]) {
-      if (pictureSize == null ||
-          pictureSize!.isEmpty ||
-          pictureFill == null ||
-          pictureFill!.isEmpty ||
-          pictureType == null ||
-          pictureType!.isEmpty) {
-        kheasydevAppToast(appTranslate("missing_picture_details"));
-        return false;
-      }
-    }
-    if (category == categories[2]) {
-      if (sublimationProduct == null || sublimationProduct!.isEmpty) {
-        kheasydevAppToast(appTranslate("missing_sublimation_size"));
-        return false;
-      }
-    }
-    if (int.parse(_amount.text) <= 0) {
-      kheasydevAppToast(appTranslate("missing_amount"));
-      return false;
-    }
+  // bool orderValidation(BuildContext context) {
+  //   if (_customerName.text.isEmpty ||
+  //       _customerPhoneNumber.text.isEmpty ||
+  //       _employeeName.text.isEmpty) {
+  //     kheasydevAppToast(appTranslate("missing_customer_employee_details"));
+  //     return false;
+  //   }
+  //   if (category == categories[0]) {
+  //     if (canvasSize == null || canvasSize!.isEmpty) {
+  //       kheasydevAppToast(appTranslate("missing_canvas_size"));
+  //       return false;
+  //     }
+  //   }
+  //   if (category == categories[1]) {
+  //     if (pictureSize == null ||
+  //         pictureSize!.isEmpty ||
+  //         pictureFill == null ||
+  //         pictureFill!.isEmpty ||
+  //         pictureType == null ||
+  //         pictureType!.isEmpty) {
+  //       kheasydevAppToast(appTranslate("missing_picture_details"));
+  //       return false;
+  //     }
+  //   }
+  //   if (category == categories[2]) {
+  //     if (sublimationProduct == null || sublimationProduct!.isEmpty) {
+  //       kheasydevAppToast(appTranslate("missing_sublimation_size"));
+  //       return false;
+  //     }
+  //   }
+  //   if (int.parse(_amount.text) <= 0) {
+  //     kheasydevAppToast(appTranslate("missing_amount"));
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   saveOrder(NewOrderInnerBloc bloc) {
     bloc.add(NewOrderEventAddOrder(
-        customerName: _customerName.text,
-        phoneNumber: _customerPhoneNumber.text,
-        category: category!,
-        amount: int.parse(_amount.text),
-        employeeName: _employeeName.text,
-        canvasSize: canvasSize,
-        photoSize: pictureSize,
-        photoType: pictureType,
-        photoFill: pictureFill,
-        notes: _notes.text,
-        sublimationProduct: sublimationProduct));
+      customerName: _customerName.text,
+      phoneNumber: _customerPhoneNumber.text,
+      category: category!,
+      // amount: int.parse(_amount.text),
+      employeeName: _employeeName.text,
+      itemsList: itemsList,
+      notes: _notes.text,
+    ));
   }
 
   void clearData(bool newCustomer) {
@@ -616,13 +623,15 @@ class _NewOrderState extends State<NewOrder> {
       _employeeName.clear();
     }
     _notes.clear();
-    _amount.clear();
+    // _amount.clear();
     // category = null;
-    canvasSize = null;
-    sublimationProduct = null;
-    pictureSize = null;
-    pictureType = null;
-    pictureFill = null;
+    // canvasSize = null;
+    // sublimationProduct = null;
+    // pictureSize = null;
+    // pictureType = null;
+    // pictureFill = null;
+    itemsExpandedList = itemsExpandedList.map((_) => false).toList();
+    itemsList = [OrderInModel(amount: 0)];
     canvasSizeExpanded = false;
     sublimationProductExpanded = false;
     pictureSizesExpanded = false;
@@ -667,9 +676,9 @@ class _NewOrderState extends State<NewOrder> {
         children: [
           categoriesDropdown(context),
           heightSpace(),
-          getCategoryField(context),
+          getCategoryField(context, index),
           heightSpace(),
-          amountOfProduct(context),
+          amountOfProduct(context, index),
           inItemButton(
             bloc,
             index,
@@ -677,6 +686,8 @@ class _NewOrderState extends State<NewOrder> {
             color: Color(0xFF21B7CA),
             icon: Icons.save_outlined,
             onPressed: () {
+              // itemsList[index] =
+              //     OrderInModel(amount: 2 * index + 1, canvasSize: "20X30");
               //TODO: orderInModel from here
               // OrderInModel(amount: amount,canvasSize: ,photoFill: ,photoSize: ,photoType: ,sublimationProduct: );
             },
