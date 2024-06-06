@@ -7,6 +7,7 @@ import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
 import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
 import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
+import 'package:tzamtzam_hadar/services/general_functions.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/services/general_subwidgets.dart';
 import 'package:tzamtzam_hadar/widgets/dialogs/general_dialog.dart';
@@ -39,13 +40,6 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
       key: ValueKey(1),
       startActionPane: GeneralSubwidgets()
           .slidableGeneralActionPane(onDelete: widget.onDelete, moreButtons: [
-        // SlidableAction(
-        //   onPressed: widget.onPrint,
-        //   backgroundColor: Colors.grey,
-        //   foregroundColor: Colors.white,
-        //   icon: Icons.details,
-        //   label: appTranslate('print'),
-        // ),
         SlidableAction(
           onPressed: (context) async {
             await showDialog(
@@ -177,7 +171,7 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
           children: [
             Text("${appTranslate("date")}: ${order.date}"),
             Text(
-                "${appTranslate("amount")}: ${getSumAmount(order.orderInList)}"),
+                "${appTranslate("amount")}: ${GeneralFunctions().getSumAmount(order.orderInList)}"),
           ],
         ),
         Row(
@@ -249,18 +243,6 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
     };
   }
 
-  int getSumAmount(List<OrderInModel> orderInList) {
-    int amount = 0;
-    if (orderInList.length == 1) {
-      amount = orderInList.first.amount;
-    } else {
-      for (var element in orderInList) {
-        amount += element.amount;
-      }
-    }
-    return amount;
-  }
-
   ListView getOrderDetails(List<OrderInModel> orderInList) {
     return ListView.separated(
         shrinkWrap: true,
@@ -280,21 +262,29 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
         separatorBuilder: (context, index) => kheasydevDivider(black: true),
         itemCount: orderInList.length + 2);
   }
+}
 
-  String getOrderInDetails(OrderInModel orderIn) {
-    final categories = globalProductsCategoriesTranslated;
-    String text = "";
-    if (orderIn.category == categories[0]) {
-      text = "גודל קנבס: ${orderIn.canvasSize}";
-    }
-    if (orderIn.category == categories[1]) {
+String getOrderInDetails(OrderInModel orderIn,
+    {bool? amount, bool? sizeAndFitRow}) {
+  final categories = globalProductsCategoriesTranslated;
+  String text = "";
+  if (orderIn.category == categories[0]) {
+    text = "גודל קנבס: ${orderIn.canvasSize}";
+  }
+  if (orderIn.category == categories[1]) {
+    if (sizeAndFitRow == true) {
+      text =
+          "${orderIn.photoSize}    כמות: ${orderIn.amount}    ${orderIn.photoType}\n${orderIn.photoFill}";
+    } else {
       text =
           "גודל: ${orderIn.photoSize}\nחיתוך: ${orderIn.photoFill}\nסוג: ${orderIn.photoType}";
     }
-    if (orderIn.category == categories[2]) {
-      text = "מוצר: ${orderIn.sublimationProduct}";
-    }
-
-    return text;
   }
+  if (orderIn.category == categories[2]) {
+    text = "מוצר: ${orderIn.sublimationProduct}";
+  }
+  if (amount == true && sizeAndFitRow != true) {
+    text += "\nכמות: ${orderIn.amount}";
+  }
+  return text;
 }

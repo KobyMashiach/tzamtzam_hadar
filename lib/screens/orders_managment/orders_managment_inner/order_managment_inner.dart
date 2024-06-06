@@ -60,8 +60,8 @@ class OrderManagment extends StatelessWidget {
                       order: newState.order, status: status));
               case const (OrderManagmentOpenPrintDialog):
                 final newState = state as OrderManagmentOpenPrintDialog;
-              // KheasydevNavigatePage()
-              //     .push(context, PrintEnvelope(newState.order));
+              KheasydevNavigatePage()
+                  .push(context, PrintEnvelope(newState.order));
               case const (OrderManagmentOpenAddContactDialog):
                 final newState = state as OrderManagmentOpenAddContactDialog;
                 final contactData = await showDialog(

@@ -1,5 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,18 @@ class GeneralFunctions {
         '${tempDir.path}/${imageUrl.substring(imageUrl.length - 10, imageUrl.length)}.jpg');
     await file.writeAsBytes(bytes);
     return XFile(file.path);
+  }
+
+  int getSumAmount(List<OrderInModel> orderInList) {
+    int amount = 0;
+    if (orderInList.length == 1) {
+      amount = orderInList.first.amount;
+    } else {
+      for (var element in orderInList) {
+        amount += element.amount;
+      }
+    }
+    return amount;
   }
 }
 
