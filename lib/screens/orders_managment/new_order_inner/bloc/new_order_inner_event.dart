@@ -12,7 +12,7 @@ class NewOrderEventInitial extends NewOrderInnerEvent {
 class NewOrderEventAddOrder extends NewOrderInnerEvent {
   final String customerName;
   final String phoneNumber;
-  final String category;
+  final String category; //TODO: remove
   final String employeeName;
   // final int amount;
   final String? notes;

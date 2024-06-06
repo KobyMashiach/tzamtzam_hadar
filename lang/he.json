@@ -47,6 +47,7 @@
     "missing_picture_details": "חסרים פרטי התמונות",
     "missing_sublimation_size": "חסר גודל המוצר",
     "missing_amount": "חסרה הכמות",
+    "missing_category": "לא נבחרה קטגוריה",
     "order_num": "מספר הזמנה",
     "delete_all_orders": "מחק את כל ההזמנות",
     "all_orders_deleted": "כל ההזמנות נמחקו",

@@ -124,15 +124,8 @@ class NewOrderInnerBloc extends Bloc<NewOrderInnerEvent, NewOrderInnerState> {
         time: time,
         customerName: event.customerName,
         phoneNumber: event.phoneNumber,
-        category: event.category,
         employeeName: event.employeeName,
-        // canvasSize: event.canvasSize,
-        // photoSize: event.photoSize,
-        // photoFill: event.photoFill,
-        // photoType: event.photoType,
         notes: event.notes,
-        // sublimationProduct: event.sublimationProduct,
-        amount: 0,
         status: OrderStatus.progress.getStringToFirestore(),
         orderInList: event.itemsList);
     localDB.addOrder(order: order!);

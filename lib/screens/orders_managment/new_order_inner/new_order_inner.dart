@@ -26,36 +26,27 @@ class _NewOrderState extends State<NewOrder> {
   late TextEditingController _customerPhoneNumber;
   late TextEditingController _employeeName;
   late TextEditingController _notes;
-  // late TextEditingController _amount;
-  // int _amount = 0;
 
-  // categories
   late List<String> categories;
-  String? category;
 
-  // canvases
   late List<String> canvasSizes;
-  // String? canvasSize;
+
   bool canvasSizeExpanded = false;
 
-  // sublimation
   late List<String> sublimationProducts;
-  // String? sublimationProduct;
+
   bool sublimationProductExpanded = false;
 
-  // pictures
   late List<String> picturesSizes;
   late List<String> picturesTypes;
   late List<String> picturesFill;
-  // String? pictureSize;
-  // String? pictureType;
-  // String? pictureFill;
+
   bool pictureSizesExpanded = false;
   bool pictureTypesExpanded = false;
   bool pictureFillExpanded = false;
 
   List<bool> itemsExpandedList = [true];
-  List<OrderInModel> itemsList = [OrderInModel(amount: 0)];
+  List<OrderInModel> itemsList = [OrderInModel(amount: 0, category: "")];
 
   @override
   void initState() {
@@ -63,7 +54,7 @@ class _NewOrderState extends State<NewOrder> {
     _customerPhoneNumber = TextEditingController();
     _employeeName = TextEditingController();
     _notes = TextEditingController();
-    // _amount = TextEditingController();
+
     super.initState();
   }
 
@@ -100,7 +91,6 @@ class _NewOrderState extends State<NewOrder> {
           listener: (context, state) async {
             switch (state.runtimeType) {
               case const (NewOrderNavigationNavToHomeScreen):
-                //TODO: change to popuntil
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
 
@@ -120,7 +110,6 @@ class _NewOrderState extends State<NewOrder> {
               Navigator.of(context).pop();
               bloc.add(NewOrderEventInitial(context));
             }
-
             categories = state.categories;
             picturesSizes = state.picturesSizes;
             picturesTypes = state.picturesTypes;
@@ -211,7 +200,7 @@ class _NewOrderState extends State<NewOrder> {
         onPressed: () {
           itemsExpandedList = itemsExpandedList.map((_) => false).toList();
           itemsExpandedList.add(true);
-          itemsList.add(OrderInModel(amount: 0));
+          itemsList.add(OrderInModel(amount: 0, category: ""));
           setState(() {});
         },
         icon: Icon(Icons.add_circle_outline_rounded),
@@ -283,7 +272,6 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () async {
-                      //  TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "finish order");
                       bloc.add(NewOrderEventNavToHomeScreen());
@@ -295,7 +283,6 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      // TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       log(name: "order done", "new order to new customer");
                       bloc.add(NewOrderOnNewOrder(newCustomer: true));
@@ -308,7 +295,6 @@ class _NewOrderState extends State<NewOrder> {
                 Expanded(
                   child: ListTile(
                     onTap: () {
-                      // TODO: if (!orderValidation(context)) return;
                       saveOrder(bloc);
                       bloc.add(NewOrderOnNewOrder(newCustomer: false));
                     },
@@ -326,17 +312,19 @@ class _NewOrderState extends State<NewOrder> {
     );
   }
 
-  AppDropDown categoriesDropdown(BuildContext context) {
-    return AppDropDown(
-      onChanged: (value) {
-        log(name: "category type", value);
-        setState(() {
-          category = value;
-        });
-      },
-      hintText: appTranslate("categories"),
-      listValues: categories,
-      value: category != null ? category : null,
+  Widget categoriesDropdown(BuildContext context, int index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: AppDropDown(
+        onChanged: (value) {
+          log(name: "category type", value);
+          setState(() {
+            itemsList[index] = itemsList[index].copyWith(category: value);
+          });
+        },
+        hintText: appTranslate("categories"),
+        listValues: categories,
+      ),
     );
   }
 
@@ -357,7 +345,6 @@ class _NewOrderState extends State<NewOrder> {
             hintText: appTranslate('phone_number'),
             controller: _customerPhoneNumber,
             keyboard: TextInputType.phone,
-            // textInputAction: TextInputAction.next,
             padding: EdgeInsets.symmetric(vertical: 8),
           ),
         ),
@@ -377,11 +364,11 @@ class _NewOrderState extends State<NewOrder> {
 
   Widget getCategoryField(BuildContext context, int index) {
     if (categories.isNotEmpty) {
-      if (category == categories[0])
+      if (itemsList[index].category == categories[0])
         return Column(
           children: subCategories(context, title: 'canvas_size', index: index),
         );
-      else if (category == categories[1]) {
+      else if (itemsList[index].category == categories[1]) {
         return Column(
           children: [
             ...subCategories(context, title: 'size', index: index),
@@ -389,11 +376,11 @@ class _NewOrderState extends State<NewOrder> {
             ...subCategories(context, title: 'fill', index: index),
           ],
         );
-      } else if (category == categories[2]) {
+      } else if (itemsList[index].category == categories[2]) {
         return Column(
           children: subCategories(context, title: 'product', index: index),
         );
-      } else if (category == categories[3]) {
+      } else if (itemsList[index].category == categories[3]) {
         return Text(appTranslate("write_in_notes"));
       }
     }
@@ -413,11 +400,9 @@ class _NewOrderState extends State<NewOrder> {
             child: AppTextField(
           hintText: '0',
           hintTextCenter: true,
-          // controller: _amount,
           keyboard: TextInputType.number,
           onChanged: (value) {
             setState(() {
-              // _amount.text = value;
               itemsList[index] =
                   itemsList[index].copyWith(amount: int.parse(value));
             });
@@ -488,19 +473,14 @@ class _NewOrderState extends State<NewOrder> {
     switch (getValueIndex(title)) {
       case 0:
         itemsList[index] = itemsList[index].copyWith(photoSize: value);
-      // pictureSize = value;
       case 1:
         itemsList[index] = itemsList[index].copyWith(photoType: value);
-      // pictureType = value;
       case 2:
         itemsList[index] = itemsList[index].copyWith(photoFill: value);
-      // pictureFill = value;
       case 3:
         itemsList[index] = itemsList[index].copyWith(canvasSize: value);
-      // canvasSize = value;
       default:
         itemsList[index] = itemsList[index].copyWith(sublimationProduct: value);
-      // sublimationProduct = value;
     }
   }
 
@@ -531,8 +511,6 @@ class _NewOrderState extends State<NewOrder> {
       default:
         pictureSizesExpanded = false;
         pictureTypesExpanded = false;
-      // default:
-      //   canvasSizeExpanded = false;
     }
   }
 
@@ -566,50 +544,11 @@ class _NewOrderState extends State<NewOrder> {
     };
   }
 
-  // bool orderValidation(BuildContext context) {
-  //   if (_customerName.text.isEmpty ||
-  //       _customerPhoneNumber.text.isEmpty ||
-  //       _employeeName.text.isEmpty) {
-  //     kheasydevAppToast(appTranslate("missing_customer_employee_details"));
-  //     return false;
-  //   }
-  //   if (category == categories[0]) {
-  //     if (canvasSize == null || canvasSize!.isEmpty) {
-  //       kheasydevAppToast(appTranslate("missing_canvas_size"));
-  //       return false;
-  //     }
-  //   }
-  //   if (category == categories[1]) {
-  //     if (pictureSize == null ||
-  //         pictureSize!.isEmpty ||
-  //         pictureFill == null ||
-  //         pictureFill!.isEmpty ||
-  //         pictureType == null ||
-  //         pictureType!.isEmpty) {
-  //       kheasydevAppToast(appTranslate("missing_picture_details"));
-  //       return false;
-  //     }
-  //   }
-  //   if (category == categories[2]) {
-  //     if (sublimationProduct == null || sublimationProduct!.isEmpty) {
-  //       kheasydevAppToast(appTranslate("missing_sublimation_size"));
-  //       return false;
-  //     }
-  //   }
-  //   if (int.parse(_amount.text) <= 0) {
-  //     kheasydevAppToast(appTranslate("missing_amount"));
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-
   saveOrder(NewOrderInnerBloc bloc) {
     bloc.add(NewOrderEventAddOrder(
       customerName: _customerName.text,
       phoneNumber: _customerPhoneNumber.text,
-      category: category!,
-      // amount: int.parse(_amount.text),
+      category: "category!",
       employeeName: _employeeName.text,
       itemsList: itemsList,
       notes: _notes.text,
@@ -623,15 +562,9 @@ class _NewOrderState extends State<NewOrder> {
       _employeeName.clear();
     }
     _notes.clear();
-    // _amount.clear();
-    // category = null;
-    // canvasSize = null;
-    // sublimationProduct = null;
-    // pictureSize = null;
-    // pictureType = null;
-    // pictureFill = null;
+
     itemsExpandedList = itemsExpandedList.map((_) => false).toList();
-    itemsList = [OrderInModel(amount: 0)];
+    itemsList = [OrderInModel(category: "", amount: 0)];
     canvasSizeExpanded = false;
     sublimationProductExpanded = false;
     pictureSizesExpanded = false;
@@ -674,7 +607,7 @@ class _NewOrderState extends State<NewOrder> {
       ),
       child: Column(
         children: [
-          categoriesDropdown(context),
+          categoriesDropdown(context, index),
           heightSpace(),
           getCategoryField(context, index),
           heightSpace(),
@@ -686,10 +619,13 @@ class _NewOrderState extends State<NewOrder> {
             color: Color(0xFF21B7CA),
             icon: Icons.save_outlined,
             onPressed: () {
-              // itemsList[index] =
-              //     OrderInModel(amount: 2 * index + 1, canvasSize: "20X30");
-              //TODO: orderInModel from here
-              // OrderInModel(amount: amount,canvasSize: ,photoFill: ,photoSize: ,photoType: ,sublimationProduct: );
+              final orderValid = checkInOrderValidation(itemsList[index]);
+              if (orderValid) {
+                setState(() {
+                  itemsExpandedList[index] = false;
+                });
+              }
+              log(itemsList[index].toString());
             },
           ),
           inItemButton(
@@ -747,5 +683,28 @@ class _NewOrderState extends State<NewOrder> {
         ),
       ),
     );
+  }
+
+  bool checkInOrderValidation(OrderInModel orderIn) {
+    if (orderIn.amount < 1) {
+      kheasydevAppToast(appTranslate("missing_amount"));
+      return false;
+    }
+    if (orderIn.category == "") {
+      kheasydevAppToast(appTranslate("missing_category"));
+      return false;
+    } else {
+      if (orderIn.category == categories[0] && orderIn.canvasSize == null) {
+        kheasydevAppToast(appTranslate("missing_canvas_size"));
+        return false;
+      } else if (orderIn.category == categories[1] &&
+          (orderIn.photoSize == null ||
+              orderIn.photoFill == null ||
+              orderIn.photoType == null)) {
+        kheasydevAppToast(appTranslate("missing_picture_details"));
+        return false;
+      } else if (orderIn.category == categories[2]) {}
+    }
+    return true;
   }
 }

@@ -10,14 +10,15 @@ part 'order_in_model.g.dart';
 @freezed
 class OrderInModel with _$OrderInModel {
   static const String hiveKey = 'orderModel';
-  @HiveType(typeId: 100, adapterName: 'OrderModelAdapter')
+  @HiveType(typeId: 103, adapterName: 'OrderModelAdapter')
   factory OrderInModel({
-    @HiveField(0) String? photoSize,
-    @HiveField(1) String? photoType,
-    @HiveField(2) String? photoFill,
-    @HiveField(3) String? canvasSize,
-    @HiveField(4) String? sublimationProduct,
-    @HiveField(5) required int amount,
+    @HiveField(0) required String category,
+    @HiveField(1) required int amount,
+    @HiveField(2) String? photoSize,
+    @HiveField(3) String? photoType,
+    @HiveField(4) String? photoFill,
+    @HiveField(5) String? canvasSize,
+    @HiveField(6) String? sublimationProduct,
   }) = _OrderInModel;
 
   factory OrderInModel.fromJson(Map<String, dynamic> json) =>

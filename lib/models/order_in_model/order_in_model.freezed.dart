@@ -21,17 +21,19 @@ OrderInModel _$OrderInModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$OrderInModel {
   @HiveField(0)
-  String? get photoSize => throw _privateConstructorUsedError;
+  String get category => throw _privateConstructorUsedError;
   @HiveField(1)
-  String? get photoType => throw _privateConstructorUsedError;
-  @HiveField(2)
-  String? get photoFill => throw _privateConstructorUsedError;
-  @HiveField(3)
-  String? get canvasSize => throw _privateConstructorUsedError;
-  @HiveField(4)
-  String? get sublimationProduct => throw _privateConstructorUsedError;
-  @HiveField(5)
   int get amount => throw _privateConstructorUsedError;
+  @HiveField(2)
+  String? get photoSize => throw _privateConstructorUsedError;
+  @HiveField(3)
+  String? get photoType => throw _privateConstructorUsedError;
+  @HiveField(4)
+  String? get photoFill => throw _privateConstructorUsedError;
+  @HiveField(5)
+  String? get canvasSize => throw _privateConstructorUsedError;
+  @HiveField(6)
+  String? get sublimationProduct => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,12 +48,13 @@ abstract class $OrderInModelCopyWith<$Res> {
       _$OrderInModelCopyWithImpl<$Res, OrderInModel>;
   @useResult
   $Res call(
-      {@HiveField(0) String? photoSize,
-      @HiveField(1) String? photoType,
-      @HiveField(2) String? photoFill,
-      @HiveField(3) String? canvasSize,
-      @HiveField(4) String? sublimationProduct,
-      @HiveField(5) int amount});
+      {@HiveField(0) String category,
+      @HiveField(1) int amount,
+      @HiveField(2) String? photoSize,
+      @HiveField(3) String? photoType,
+      @HiveField(4) String? photoFill,
+      @HiveField(5) String? canvasSize,
+      @HiveField(6) String? sublimationProduct});
 }
 
 /// @nodoc
@@ -67,14 +70,23 @@ class _$OrderInModelCopyWithImpl<$Res, $Val extends OrderInModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? category = null,
+    Object? amount = null,
     Object? photoSize = freezed,
     Object? photoType = freezed,
     Object? photoFill = freezed,
     Object? canvasSize = freezed,
     Object? sublimationProduct = freezed,
-    Object? amount = null,
   }) {
     return _then(_value.copyWith(
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      amount: null == amount
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
       photoSize: freezed == photoSize
           ? _value.photoSize
           : photoSize // ignore: cast_nullable_to_non_nullable
@@ -95,10 +107,6 @@ class _$OrderInModelCopyWithImpl<$Res, $Val extends OrderInModel>
           ? _value.sublimationProduct
           : sublimationProduct // ignore: cast_nullable_to_non_nullable
               as String?,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -112,12 +120,13 @@ abstract class _$$OrderInModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) String? photoSize,
-      @HiveField(1) String? photoType,
-      @HiveField(2) String? photoFill,
-      @HiveField(3) String? canvasSize,
-      @HiveField(4) String? sublimationProduct,
-      @HiveField(5) int amount});
+      {@HiveField(0) String category,
+      @HiveField(1) int amount,
+      @HiveField(2) String? photoSize,
+      @HiveField(3) String? photoType,
+      @HiveField(4) String? photoFill,
+      @HiveField(5) String? canvasSize,
+      @HiveField(6) String? sublimationProduct});
 }
 
 /// @nodoc
@@ -131,14 +140,23 @@ class __$$OrderInModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? category = null,
+    Object? amount = null,
     Object? photoSize = freezed,
     Object? photoType = freezed,
     Object? photoFill = freezed,
     Object? canvasSize = freezed,
     Object? sublimationProduct = freezed,
-    Object? amount = null,
   }) {
     return _then(_$OrderInModelImpl(
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      amount: null == amount
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
       photoSize: freezed == photoSize
           ? _value.photoSize
           : photoSize // ignore: cast_nullable_to_non_nullable
@@ -159,51 +177,51 @@ class __$$OrderInModelImplCopyWithImpl<$Res>
           ? _value.sublimationProduct
           : sublimationProduct // ignore: cast_nullable_to_non_nullable
               as String?,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 100, adapterName: 'OrderModelAdapter')
+@HiveType(typeId: 103, adapterName: 'OrderModelAdapter')
 class _$OrderInModelImpl implements _OrderInModel {
   _$OrderInModelImpl(
-      {@HiveField(0) this.photoSize,
-      @HiveField(1) this.photoType,
-      @HiveField(2) this.photoFill,
-      @HiveField(3) this.canvasSize,
-      @HiveField(4) this.sublimationProduct,
-      @HiveField(5) required this.amount});
+      {@HiveField(0) required this.category,
+      @HiveField(1) required this.amount,
+      @HiveField(2) this.photoSize,
+      @HiveField(3) this.photoType,
+      @HiveField(4) this.photoFill,
+      @HiveField(5) this.canvasSize,
+      @HiveField(6) this.sublimationProduct});
 
   factory _$OrderInModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrderInModelImplFromJson(json);
 
   @override
   @HiveField(0)
-  final String? photoSize;
+  final String category;
   @override
   @HiveField(1)
-  final String? photoType;
+  final int amount;
   @override
   @HiveField(2)
-  final String? photoFill;
+  final String? photoSize;
   @override
   @HiveField(3)
-  final String? canvasSize;
+  final String? photoType;
   @override
   @HiveField(4)
-  final String? sublimationProduct;
+  final String? photoFill;
   @override
   @HiveField(5)
-  final int amount;
+  final String? canvasSize;
+  @override
+  @HiveField(6)
+  final String? sublimationProduct;
 
   @override
   String toString() {
-    return 'OrderInModel(photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct, amount: $amount)';
+    return 'OrderInModel(category: $category, amount: $amount, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct)';
   }
 
   @override
@@ -211,6 +229,9 @@ class _$OrderInModelImpl implements _OrderInModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OrderInModelImpl &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.photoSize, photoSize) ||
                 other.photoSize == photoSize) &&
             (identical(other.photoType, photoType) ||
@@ -220,14 +241,13 @@ class _$OrderInModelImpl implements _OrderInModel {
             (identical(other.canvasSize, canvasSize) ||
                 other.canvasSize == canvasSize) &&
             (identical(other.sublimationProduct, sublimationProduct) ||
-                other.sublimationProduct == sublimationProduct) &&
-            (identical(other.amount, amount) || other.amount == amount));
+                other.sublimationProduct == sublimationProduct));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, photoSize, photoType, photoFill,
-      canvasSize, sublimationProduct, amount);
+  int get hashCode => Object.hash(runtimeType, category, amount, photoSize,
+      photoType, photoFill, canvasSize, sublimationProduct);
 
   @JsonKey(ignore: true)
   @override
@@ -245,34 +265,38 @@ class _$OrderInModelImpl implements _OrderInModel {
 
 abstract class _OrderInModel implements OrderInModel {
   factory _OrderInModel(
-      {@HiveField(0) final String? photoSize,
-      @HiveField(1) final String? photoType,
-      @HiveField(2) final String? photoFill,
-      @HiveField(3) final String? canvasSize,
-      @HiveField(4) final String? sublimationProduct,
-      @HiveField(5) required final int amount}) = _$OrderInModelImpl;
+      {@HiveField(0) required final String category,
+      @HiveField(1) required final int amount,
+      @HiveField(2) final String? photoSize,
+      @HiveField(3) final String? photoType,
+      @HiveField(4) final String? photoFill,
+      @HiveField(5) final String? canvasSize,
+      @HiveField(6) final String? sublimationProduct}) = _$OrderInModelImpl;
 
   factory _OrderInModel.fromJson(Map<String, dynamic> json) =
       _$OrderInModelImpl.fromJson;
 
   @override
   @HiveField(0)
-  String? get photoSize;
+  String get category;
   @override
   @HiveField(1)
-  String? get photoType;
+  int get amount;
   @override
   @HiveField(2)
-  String? get photoFill;
+  String? get photoSize;
   @override
   @HiveField(3)
-  String? get canvasSize;
+  String? get photoType;
   @override
   @HiveField(4)
-  String? get sublimationProduct;
+  String? get photoFill;
   @override
   @HiveField(5)
-  int get amount;
+  String? get canvasSize;
+  @override
+  @HiveField(6)
+  String? get sublimationProduct;
   @override
   @JsonKey(ignore: true)
   _$$OrderInModelImplCopyWith<_$OrderInModelImpl> get copyWith =>

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kh_easy_dev/kh_easy_dev.dart';
 import 'package:tzamtzam_hadar/core/colors.dart';
 import 'package:tzamtzam_hadar/core/text_styles.dart';
 import 'package:tzamtzam_hadar/core/translates/get_tran.dart';
 import 'package:tzamtzam_hadar/hive/general_data_source.dart';
+import 'package:tzamtzam_hadar/models/order_in_model/order_in_model.dart';
 import 'package:tzamtzam_hadar/models/order_model/orders_model.dart';
 import 'package:tzamtzam_hadar/services/general_lists.dart';
 import 'package:tzamtzam_hadar/services/general_subwidgets.dart';
@@ -174,7 +176,8 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("${appTranslate("date")}: ${order.date}"),
-            Text("${appTranslate("amount")}: ${order.amount}"),
+            Text(
+                "${appTranslate("amount")}: ${getSumAmount(order.orderInList)}"),
           ],
         ),
         Row(
@@ -184,24 +187,32 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
             Text("${appTranslate("phone_number")}: ${order.phoneNumber}"),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("${appTranslate("employee_name")}: ${order.employeeName}"),
-            if (order.category == categories[0])
-              Text("${appTranslate("canvas_size")}: ${order.canvasSize}"),
-            if (order.category == categories[1])
-              Column(
-                children: [
-                  Text("${appTranslate("size")}: ${order.photoSize}"),
-                  Text("${appTranslate("fill")}: ${order.photoType}"),
-                  Text("${appTranslate("type")}: ${order.photoFill}"),
-                ],
-              ),
-            if (order.category == categories[2])
-              Text("${appTranslate("product")}: ${order.sublimationProduct}"),
-          ],
-        ),
+        if (order.orderInList.length == 1)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${appTranslate("employee_name")}: ${order.employeeName}"),
+              if (order.orderInList.first.category == categories[0])
+                Text(
+                    "${appTranslate("canvas_size")}: ${order.orderInList.first.canvasSize}"),
+              if (order.orderInList.first.category == categories[1])
+                Column(
+                  children: [
+                    Text(
+                        "${appTranslate("size")}: ${order.orderInList.first.photoSize}"),
+                    Text(
+                        "${appTranslate("fill")}: ${order.orderInList.first.photoType}"),
+                    Text(
+                        "${appTranslate("type")}: ${order.orderInList.first.photoFill}"),
+                  ],
+                ),
+              if (order.orderInList.first == categories[2])
+                Text(
+                    "${appTranslate("product")}: ${order.orderInList.first.sublimationProduct}"),
+            ],
+          ),
+        SizedBox(height: 16),
+        getOrderDetails(order.orderInList),
         if (order.notes != null) SizedBox(height: 16),
         if (order.notes != null)
           Text("${appTranslate("notes")}: ${order.notes}"),
@@ -218,7 +229,8 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
           children: [
             Text(widget.order.orderId, style: AppTextStyle().cardTitle),
             Text(widget.order.customerName, style: AppTextStyle().cardTitle),
-            Text(widget.order.category, style: AppTextStyle().cardTitle),
+            Text(appTranslate(widget.order.status),
+                style: AppTextStyle().cardTitle),
           ],
         ),
         if (!cardExpanded)
@@ -235,5 +247,54 @@ class _OrderManagmentCardState extends State<OrderManagmentCard> {
       "done" => Colors.green,
       _ => Colors.white
     };
+  }
+
+  int getSumAmount(List<OrderInModel> orderInList) {
+    int amount = 0;
+    if (orderInList.length == 1) {
+      amount = orderInList.first.amount;
+    } else {
+      for (var element in orderInList) {
+        amount += element.amount;
+      }
+    }
+    return amount;
+  }
+
+  ListView getOrderDetails(List<OrderInModel> orderInList) {
+    return ListView.separated(
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (index == 0 || index == (orderInList.length + 1)) {
+            return SizedBox.shrink();
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("קטגוריה: ${orderInList[index - 1].category}"),
+              Text("${getOrderInDetails(orderInList[index - 1])}"),
+              Text("כמות: ${orderInList[index - 1].amount.toString()}"),
+            ],
+          );
+        },
+        separatorBuilder: (context, index) => kheasydevDivider(black: true),
+        itemCount: orderInList.length + 2);
+  }
+
+  String getOrderInDetails(OrderInModel orderIn) {
+    final categories = globalProductsCategoriesTranslated;
+    String text = "";
+    if (orderIn.category == categories[0]) {
+      text = "גודל קנבס: ${orderIn.canvasSize}";
+    }
+    if (orderIn.category == categories[1]) {
+      text =
+          "גודל: ${orderIn.photoSize}\nחיתוך: ${orderIn.photoFill}\nסוג: ${orderIn.photoType}";
+    }
+    if (orderIn.category == categories[2]) {
+      text = "מוצר: ${orderIn.sublimationProduct}";
+    }
+
+    return text;
   }
 }

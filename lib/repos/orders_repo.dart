@@ -54,8 +54,11 @@ class OrdersRepo {
     //TODO: Last Update - From here
     final Map<String, dynamic> orderMap = order.toJson();
     List<OrderInModel> orderIn = orderMap["orderInList"];
-    final checkJson = orderIn.first.toJson();
-    orderMap["orderInList"] = [checkJson];
+    final List newOrderInList = [];
+    for (var inOrder in orderIn) {
+      newOrderInList.add(inOrder.toJson());
+    }
+    orderMap["orderInList"] = newOrderInList;
     firestoreUpdateDoc(collection,
         docName: order.status, values: {order.orderId: orderMap});
   }

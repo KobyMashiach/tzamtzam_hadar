@@ -30,24 +30,10 @@ mixin _$OrderModel {
   String get customerName => throw _privateConstructorUsedError;
   @HiveField(4)
   String get phoneNumber => throw _privateConstructorUsedError;
-  @HiveField(5)
-  String get category => throw _privateConstructorUsedError;
   @HiveField(6)
   String? get notes => throw _privateConstructorUsedError;
-  @HiveField(7)
-  String? get photoSize => throw _privateConstructorUsedError;
-  @HiveField(8)
-  String? get photoType => throw _privateConstructorUsedError;
-  @HiveField(9)
-  String? get photoFill => throw _privateConstructorUsedError;
-  @HiveField(10)
-  String? get canvasSize => throw _privateConstructorUsedError;
-  @HiveField(11)
-  String? get sublimationProduct => throw _privateConstructorUsedError;
   @HiveField(12)
   String get employeeName => throw _privateConstructorUsedError;
-  @HiveField(13)
-  int get amount => throw _privateConstructorUsedError;
   @HiveField(14)
   String get status => throw _privateConstructorUsedError;
   @HiveField(15)
@@ -71,15 +57,8 @@ abstract class $OrderModelCopyWith<$Res> {
       @HiveField(2) String time,
       @HiveField(3) String customerName,
       @HiveField(4) String phoneNumber,
-      @HiveField(5) String category,
       @HiveField(6) String? notes,
-      @HiveField(7) String? photoSize,
-      @HiveField(8) String? photoType,
-      @HiveField(9) String? photoFill,
-      @HiveField(10) String? canvasSize,
-      @HiveField(11) String? sublimationProduct,
       @HiveField(12) String employeeName,
-      @HiveField(13) int amount,
       @HiveField(14) String status,
       @HiveField(15) List<OrderInModel> orderInList});
 }
@@ -102,15 +81,8 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
     Object? time = null,
     Object? customerName = null,
     Object? phoneNumber = null,
-    Object? category = null,
     Object? notes = freezed,
-    Object? photoSize = freezed,
-    Object? photoType = freezed,
-    Object? photoFill = freezed,
-    Object? canvasSize = freezed,
-    Object? sublimationProduct = freezed,
     Object? employeeName = null,
-    Object? amount = null,
     Object? status = null,
     Object? orderInList = null,
   }) {
@@ -135,42 +107,14 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
       notes: freezed == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoSize: freezed == photoSize
-          ? _value.photoSize
-          : photoSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoType: freezed == photoType
-          ? _value.photoType
-          : photoType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoFill: freezed == photoFill
-          ? _value.photoFill
-          : photoFill // ignore: cast_nullable_to_non_nullable
-              as String?,
-      canvasSize: freezed == canvasSize
-          ? _value.canvasSize
-          : canvasSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sublimationProduct: freezed == sublimationProduct
-          ? _value.sublimationProduct
-          : sublimationProduct // ignore: cast_nullable_to_non_nullable
               as String?,
       employeeName: null == employeeName
           ? _value.employeeName
           : employeeName // ignore: cast_nullable_to_non_nullable
               as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as int,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -197,15 +141,8 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @HiveField(2) String time,
       @HiveField(3) String customerName,
       @HiveField(4) String phoneNumber,
-      @HiveField(5) String category,
       @HiveField(6) String? notes,
-      @HiveField(7) String? photoSize,
-      @HiveField(8) String? photoType,
-      @HiveField(9) String? photoFill,
-      @HiveField(10) String? canvasSize,
-      @HiveField(11) String? sublimationProduct,
       @HiveField(12) String employeeName,
-      @HiveField(13) int amount,
       @HiveField(14) String status,
       @HiveField(15) List<OrderInModel> orderInList});
 }
@@ -226,15 +163,8 @@ class __$$OrderModelImplCopyWithImpl<$Res>
     Object? time = null,
     Object? customerName = null,
     Object? phoneNumber = null,
-    Object? category = null,
     Object? notes = freezed,
-    Object? photoSize = freezed,
-    Object? photoType = freezed,
-    Object? photoFill = freezed,
-    Object? canvasSize = freezed,
-    Object? sublimationProduct = freezed,
     Object? employeeName = null,
-    Object? amount = null,
     Object? status = null,
     Object? orderInList = null,
   }) {
@@ -259,42 +189,14 @@ class __$$OrderModelImplCopyWithImpl<$Res>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
       notes: freezed == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoSize: freezed == photoSize
-          ? _value.photoSize
-          : photoSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoType: freezed == photoType
-          ? _value.photoType
-          : photoType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoFill: freezed == photoFill
-          ? _value.photoFill
-          : photoFill // ignore: cast_nullable_to_non_nullable
-              as String?,
-      canvasSize: freezed == canvasSize
-          ? _value.canvasSize
-          : canvasSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sublimationProduct: freezed == sublimationProduct
-          ? _value.sublimationProduct
-          : sublimationProduct // ignore: cast_nullable_to_non_nullable
               as String?,
       employeeName: null == employeeName
           ? _value.employeeName
           : employeeName // ignore: cast_nullable_to_non_nullable
               as String,
-      amount: null == amount
-          ? _value.amount
-          : amount // ignore: cast_nullable_to_non_nullable
-              as int,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -317,15 +219,8 @@ class _$OrderModelImpl implements _OrderModel {
       @HiveField(2) required this.time,
       @HiveField(3) required this.customerName,
       @HiveField(4) required this.phoneNumber,
-      @HiveField(5) required this.category,
       @HiveField(6) this.notes,
-      @HiveField(7) this.photoSize,
-      @HiveField(8) this.photoType,
-      @HiveField(9) this.photoFill,
-      @HiveField(10) this.canvasSize,
-      @HiveField(11) this.sublimationProduct,
       @HiveField(12) required this.employeeName,
-      @HiveField(13) required this.amount,
       @HiveField(14) required this.status,
       @HiveField(15) required final List<OrderInModel> orderInList})
       : _orderInList = orderInList;
@@ -349,32 +244,11 @@ class _$OrderModelImpl implements _OrderModel {
   @HiveField(4)
   final String phoneNumber;
   @override
-  @HiveField(5)
-  final String category;
-  @override
   @HiveField(6)
   final String? notes;
   @override
-  @HiveField(7)
-  final String? photoSize;
-  @override
-  @HiveField(8)
-  final String? photoType;
-  @override
-  @HiveField(9)
-  final String? photoFill;
-  @override
-  @HiveField(10)
-  final String? canvasSize;
-  @override
-  @HiveField(11)
-  final String? sublimationProduct;
-  @override
   @HiveField(12)
   final String employeeName;
-  @override
-  @HiveField(13)
-  final int amount;
   @override
   @HiveField(14)
   final String status;
@@ -389,7 +263,7 @@ class _$OrderModelImpl implements _OrderModel {
 
   @override
   String toString() {
-    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName, phoneNumber: $phoneNumber, category: $category, notes: $notes, photoSize: $photoSize, photoType: $photoType, photoFill: $photoFill, canvasSize: $canvasSize, sublimationProduct: $sublimationProduct, employeeName: $employeeName, amount: $amount, status: $status, orderInList: $orderInList)';
+    return 'OrderModel(orderId: $orderId, date: $date, time: $time, customerName: $customerName, phoneNumber: $phoneNumber, notes: $notes, employeeName: $employeeName, status: $status, orderInList: $orderInList)';
   }
 
   @override
@@ -404,22 +278,9 @@ class _$OrderModelImpl implements _OrderModel {
                 other.customerName == customerName) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.category, category) ||
-                other.category == category) &&
             (identical(other.notes, notes) || other.notes == notes) &&
-            (identical(other.photoSize, photoSize) ||
-                other.photoSize == photoSize) &&
-            (identical(other.photoType, photoType) ||
-                other.photoType == photoType) &&
-            (identical(other.photoFill, photoFill) ||
-                other.photoFill == photoFill) &&
-            (identical(other.canvasSize, canvasSize) ||
-                other.canvasSize == canvasSize) &&
-            (identical(other.sublimationProduct, sublimationProduct) ||
-                other.sublimationProduct == sublimationProduct) &&
             (identical(other.employeeName, employeeName) ||
                 other.employeeName == employeeName) &&
-            (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality()
                 .equals(other._orderInList, _orderInList));
@@ -434,15 +295,8 @@ class _$OrderModelImpl implements _OrderModel {
       time,
       customerName,
       phoneNumber,
-      category,
       notes,
-      photoSize,
-      photoType,
-      photoFill,
-      canvasSize,
-      sublimationProduct,
       employeeName,
-      amount,
       status,
       const DeepCollectionEquality().hash(_orderInList));
 
@@ -467,15 +321,8 @@ abstract class _OrderModel implements OrderModel {
           @HiveField(2) required final String time,
           @HiveField(3) required final String customerName,
           @HiveField(4) required final String phoneNumber,
-          @HiveField(5) required final String category,
           @HiveField(6) final String? notes,
-          @HiveField(7) final String? photoSize,
-          @HiveField(8) final String? photoType,
-          @HiveField(9) final String? photoFill,
-          @HiveField(10) final String? canvasSize,
-          @HiveField(11) final String? sublimationProduct,
           @HiveField(12) required final String employeeName,
-          @HiveField(13) required final int amount,
           @HiveField(14) required final String status,
           @HiveField(15) required final List<OrderInModel> orderInList}) =
       _$OrderModelImpl;
@@ -499,32 +346,11 @@ abstract class _OrderModel implements OrderModel {
   @HiveField(4)
   String get phoneNumber;
   @override
-  @HiveField(5)
-  String get category;
-  @override
   @HiveField(6)
   String? get notes;
   @override
-  @HiveField(7)
-  String? get photoSize;
-  @override
-  @HiveField(8)
-  String? get photoType;
-  @override
-  @HiveField(9)
-  String? get photoFill;
-  @override
-  @HiveField(10)
-  String? get canvasSize;
-  @override
-  @HiveField(11)
-  String? get sublimationProduct;
-  @override
   @HiveField(12)
   String get employeeName;
-  @override
-  @HiveField(13)
-  int get amount;
   @override
   @HiveField(14)
   String get status;

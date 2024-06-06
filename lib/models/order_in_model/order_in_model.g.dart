@@ -8,7 +8,7 @@ part of 'order_in_model.dart';
 
 class OrderModelAdapter extends TypeAdapter<_$OrderInModelImpl> {
   @override
-  final int typeId = 100;
+  final int typeId = 103;
 
   @override
   _$OrderInModelImpl read(BinaryReader reader) {
@@ -17,31 +17,34 @@ class OrderModelAdapter extends TypeAdapter<_$OrderInModelImpl> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$OrderInModelImpl(
-      photoSize: fields[0] as String?,
-      photoType: fields[1] as String?,
-      photoFill: fields[2] as String?,
-      canvasSize: fields[3] as String?,
-      sublimationProduct: fields[4] as String?,
-      amount: fields[5] as int,
+      category: fields[0] as String,
+      amount: fields[1] as int,
+      photoSize: fields[2] as String?,
+      photoType: fields[3] as String?,
+      photoFill: fields[4] as String?,
+      canvasSize: fields[5] as String?,
+      sublimationProduct: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$OrderInModelImpl obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.photoSize)
+      ..write(obj.category)
       ..writeByte(1)
-      ..write(obj.photoType)
+      ..write(obj.amount)
       ..writeByte(2)
-      ..write(obj.photoFill)
+      ..write(obj.photoSize)
       ..writeByte(3)
-      ..write(obj.canvasSize)
+      ..write(obj.photoType)
       ..writeByte(4)
-      ..write(obj.sublimationProduct)
+      ..write(obj.photoFill)
       ..writeByte(5)
-      ..write(obj.amount);
+      ..write(obj.canvasSize)
+      ..writeByte(6)
+      ..write(obj.sublimationProduct);
   }
 
   @override
@@ -61,20 +64,22 @@ class OrderModelAdapter extends TypeAdapter<_$OrderInModelImpl> {
 
 _$OrderInModelImpl _$$OrderInModelImplFromJson(Map<String, dynamic> json) =>
     _$OrderInModelImpl(
+      category: json['category'] as String,
+      amount: (json['amount'] as num).toInt(),
       photoSize: json['photoSize'] as String?,
       photoType: json['photoType'] as String?,
       photoFill: json['photoFill'] as String?,
       canvasSize: json['canvasSize'] as String?,
       sublimationProduct: json['sublimationProduct'] as String?,
-      amount: (json['amount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$OrderInModelImplToJson(_$OrderInModelImpl instance) =>
     <String, dynamic>{
+      'category': instance.category,
+      'amount': instance.amount,
       'photoSize': instance.photoSize,
       'photoType': instance.photoType,
       'photoFill': instance.photoFill,
       'canvasSize': instance.canvasSize,
       'sublimationProduct': instance.sublimationProduct,
-      'amount': instance.amount,
     };
