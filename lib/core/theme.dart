@@ -7,7 +7,7 @@ ThemeData appThemeData() {
     colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primaryColor),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColor.buttomBackground),
+        backgroundColor: WidgetStateProperty.all(AppColor.buttomBackground),
       ),
     ),
     useMaterial3: true,

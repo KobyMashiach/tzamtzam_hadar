@@ -29,9 +29,7 @@ class GeneralDataSource {
   static UserPermissions getPermissions() {
     final box = Hive.box(_generalBox);
 
-    return box.get('permissions') != null
-        ? box.get('permissions')
-        : UserPermissions.customer;
+    return box.get('permissions') ?? UserPermissions.customer;
   }
 
   static Future hiveClearBox() async {
